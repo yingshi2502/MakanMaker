@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,15 +25,22 @@ public class CreditCardEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @Id
     private Long cardId;
+    
     @OneToOne(mappedBy = "creditCard")
     private CustomerEntity customer;
+    
+    @Column(nullable = false)
     private String cardHolderName;
+    
+    @Column(nullable = false)
     private String cvv;
+    
+    @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date expiryDate;
+    
+    @Column(nullable = false)
     private String creditCardNumber;
     
     public CreditCardEntity(){
@@ -49,18 +57,18 @@ public class CreditCardEntity implements Serializable {
     }
     
 
-    public Long getId() {
-        return id;
+    public Long getCardId() {
+        return cardId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCardId(Long cardId) {
+        this.cardId = cardId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (getId() != null ? getId().hashCode() : 0);
+        hash += (getCardId() != null ? getCardId().hashCode() : 0);
         return hash;
     }
 
@@ -71,7 +79,7 @@ public class CreditCardEntity implements Serializable {
             return false;
         }
         CreditCardEntity other = (CreditCardEntity) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
+        if ((this.getCardId() == null && other.getCardId() != null) || (this.getCardId() != null && !this.cardId.equals(other.cardId))) {
             return false;
         }
         return true;
@@ -79,7 +87,7 @@ public class CreditCardEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.CreditCardEntity[ id=" + getId() + " ]";
+        return "entity.CreditCardEntity[ id=" + getCardId() + " ]";
     }
 
     /**
@@ -87,20 +95,6 @@ public class CreditCardEntity implements Serializable {
      */
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    /**
-     * @return the cardId
-     */
-    public Long getCardId() {
-        return cardId;
-    }
-
-    /**
-     * @param cardId the cardId to set
-     */
-    public void setCardId(Long cardId) {
-        this.cardId = cardId;
     }
 
     /**

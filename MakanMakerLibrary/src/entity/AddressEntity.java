@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,13 +23,17 @@ public class AddressEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @Id
     private Long addressId;
+    
+    @Column(nullable = false)
     private String country;
+    @Column(nullable = false)
     private String region;
+    @Column(nullable = false)
     private String postalCode;
+    @Column(nullable = false)
     private String addressLine1;
+    @Column(nullable = false)
     private String addressLine2;
     @OneToOne(mappedBy = "address")
     private CustomerEntity customer;
@@ -47,18 +52,18 @@ public class AddressEntity implements Serializable {
         this.customer = customer;
     }
 
-    public Long getId() {
-        return id;
+    public Long getAddressId() {
+        return addressId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (getId() != null ? getId().hashCode() : 0);
+        hash += (getAddressId() != null ? getAddressId().hashCode() : 0);
         return hash;
     }
 
@@ -69,7 +74,7 @@ public class AddressEntity implements Serializable {
             return false;
         }
         AddressEntity other = (AddressEntity) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
+        if ((this.getAddressId() == null && other.getAddressId() != null) || (this.getAddressId() != null && !this.addressId.equals(other.addressId))) {
             return false;
         }
         return true;
@@ -77,7 +82,7 @@ public class AddressEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.AddressEntity[ id=" + getId() + " ]";
+        return "entity.AddressEntity[ id=" + getAddressId() + " ]";
     }
 
     /**
@@ -85,20 +90,6 @@ public class AddressEntity implements Serializable {
      */
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    /**
-     * @return the addressId
-     */
-    public Long getAddressId() {
-        return addressId;
-    }
-
-    /**
-     * @param addressId the addressId to set
-     */
-    public void setAddressId(Long addressId) {
-        this.addressId = addressId;
     }
 
     /**

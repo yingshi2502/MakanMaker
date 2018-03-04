@@ -7,7 +7,10 @@ package entity;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,17 +27,25 @@ public class MealKitEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @Id
     private Long mealKitId;
+    
+    @Column(nullable = false)
     private String name;
-    private double price;
-    private List<String> ingredients;
+    
+    @Column(nullable = false)
+    private Double price;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private CategoryEnum category;
+    
+    private List<String> ingredients;
+    @Column(nullable = false)
     private boolean isAvailable;
     
     @OneToMany(mappedBy = "mealKit")
     private List<ReviewEntity> reviews;
+    
     
     public MealKitEntity(){
         
@@ -51,18 +62,18 @@ public class MealKitEntity implements Serializable {
         
     }
     
-    public Long getId() {
-        return id;
+    public Long getMealKitId() {
+        return mealKitId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMealKitId(Long mealKitId) {
+        this.mealKitId = mealKitId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (getId() != null ? getId().hashCode() : 0);
+        hash += (getMealKitId() != null ? getMealKitId().hashCode() : 0);
         return hash;
     }
 
@@ -73,7 +84,7 @@ public class MealKitEntity implements Serializable {
             return false;
         }
         MealKitEntity other = (MealKitEntity) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
+        if ((this.getMealKitId() == null && other.getMealKitId() != null) || (this.getMealKitId() != null && !this.mealKitId.equals(other.mealKitId))) {
             return false;
         }
         return true;
@@ -81,7 +92,7 @@ public class MealKitEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.MealKitEntity[ id=" + getId() + " ]";
+        return "entity.MealKitEntity[ id=" + getMealKitId() + " ]";
     }
 
     /**
@@ -89,20 +100,6 @@ public class MealKitEntity implements Serializable {
      */
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    /**
-     * @return the mealKitId
-     */
-    public Long getMealKitId() {
-        return mealKitId;
-    }
-
-    /**
-     * @param mealKitId the mealKitId to set
-     */
-    public void setMealKitId(Long mealKitId) {
-        this.mealKitId = mealKitId;
     }
 
     /**

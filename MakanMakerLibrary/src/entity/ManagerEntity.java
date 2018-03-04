@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,10 +22,12 @@ public class ManagerEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @Id
     private Long managerId;
+    
+    @Column(unique = true, nullable = false)
     private String userName;
+    
+    @Column(unique = true, nullable = false)
     private String password;
     
     public ManagerEntity(){
@@ -37,18 +40,18 @@ public class ManagerEntity implements Serializable {
         this.password = password;
     }
 
-    public Long getId() {
-        return id;
+    public Long getManagerId() {
+        return managerId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setManagerId(Long managerId) {
+        this.managerId = managerId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (getId() != null ? getId().hashCode() : 0);
+        hash += (getManagerId() != null ? getManagerId().hashCode() : 0);
         return hash;
     }
 
@@ -59,7 +62,7 @@ public class ManagerEntity implements Serializable {
             return false;
         }
         ManagerEntity other = (ManagerEntity) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
+        if ((this.getManagerId() == null && other.getManagerId() != null) || (this.getManagerId() != null && !this.managerId.equals(other.managerId))) {
             return false;
         }
         return true;
@@ -67,7 +70,7 @@ public class ManagerEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.ManagerEntity[ id=" + getId() + " ]";
+        return "entity.ManagerEntity[ id=" + getManagerId() + " ]";
     }
 
     /**
@@ -75,20 +78,6 @@ public class ManagerEntity implements Serializable {
      */
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    /**
-     * @return the managerId
-     */
-    public Long getManagerId() {
-        return managerId;
-    }
-
-    /**
-     * @param managerId the managerId to set
-     */
-    public void setManagerId(Long managerId) {
-        this.managerId = managerId;
     }
 
     /**
