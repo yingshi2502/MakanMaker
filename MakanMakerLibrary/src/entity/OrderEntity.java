@@ -9,10 +9,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -27,20 +31,27 @@ public class OrderEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
-    @ManyToOne
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private CustomerEntity customer;
-    private double totalAmount;
+    @Column(nullable = false)
+    private Double totalAmount;
     @ManyToMany
     private List<MealKitEntity> mealKits = new ArrayList<MealKitEntity>();
     private List<Integer> quantity;
     private List<String> delivery;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    
+    @Column(nullable = false)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date purchasingDate;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private OrderStatusEnum orderStatus;
+    
     private String extraRequest;
     
     public OrderEntity(){
@@ -59,29 +70,29 @@ public class OrderEntity implements Serializable {
         this.extraRequest = extraRequest;
     }
 
-    public Long getId() {
-        return id;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (getId() != null ? getId().hashCode() : 0);
+        hash += (getOrderId() != null ? getOrderId().hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the orderId fields are not set
         if (!(object instanceof OrderEntity)) {
             return false;
         }
         OrderEntity other = (OrderEntity) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
+        if ((this.getOrderId() == null && other.getOrderId() != null) || (this.getOrderId() != null && !this.orderId.equals(other.orderId))) {
             return false;
         }
         return true;
@@ -89,7 +100,7 @@ public class OrderEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.OrderEntity[ id=" + getId() + " ]";
+        return "entity.OrderEntity[ id=" + getOrderId() + " ]";
     }
 
     /**
@@ -97,20 +108,6 @@ public class OrderEntity implements Serializable {
      */
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    /**
-     * @return the orderId
-     */
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    /**
-     * @param orderId the orderId to set
-     */
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
     }
 
     /**

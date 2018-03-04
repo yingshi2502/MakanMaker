@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,13 +27,17 @@ public class CustomerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
+    
+    @Column(unique = true, nullable = false)
     private String userName;
+    
+    @Column(unique = true, nullable = false)
     private String email;
-    private String password;
+    
+    @Column(nullable = false)
+    private String password; 
     private List<String> socialMediaAccount;
     
     @OneToMany(mappedBy = "customer")
@@ -44,29 +49,29 @@ public class CustomerEntity implements Serializable {
     @ManyToMany
     private List<MealKitEntity> wishList = new ArrayList<MealKitEntity>();
 
-    public Long getId() {
-        return id;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (getId() != null ? getId().hashCode() : 0);
+        hash += (getCustomerId() != null ? getCustomerId().hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the customerId fields are not set
         if (!(object instanceof CustomerEntity)) {
             return false;
         }
         CustomerEntity other = (CustomerEntity) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
+        if ((this.getCustomerId() == null && other.getCustomerId() != null) || (this.getCustomerId() != null && !this.customerId.equals(other.customerId))) {
             return false;
         }
         return true;
@@ -74,7 +79,7 @@ public class CustomerEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.CustomerEntity[ id=" + getId() + " ]";
+        return "entity.CustomerEntity[ id=" + getCustomerId() + " ]";
     }
 
     /**
@@ -84,19 +89,6 @@ public class CustomerEntity implements Serializable {
         return serialVersionUID;
     }
 
-    /**
-     * @return the customerId
-     */
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    /**
-     * @param customerId the customerId to set
-     */
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
 
     /**
      * @return the userName
