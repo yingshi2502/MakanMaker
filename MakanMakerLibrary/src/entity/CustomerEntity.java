@@ -56,6 +56,12 @@ public class CustomerEntity implements Serializable {
         this.customerId = customerId;
     }
 
+    public CustomerEntity(String userName, String email, String password) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

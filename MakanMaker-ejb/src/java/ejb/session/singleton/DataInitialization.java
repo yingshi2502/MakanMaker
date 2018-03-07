@@ -5,8 +5,12 @@
  */
 package ejb.session.singleton;
 
+import entity.CustomerEntity;
+import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -16,6 +20,14 @@ import javax.ejb.LocalBean;
 @LocalBean
 public class DataInitialization {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @PersistenceContext(unitName = "MakanMaker-ejbPU")
+    private EntityManager em;
+
+    
+    @PostConstruct
+    public void postConstruct(){
+        CustomerEntity customer = new CustomerEntity("yingshi", "yingshi", "12345");
+        em.persist(customer);
+    }
+
 }
