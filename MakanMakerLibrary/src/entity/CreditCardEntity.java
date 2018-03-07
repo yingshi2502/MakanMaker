@@ -40,11 +40,18 @@ public class CreditCardEntity implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date expiryDate;
     
-    @Column(nullable = false)
+    @Column(nullable = false, length=16)
     private String creditCardNumber;
     
     public CreditCardEntity(){
         
+    }
+
+    public CreditCardEntity(String cardHolderName, String cvv, Date expiryDate, String creditCardNumber) {
+        this.cardHolderName = cardHolderName;
+        this.cvv = cvv;
+        this.expiryDate = expiryDate;
+        this.creditCardNumber = creditCardNumber;
     }
     
     public CreditCardEntity(CustomerEntity customer, String cardHolderName, String cvv, Date expiryDate, String creditCardNumber){

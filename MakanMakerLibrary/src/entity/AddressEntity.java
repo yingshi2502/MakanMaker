@@ -29,7 +29,7 @@ public class AddressEntity implements Serializable {
     private String country;
     @Column(nullable = false)
     private String region;
-    @Column(nullable = false)
+    @Column(nullable = false, length=6)
     private String postalCode;
     @Column(nullable = false)
     private String addressLine1;
@@ -40,6 +40,14 @@ public class AddressEntity implements Serializable {
     
     public AddressEntity(){
         
+    }
+
+    public AddressEntity(String country, String region, String postalCode, String addressLine1, String addressLine2) {
+        this.country = country;
+        this.region = region;
+        this.postalCode = postalCode;
+        this.addressLine1 = addressLine1;
+        this.addressLine2 = addressLine2;
     }
     
     public AddressEntity(String country, String region, String postalCode, String addressLine1, String addressLine2, CustomerEntity customer){

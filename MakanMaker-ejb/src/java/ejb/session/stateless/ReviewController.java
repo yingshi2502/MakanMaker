@@ -5,11 +5,13 @@
  */
 package ejb.session.stateless;
 
+import entity.MealKitEntity;
 import entity.ReviewEntity;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import util.exception.EmptyListException;
 
 /**
@@ -25,14 +27,43 @@ public class ReviewController implements ReviewControllerLocal {
     public ReviewController() {
     }
 
+    /**
+     *
+     * @param customerUsername
+     * @param mealKitId
+     * @param reviewContent
+     * @param ratings
+     * @return
+     */
     @Override
-    public ReviewEntity createNewReiview(Long customerId, Long mealKitId, String reviewContent, Integer ratings) {
-        return null;
+    public ReviewEntity createNewReiview(String customerUsername, Long mealKitId, String reviewContent, Integer ratings) {
+        MealKitEntity targetMealKit = em.find(MealKitEntity.class, mealKitId);
+        
+        ReviewEntity newReview = new ReviewEntity(customerUsername, ratings, reviewContent);
+        em.persist(newReview);
+        
+        newReview.setMealKit(targetMealKit);
+        targetMealKit.getReviews().add(newReview);
+        em.flush();
+        em.refresh(newReview);
+        return newReview;
     }
 
+    /**
+     *
+     * @param mealKitId
+     * @return
+     * @throws EmptyListException
+     */
     @Override
     public List<ReviewEntity> retrieveReviewByMealKitId(Long mealKitId) throws EmptyListException{
-        return null;
+        Query query = em.createQuery("SELECT r FROM ReviewEntity WHERE r.mealKit.mealKitId =:id");
+        query.setParameter("id", mealKitId);
+        List<ReviewEntity> list = query.getResultList();
+        if (list.isEmpty()){
+            throw new EmptyListException("No reviews added for the mealKid");
+        }
+        return list;
     }
 
     

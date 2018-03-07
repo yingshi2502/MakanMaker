@@ -12,6 +12,7 @@ import java.util.List;
 import javax.ejb.Local;
 import util.exception.CustomerExistException;
 import util.exception.CustomerNotFoundException;
+import util.exception.GeneralException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.PasswordChangeException;
 
@@ -26,9 +27,9 @@ public interface CustomerControllerLocal {
 
     Boolean changePassword(Long customerId, String newPassword, String oldPassword) throws PasswordChangeException;
 
-    CustomerEntity createNewCustomer(CustomerEntity customer) throws CustomerExistException;
+    CustomerEntity createNewCustomer(CustomerEntity customer) throws CustomerExistException,GeneralException;
 
-    public CustomerEntity updateCustomer(CustomerEntity customer) throws CustomerNotFoundException;
+    public CustomerEntity updateCustomer(CustomerEntity customer) throws CustomerExistException,GeneralException;
 
     public CustomerEntity retrieveCustomerById(Long customerId) throws CustomerNotFoundException;
 

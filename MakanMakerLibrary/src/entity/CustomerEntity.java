@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.criteria.Order;
 
 /**
  *
@@ -41,7 +40,7 @@ public class CustomerEntity implements Serializable {
     private List<String> socialMediaAccount;
     
     @OneToMany(mappedBy = "customer")
-    private List<Order> orderHistory;
+    private List<OrderEntity> orderHistory;
     @OneToOne
     private AddressEntity address;
     @OneToOne
@@ -149,14 +148,14 @@ public class CustomerEntity implements Serializable {
     /**
      * @return the orderHistory
      */
-    public List<Order> getOrderHistory() {
+    public List<OrderEntity> getOrderHistory() {
         return orderHistory;
     }
 
     /**
      * @param orderHistory the orderHistory to set
      */
-    public void setOrderHistory(List<Order> orderHistory) {
+    public void setOrderHistory(List<OrderEntity> orderHistory) {
         this.orderHistory = orderHistory;
     }
 

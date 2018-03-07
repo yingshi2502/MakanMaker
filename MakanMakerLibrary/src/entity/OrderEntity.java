@@ -37,10 +37,12 @@ public class OrderEntity implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private CustomerEntity customer;
+    
     @Column(nullable = false)
     private Double totalAmount;
     @ManyToMany
     private List<MealKitEntity> mealKits = new ArrayList<MealKitEntity>();
+    
     private List<Integer> quantity;
     private List<String> delivery;
     
@@ -56,6 +58,13 @@ public class OrderEntity implements Serializable {
     
     public OrderEntity(){
         
+    }
+
+    public OrderEntity(Double totalAmount, Date purchasingDate, OrderStatusEnum orderStatus, String extraRequest) {
+        this.totalAmount = totalAmount;
+        this.purchasingDate = purchasingDate;
+        this.orderStatus = orderStatus;
+        this.extraRequest = extraRequest;
     }
     
     public OrderEntity(CustomerEntity customer, double totalAmount,List<MealKitEntity> mealKits,List<Integer> quantity, List<String> delivery, Date purchasingDate,OrderStatusEnum orderStatus,String extraRequest){

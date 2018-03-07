@@ -17,7 +17,7 @@ import util.exception.EmptyListException;
 @Local
 public interface ReviewControllerLocal {
 
-    ReviewEntity createNewReiview(Long customerId, Long mealKitId, String reviewContent, Integer ratings);
+    ReviewEntity createNewReiview(String customerUsername, Long mealKitId, String reviewContent, Integer ratings);
 
     List<ReviewEntity> retrieveReviewByMealKitId(Long mealKitId)throws EmptyListException;
     
