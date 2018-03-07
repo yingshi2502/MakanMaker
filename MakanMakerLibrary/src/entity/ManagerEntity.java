@@ -21,7 +21,7 @@ public class ManagerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long managerId;
     
     @Column(unique = true, nullable = false)
