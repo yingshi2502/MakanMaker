@@ -103,6 +103,7 @@ public class OrderController implements OrderControllerLocal {
     @Override
     public void refundOrder(OrderEntity order){
         order.setOrderStatus(OrderStatusEnum.REFUNDED);
+        //creditTransaction
         CustomerEntity customer = order.getCustomer();
         em.merge(order);
     }

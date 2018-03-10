@@ -79,12 +79,12 @@ public class MealKitController implements MealKitControllerLocal {
     }
 
     @Override
-    public void deleteMealKit(MealKitEntity mealKit) throws UndeletableException{
+    public void deleteMealKit(MealKitEntity mealKit){
         if (mealKit.getReviews().size() == 0) {
             em.remove(mealKit);
             em.flush();
         } else {
-            throw new UndeletableException("MealKit has been used hence not able to be deleted");
+            mealKit.setIsAvailable(false);
         };
     }
     
