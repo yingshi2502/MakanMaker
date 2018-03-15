@@ -9,5 +9,6 @@ public enum OrderStatusEnum
     PREPARING,
     DELIVERED,
     REFUNDED,
-    PAID
+    PAID,
+    CANCELED
 }
