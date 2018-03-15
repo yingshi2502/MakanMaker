@@ -113,7 +113,7 @@ public class CustomerController implements CustomerControllerLocal {
         
         try{
             CustomerEntity customer = (CustomerEntity) query.getSingleResult();
-            customer.getCreditCard();
+           // customer.getCreditCard();
             customer.getOrderHistory().size();
             customer.getWishList().size();
             return customer;

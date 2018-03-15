@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -35,7 +37,7 @@ public class AddressEntity implements Serializable {
     private String addressLine1;
     @Column(nullable = false)
     private String addressLine2;
-    @OneToOne(mappedBy = "address")
+    @ManyToOne
     private CustomerEntity customer;
     
     public AddressEntity(){

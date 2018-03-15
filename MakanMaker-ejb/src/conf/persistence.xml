@@ -9,6 +9,8 @@
     <class>entity.MealKitEntity</class>
     <class>entity.OrderEntity</class>
     <class>entity.ReviewEntity</class>
+    <class>entity.TagEntity</class>
+    <class>entity.TransactionEntity</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>

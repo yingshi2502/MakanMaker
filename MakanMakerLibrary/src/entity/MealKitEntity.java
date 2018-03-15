@@ -14,8 +14,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import util.enumeration.CategoryEnum;
 
 /**
  *
@@ -34,10 +34,10 @@ public class MealKitEntity implements Serializable {
     
     @Column(nullable = false)
     private Double price;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private CategoryEnum category;
+//    
+//    @Enumerated(EnumType.STRING)
+//    @Column(nullable = false)
+//    private CategoryEnum category;
     
     private List<String> ingredients;
     @Column(nullable = false)
@@ -46,25 +46,30 @@ public class MealKitEntity implements Serializable {
     @OneToMany(mappedBy = "mealKit")
     private List<ReviewEntity> reviews;
     
+    @ManyToMany
+    private List<OrderEntity> orders;
+    
+    @ManyToMany
+    private List<TagEntity> tags;
     
     public MealKitEntity(){
         
     }
 
-    public MealKitEntity(String name, Double price, CategoryEnum category, boolean isAvailable) {
+    public MealKitEntity(String name, Double price, boolean isAvailable) {
         this.name = name;
         this.price = price;
-        this.category = category;
+       // this.category = category;
         this.isAvailable = isAvailable;
     }
     
     
-    public MealKitEntity(String name, double price, List<String> ingredients, CategoryEnum category, boolean isAvailable, List<ReviewEntity> reviews){
+    public MealKitEntity(String name, double price, List<String> ingredients, boolean isAvailable, List<ReviewEntity> reviews){
         this();
         this.name = name;
         this.price = price;
         this.ingredients = ingredients;
-        this.category = category;
+       // this.category = category;
         this.isAvailable = isAvailable;
         this.reviews = reviews;
         
@@ -152,19 +157,19 @@ public class MealKitEntity implements Serializable {
         this.ingredients = ingredients;
     }
 
-    /**
-     * @return the category
-     */
-    public CategoryEnum getCategory() {
-        return category;
-    }
-
-    /**
-     * @param category the category to set
-     */
-    public void setCategory(CategoryEnum category) {
-        this.category = category;
-    }
+//    /**
+//     * @return the category
+//     */
+//    public CategoryEnum getCategory() {
+//        return category;
+//    }
+//
+//    /**
+//     * @param category the category to set
+//     */
+//    public void setCategory(CategoryEnum category) {
+//        this.category = category;
+//    }
 
     /**
      * @return the isAvailable
@@ -192,6 +197,34 @@ public class MealKitEntity implements Serializable {
      */
     public void setReviews(List<ReviewEntity> reviews) {
         this.reviews = reviews;
+    }
+
+    /**
+     * @return the orders
+     */
+    public List<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    /**
+     * @param orders the orders to set
+     */
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
+    }
+
+    /**
+     * @return the tags
+     */
+    public List<TagEntity> getTags() {
+        return tags;
+    }
+
+    /**
+     * @param tags the tags to set
+     */
+    public void setTags(List<TagEntity> tags) {
+        this.tags = tags;
     }
     
 }

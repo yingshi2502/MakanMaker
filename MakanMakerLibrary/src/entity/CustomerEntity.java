@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -41,13 +40,17 @@ public class CustomerEntity implements Serializable {
     
     @OneToMany(mappedBy = "customer")
     private List<OrderEntity> orderHistory;
-    @OneToOne
-    private AddressEntity address;
-    @OneToOne
-    private CreditCardEntity creditCard;
+    @OneToMany(mappedBy = "customer")
+    private List<AddressEntity> addresses;
+//    @OneToOne
+//    private CreditCardEntity creditCard;
     @ManyToMany
     private List<MealKitEntity> wishList = new ArrayList<MealKitEntity>();
 
+    @OneToMany(mappedBy = "customer")
+    private List<TransactionEntity> transactions;
+    
+    
     public Long getCustomerId() {
         return customerId;
     }
@@ -55,6 +58,11 @@ public class CustomerEntity implements Serializable {
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
+
+    public CustomerEntity() {
+    }
+    
+    
 
     public CustomerEntity(String userName, String email, String password) {
         this.userName = userName;
@@ -165,33 +173,20 @@ public class CustomerEntity implements Serializable {
         this.orderHistory = orderHistory;
     }
 
-    /**
-     * @return the address
-     */
-    public AddressEntity getAddress() {
-        return address;
-    }
 
-    /**
-     * @param address the address to set
-     */
-    public void setAddress(AddressEntity address) {
-        this.address = address;
-    }
-
-    /**
-     * @return the creditCard
-     */
-    public CreditCardEntity getCreditCard() {
-        return creditCard;
-    }
-
-    /**
-     * @param creditCard the creditCard to set
-     */
-    public void setCreditCard(CreditCardEntity creditCard) {
-        this.creditCard = creditCard;
-    }
+//    /**
+//     * @return the creditCard
+//     */
+//    public CreditCardEntity getCreditCard() {
+//        return creditCard;
+//    }
+//
+//    /**
+//     * @param creditCard the creditCard to set
+//     */
+//    public void setCreditCard(CreditCardEntity creditCard) {
+//        this.creditCard = creditCard;
+//    }
 
     /**
      * @return the wishList
@@ -205,6 +200,34 @@ public class CustomerEntity implements Serializable {
      */
     public void setWishList(List<MealKitEntity> wishList) {
         this.wishList = wishList;
+    }
+
+    /**
+     * @return the transactions
+     */
+    public List<TransactionEntity> getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * @param transactions the transactions to set
+     */
+    public void setTransactions(List<TransactionEntity> transactions) {
+        this.transactions = transactions;
+    }
+
+    /**
+     * @return the addresses
+     */
+    public List<AddressEntity> getAddresses() {
+        return addresses;
+    }
+
+    /**
+     * @param addresses the addresses to set
+     */
+    public void setAddresses(List<AddressEntity> addresses) {
+        this.addresses = addresses;
     }
     
 }

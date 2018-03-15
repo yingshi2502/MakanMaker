@@ -40,8 +40,9 @@ public class OrderEntity implements Serializable {
     
     @Column(nullable = false)
     private Double totalAmount;
+    
     @ManyToMany
-    private List<MealKitEntity> mealKits = new ArrayList<MealKitEntity>();
+    private List<MealKitEntity> mealKits;
     
     private List<Integer> quantity;
     private List<String> delivery;

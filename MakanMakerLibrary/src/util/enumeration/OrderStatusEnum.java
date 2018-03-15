@@ -9,5 +9,4 @@ public enum OrderStatusEnum
     PREPARING,
     DELIVERED,
     REFUNDED
-
 }

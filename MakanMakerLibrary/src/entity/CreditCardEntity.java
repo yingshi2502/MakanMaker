@@ -12,13 +12,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
 /**
  *
  * @author Ismahfaris
+ * Maybe won't use it according to the recent consultation.
  */
+
 @Entity
 public class CreditCardEntity implements Serializable {
 
@@ -27,9 +28,9 @@ public class CreditCardEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cardId;
     
-    @OneToOne(mappedBy = "creditCard")
-    private CustomerEntity customer;
-    
+//    @OneToOne(mappedBy = "creditCard")
+//    private CustomerEntity customer;
+//    
     @Column(nullable = false)
     private String cardHolderName;
     
@@ -56,7 +57,7 @@ public class CreditCardEntity implements Serializable {
     
     public CreditCardEntity(CustomerEntity customer, String cardHolderName, String cvv, Date expiryDate, String creditCardNumber){
         this();
-        this.customer = customer;
+        //this.customer = customer;
         this.cardHolderName = cardHolderName;
         this.cvv = cvv;
         this.expiryDate = expiryDate;
@@ -104,19 +105,19 @@ public class CreditCardEntity implements Serializable {
         return serialVersionUID;
     }
 
-    /**
-     * @return the customer
-     */
-    public CustomerEntity getCustomer() {
-        return customer;
-    }
-
-    /**
-     * @param customer the customer to set
-     */
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
-    }
+//    /**
+//     * @return the customer
+//     */
+//    public CustomerEntity getCustomer() {
+//        return customer;
+//    }
+//
+//    /**
+//     * @param customer the customer to set
+//     */
+//    public void setCustomer(CustomerEntity customer) {
+//        this.customer = customer;
+//    }
 
     /**
      * @return the cardHolderName
