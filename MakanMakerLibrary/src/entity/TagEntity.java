@@ -23,7 +23,7 @@ public class TagEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tagId;
     
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
     
     private TagCategoryEnum tagCategory;

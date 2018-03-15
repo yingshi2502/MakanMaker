@@ -45,7 +45,7 @@ public class CustomerEntity implements Serializable {
 //    @OneToOne
 //    private CreditCardEntity creditCard;
     @ManyToMany
-    private List<MealKitEntity> wishList = new ArrayList<MealKitEntity>();
+    private List<MealKitEntity> wishList;
 
     @OneToMany(mappedBy = "customer")
     private List<TransactionEntity> transactions;

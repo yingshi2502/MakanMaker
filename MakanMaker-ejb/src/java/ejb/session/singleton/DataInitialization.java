@@ -6,9 +6,11 @@
 package ejb.session.singleton;
 
 import entity.CustomerEntity;
+import entity.TagEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
+import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -18,6 +20,7 @@ import javax.persistence.PersistenceContext;
  */
 @Singleton
 @LocalBean
+@Startup
 public class DataInitialization {
 
     @PersistenceContext(unitName = "MakanMaker-ejbPU")
@@ -27,7 +30,14 @@ public class DataInitialization {
     @PostConstruct
     public void postConstruct(){
         CustomerEntity customer = new CustomerEntity("yingshi", "yingshi", "12345");
+        TagEntity tag = new TagEntity("Dietttt");
         em.persist(customer);
+        em.persist(tag);
     }
 
+    public DataInitialization() {
+        
+    }
+
+    
 }
