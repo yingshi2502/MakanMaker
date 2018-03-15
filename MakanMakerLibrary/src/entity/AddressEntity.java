@@ -6,12 +6,14 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -38,6 +40,8 @@ public class AddressEntity implements Serializable {
     @ManyToOne
     private CustomerEntity customer;
     
+    @OneToMany
+    private List<OrderEntity> orders;
     public AddressEntity(){
         
     }
@@ -182,6 +186,20 @@ public class AddressEntity implements Serializable {
      */
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
+    }
+
+    /**
+     * @return the orders
+     */
+    public List<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    /**
+     * @param orders the orders to set
+     */
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
     }
     
 }

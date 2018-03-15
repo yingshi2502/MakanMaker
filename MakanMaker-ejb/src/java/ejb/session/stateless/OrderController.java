@@ -7,6 +7,8 @@ package ejb.session.stateless;
 
 import entity.CustomerEntity;
 import entity.OrderEntity;
+import entity.TransactionEntity;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,6 +16,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import util.enumeration.OrderStatusEnum;
+import util.enumeration.PaymentTypeEnum;
+import util.enumeration.TransactionTypeEnum;
 import util.exception.EmptyListException;
 import util.exception.GeneralException;
 import util.exception.OrderExistException;
@@ -29,14 +33,14 @@ public class OrderController implements OrderControllerLocal {
     @PersistenceContext(unitName = "MakanMaker-ejbPU")
     private EntityManager em;
 
-
     public OrderController() {
     }
-    
+
     @Override
     public OrderEntity createNewOrder(OrderEntity order) throws OrderExistException, GeneralException {
         try {
             em.persist(order);
+
             em.flush();
             return order;
         } catch (PersistenceException ex) {
@@ -49,9 +53,31 @@ public class OrderController implements OrderControllerLocal {
             }
         }
     }
-    
+
+    /**
+     *
+     * @param order
+     * @param paymentType
+     * @return
+     */
     @Override
-    public OrderEntity updateOrder(OrderEntity order) throws OrderExistException,GeneralException {
+    public TransactionEntity payForOrder(OrderEntity order, PaymentTypeEnum paymentType) {
+        TransactionEntity newTransaction = new TransactionEntity();
+        newTransaction.setAmount(order.getTotalAmount());
+        newTransaction.setCustomer(order.getCustomer());
+        newTransaction.setOrderId(order.getOrderId());
+        newTransaction.setPaymentType(paymentType);
+        newTransaction.setTransactionDateTime(new Date());
+        newTransaction.setTransactionType(TransactionTypeEnum.PAYMENT);
+        order.setOrderStatus(OrderStatusEnum.PAID);
+        em.persist(newTransaction);
+        em.merge(order);
+        em.flush();
+        return newTransaction;
+    }
+
+    @Override
+    public OrderEntity updateOrder(OrderEntity order) throws OrderExistException, GeneralException {
         try {
             return em.merge(order);
         } catch (PersistenceException ex) {
@@ -64,29 +90,29 @@ public class OrderController implements OrderControllerLocal {
             }
         }
     }
-    
+
     @Override
     public OrderEntity retrieveOrderById(Long orderId) throws OrderNotFoundException {
         OrderEntity order = em.find(OrderEntity.class, orderId);
-        if (order != null){
+        if (order != null) {
             //order.getMealKits().size();
             return order;
-        }else{
-            throw new OrderNotFoundException("Order ID "+ orderId+" does not exists!");
+        } else {
+            throw new OrderNotFoundException("Order ID " + orderId + " does not exists!");
         }
     }
-    
+
     @Override
-    public List<OrderEntity> retrieveOrderByCustomerId(Long customerId) throws EmptyListException{
+    public List<OrderEntity> retrieveOrderByCustomerId(Long customerId) throws EmptyListException {
         Query query = em.createQuery("SELECT o FROM OrderEntity WHERE o.customer.customerId =:id");
         query.setParameter("id", customerId);
         List<OrderEntity> list = query.getResultList();
-        if (list.isEmpty()){
+        if (list.isEmpty()) {
             throw new EmptyListException("No orders from the customer");
         }
         return list;
     }
-    
+
     @Override
     public List<OrderEntity> retrieveAllOrders() {
         Query query = em.createQuery("SELECT o FROM Order o");
@@ -96,12 +122,33 @@ public class OrderController implements OrderControllerLocal {
         }
         return orders;
     }
+
+//    @Override
+//    public void refundOrder(OrderEntity order){
+//        order.setOrderStatus(OrderStatusEnum.REFUNDED);
+//        //creditTransaction
+//        CustomerEntity customer = order.getCustomer();
+//        em.merge(order);
+//    }
     
+    /**
+     * create transaction entity and refund the order
+     * order cannot be deliveried// refund policy???
+     * @param order
+     * @return
+     */
     @Override
-    public void refundOrder(OrderEntity order){
+    public TransactionEntity refundOrder(OrderEntity order) {
+        TransactionEntity newTransaction = new TransactionEntity();
+        newTransaction.setAmount(order.getTotalAmount());
+        newTransaction.setCustomer(order.getCustomer());
+        newTransaction.setOrderId(order.getOrderId());
+        newTransaction.setTransactionDateTime(new Date());
+        newTransaction.setTransactionType(TransactionTypeEnum.REFUND);
         order.setOrderStatus(OrderStatusEnum.REFUNDED);
-        //creditTransaction
-        CustomerEntity customer = order.getCustomer();
+        em.persist(newTransaction);
         em.merge(order);
+        em.flush();
+        return newTransaction;
     }
 }

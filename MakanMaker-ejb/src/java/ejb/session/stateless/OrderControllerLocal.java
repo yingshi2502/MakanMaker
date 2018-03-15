@@ -6,8 +6,10 @@
 package ejb.session.stateless;
 
 import entity.OrderEntity;
+import entity.TransactionEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.enumeration.PaymentTypeEnum;
 import util.exception.EmptyListException;
 import util.exception.GeneralException;
 import util.exception.OrderExistException;
@@ -30,6 +32,10 @@ public interface OrderControllerLocal {
 
     public List<OrderEntity> retrieveAllOrders();
 
-    public void refundOrder(OrderEntity order);
+//    public void refundOrder(OrderEntity order);
+
+    public TransactionEntity refundOrder(OrderEntity order);
+
+    public TransactionEntity payForOrder(OrderEntity order, PaymentTypeEnum paymentType);
     
 }

@@ -8,5 +8,6 @@ public enum OrderStatusEnum
     SUBMITTED,
     PREPARING,
     DELIVERED,
-    REFUNDED
+    REFUNDED,
+    PAID
 }

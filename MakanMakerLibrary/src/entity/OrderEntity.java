@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import util.enumeration.OrderStatusEnum;
 
@@ -54,6 +55,9 @@ public class OrderEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatusEnum orderStatus;
+    
+    @ManyToOne
+    private AddressEntity address;
     
     private String extraRequest;
     
@@ -230,6 +234,20 @@ public class OrderEntity implements Serializable {
      */
     public void setExtraRequest(String extraRequest) {
         this.extraRequest = extraRequest;
+    }
+
+    /**
+     * @return the address
+     */
+    public AddressEntity getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(AddressEntity address) {
+        this.address = address;
     }
     
 }
