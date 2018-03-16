@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package entity;
 
 import java.io.Serializable;
@@ -14,7 +10,7 @@ import javax.persistence.Id;
 
 /**
  *
- * @author Ismahfaris
+ * @author yingshi
  */
 @Entity
 public class ManagerEntity implements Serializable {
@@ -24,20 +20,21 @@ public class ManagerEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long managerId;
     
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String userName;
     
     @Column(nullable = false)
     private String password;
-    
-    public ManagerEntity(){
-        
+
+    public ManagerEntity() {
     }
-    
-    public ManagerEntity(String userName, String password){
+
+    public ManagerEntity(String userName, String password) {
         this.userName = userName;
         this.password = password;
     }
+
+    
 
     public Long getManagerId() {
         return managerId;
@@ -50,18 +47,18 @@ public class ManagerEntity implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (getManagerId() != null ? getManagerId().hashCode() : 0);
+        hash += (managerId != null ? managerId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the managerId fields are not set
         if (!(object instanceof ManagerEntity)) {
             return false;
         }
         ManagerEntity other = (ManagerEntity) object;
-        if ((this.getManagerId() == null && other.getManagerId() != null) || (this.getManagerId() != null && !this.managerId.equals(other.managerId))) {
+        if ((this.managerId == null && other.managerId != null) || (this.managerId != null && !this.managerId.equals(other.managerId))) {
             return false;
         }
         return true;
@@ -69,14 +66,7 @@ public class ManagerEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.ManagerEntity[ id=" + getManagerId() + " ]";
-    }
-
-    /**
-     * @return the serialVersionUID
-     */
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+        return "entity.ManagerEntity[ id=" + managerId + " ]";
     }
 
     /**
@@ -106,5 +96,5 @@ public class ManagerEntity implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
 }

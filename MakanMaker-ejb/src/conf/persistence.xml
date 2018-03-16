@@ -5,14 +5,14 @@
     <class>entity.AddressEntity</class>
     <class>entity.CreditCardEntity</class>
     <class>entity.CustomerEntity</class>
-    <class>entity.ManagerEntity</class>
     <class>entity.MealKitEntity</class>
     <class>entity.OrderEntity</class>
     <class>entity.ReviewEntity</class>
     <class>entity.TagEntity</class>
     <class>entity.TransactionEntity</class>
     <class>entity.ShoppingCartEntity</class>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <class>entity.ManagerEntity</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>

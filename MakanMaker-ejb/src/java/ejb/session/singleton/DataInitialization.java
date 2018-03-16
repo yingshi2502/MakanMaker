@@ -5,7 +5,6 @@
  */
 package ejb.session.singleton;
 
-import entity.CustomerEntity;
 import entity.ManagerEntity;
 import entity.TagEntity;
 import javax.annotation.PostConstruct;
@@ -13,10 +12,7 @@ import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import util.enumeration.TagCategoryEnum;
 import util.helperClass.SecurityHelper;
 
@@ -35,6 +31,9 @@ public class DataInitialization {
     @PostConstruct
     public void postConstruct(){
         initialize();
+//        ManagerEntity manager = new ManagerEntity("manager", "password");
+//        manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
+//        em.persist(manager);
     }
 
     private void initialize(){
