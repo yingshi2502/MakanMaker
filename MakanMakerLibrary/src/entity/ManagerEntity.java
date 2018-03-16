@@ -35,7 +35,6 @@ public class ManagerEntity implements Serializable {
     }
     
     public ManagerEntity(String userName, String password){
-        this();
         this.userName = userName;
         this.password = password;
     }
