@@ -135,8 +135,11 @@ public class CustomerController implements CustomerControllerLocal {
         CustomerEntity customer = em.find(CustomerEntity.class, customerId);
       
         if (customer!=null){
-            customer.getWishList().size();
-            return customer.getWishList();
+            List<MealKitEntity> mealKits = null;
+            for(Long mkId: customer.getWishList()){
+                mealKits.add(em.find(MealKitEntity.class, mkId));
+            }
+            return mealKits;
         }else{
             return null;
         }

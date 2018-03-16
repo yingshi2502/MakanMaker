@@ -6,13 +6,19 @@
 package ejb.session.singleton;
 
 import entity.CustomerEntity;
+import entity.ManagerEntity;
 import entity.TagEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import util.enumeration.TagCategoryEnum;
+import util.helperClass.SecurityHelper;
 
 /**
  *
@@ -29,12 +35,50 @@ public class DataInitialization {
     
     @PostConstruct
     public void postConstruct(){
-        CustomerEntity customer = new CustomerEntity("yingshi", "yingshi", "12345");
-        TagEntity tag = new TagEntity("Dietttt");
-        em.persist(customer);
-        em.persist(tag);
+        Query query= em.createQuery("SELECT m FROM ManagerEntity m WHERE m.userName = :username");
+        query.setParameter("username", "manager");
+        try
+        {
+            ManagerEntity defaultMng = (ManagerEntity)query.getSingleResult();
+        }
+        catch(NoResultException | NonUniqueResultException ex)
+        {
+            initialize();
+        }
     }
 
+    private void initialize(){
+        ManagerEntity manager = new ManagerEntity("manager", "password");
+        manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
+        em.persist(manager);
+        
+        TagEntity tag = new TagEntity("Western",TagCategoryEnum.GEOGRPHIC);
+        em.persist(tag);
+        
+        tag = new TagEntity("Chinese",TagCategoryEnum.GEOGRPHIC);
+        em.persist(tag);
+        
+        tag = new TagEntity("Japanese",TagCategoryEnum.GEOGRPHIC);
+        em.persist(tag);
+        
+        tag = new TagEntity("Indian",TagCategoryEnum.GEOGRPHIC);
+        em.persist(tag);
+        
+        tag = new TagEntity("Malay",TagCategoryEnum.GEOGRPHIC);
+        em.persist(tag);
+        
+        tag = new TagEntity("Vegetarian",TagCategoryEnum.DIET);
+        em.persist(tag);
+        
+        tag = new TagEntity("Seafood",TagCategoryEnum.DIET);
+        em.persist(tag);
+        
+        tag = new TagEntity("Beef",TagCategoryEnum.DIET);
+        em.persist(tag);
+       
+    }
+    
+    
     public DataInitialization() {
         
     }

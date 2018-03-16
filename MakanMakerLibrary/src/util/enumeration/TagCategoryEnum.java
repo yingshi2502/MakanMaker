@@ -10,7 +10,7 @@ package util.enumeration;
  * @author yingshi
  */
 public enum TagCategoryEnum {
-    GEOMETRIC,
+    GEOGRPHIC,
     DIET,
     OTHERS
 }

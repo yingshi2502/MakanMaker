@@ -6,7 +6,6 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -17,7 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -29,6 +27,7 @@ import util.enumeration.OrderStatusEnum;
  */
 @Entity
 public class OrderEntity implements Serializable {
+
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -42,11 +41,14 @@ public class OrderEntity implements Serializable {
     @Column(nullable = false)
     private Double totalAmount;
     
-    @ManyToMany
-    private List<MealKitEntity> mealKits;
+    @ManyToOne
+    private MealKitEntity mealKit;
     
-    private List<Integer> quantity;
-    private List<String> delivery;
+    private Integer quantity;
+    
+    @Column(nullable = false)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date deliveryDate;
     
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -59,30 +61,24 @@ public class OrderEntity implements Serializable {
     @ManyToOne
     private AddressEntity address;
     
+    @OneToOne(mappedBy="order")
+    private TransactionEntity transaction;
+    
     private String extraRequest;
     
     public OrderEntity(){
         
     }
 
-    public OrderEntity(Double totalAmount, Date purchasingDate, OrderStatusEnum orderStatus, String extraRequest) {
+    public OrderEntity(Double totalAmount, Integer quantity, Date deliveryDate, Date purchasingDate, OrderStatusEnum orderStatus, String extraRequest) {
         this.totalAmount = totalAmount;
+        this.quantity = quantity;
+        this.deliveryDate = deliveryDate;
         this.purchasingDate = purchasingDate;
         this.orderStatus = orderStatus;
         this.extraRequest = extraRequest;
     }
     
-    public OrderEntity(CustomerEntity customer, double totalAmount,List<MealKitEntity> mealKits,List<Integer> quantity, List<String> delivery, Date purchasingDate,OrderStatusEnum orderStatus,String extraRequest){
-        this();
-        this.customer = customer;
-        this.totalAmount = totalAmount;
-        this.mealKits = mealKits;
-        this.quantity = quantity;
-        this.delivery = delivery;
-        this.purchasingDate = purchasingDate;
-        this.orderStatus = orderStatus;
-        this.extraRequest = extraRequest;
-    }
 
     public Long getOrderId() {
         return orderId;
@@ -153,46 +149,18 @@ public class OrderEntity implements Serializable {
     }
 
     /**
-     * @return the mealKits
-     */
-    public List<MealKitEntity> getMealKits() {
-        return mealKits;
-    }
-
-    /**
-     * @param mealKits the mealKits to set
-     */
-    public void setMealKits(List<MealKitEntity> mealKits) {
-        this.mealKits = mealKits;
-    }
-
-    /**
      * @return the quantity
      */
-    public List<Integer> getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
-
     /**
      * @param quantity the quantity to set
      */
     public void setQuantity(List<Integer> quantity) {
-        this.quantity = quantity;
+        this.setQuantity(quantity);
     }
 
-    /**
-     * @return the delivery
-     */
-    public List<String> getDelivery() {
-        return delivery;
-    }
-
-    /**
-     * @param delivery the delivery to set
-     */
-    public void setDelivery(List<String> delivery) {
-        this.delivery = delivery;
-    }
 
     /**
      * @return the purchasingDate
@@ -248,6 +216,55 @@ public class OrderEntity implements Serializable {
      */
     public void setAddress(AddressEntity address) {
         this.address = address;
+    }
+
+    /**
+     * @return the mealKit
+     */
+    public MealKitEntity getMealKit() {
+        return mealKit;
+    }
+
+    /**
+     * @param mealKit the mealKit to set
+     */
+    public void setMealKit(MealKitEntity mealKit) {
+        this.mealKit = mealKit;
+    }
+
+    /**
+     * @param quantity the quantity to set
+     */
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    /**
+     * @return the deliveryDate
+     */
+    public Date getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    /**
+     * @param deliveryDate the deliveryDate to set
+     */
+    public void setDeliveryDate(Date deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    /**
+     * @return the transaction
+     */
+    public TransactionEntity getTransaction() {
+        return transaction;
+    }
+
+    /**
+     * @param transaction the transaction to set
+     */
+    public void setTransaction(TransactionEntity transaction) {
+        this.transaction = transaction;
     }
     
 }

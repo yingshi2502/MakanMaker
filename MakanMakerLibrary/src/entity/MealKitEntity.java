@@ -24,6 +24,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class MealKitEntity implements Serializable {
 
+   
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,19 +36,18 @@ public class MealKitEntity implements Serializable {
     
     @Column(nullable = false)
     private Double price;
-//    
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false)
-//    private CategoryEnum category;
     
     private List<String> ingredients;
+    
+    private List<String> recipe;
+    
     @Column(nullable = false)
     private boolean isAvailable;
     
     @OneToMany(mappedBy = "mealKit")
     private List<ReviewEntity> reviews;
     
-    @ManyToMany
+    @OneToMany(mappedBy = "mealKit")
     private List<OrderEntity> orders;
     
     @ManyToMany
@@ -59,7 +60,6 @@ public class MealKitEntity implements Serializable {
     public MealKitEntity(String name, Double price, boolean isAvailable) {
         this.name = name;
         this.price = price;
-       // this.category = category;
         this.isAvailable = isAvailable;
     }
     
@@ -69,10 +69,23 @@ public class MealKitEntity implements Serializable {
         this.name = name;
         this.price = price;
         this.ingredients = ingredients;
-       // this.category = category;
         this.isAvailable = isAvailable;
         this.reviews = reviews;
         
+    }
+    
+     /**
+     * @return the recipe
+     */
+    public List<String> getRecipe() {
+        return recipe;
+    }
+
+    /**
+     * @param recipe the recipe to set
+     */
+    public void setRecipe(List<String> recipe) {
+        this.recipe = recipe;
     }
     
     public Long getMealKitId() {

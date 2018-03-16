@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +28,7 @@ public class TagEntity implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
     
+    @Enumerated(EnumType.STRING)
     private TagCategoryEnum tagCategory;
     
     @ManyToMany(mappedBy = "tags")
@@ -34,9 +37,10 @@ public class TagEntity implements Serializable {
     public TagEntity() {
     }
 
-    public TagEntity(String name) {
+    public TagEntity(String name, TagCategoryEnum tagCategory) {
         this.name = name;
-    }
+        this.tagCategory = tagCategory;
+    }   
     
     
     public Long getTagId() {

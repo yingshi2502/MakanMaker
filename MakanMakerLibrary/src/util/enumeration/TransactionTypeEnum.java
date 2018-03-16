@@ -10,6 +10,6 @@ package util.enumeration;
  * @author yingshi
  */
 public enum TransactionTypeEnum {
-    PAYMENT,
-    REFUND
+    CREDIT,
+    DEBIT
 }

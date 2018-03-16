@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -36,20 +37,19 @@ public class CustomerEntity implements Serializable {
     
     @Column(nullable = false)
     private String password; 
-    private List<String> socialMediaAccount;
     
     @OneToMany(mappedBy = "customer")
     private List<OrderEntity> orderHistory;
     @OneToMany(mappedBy = "customer")
     private List<AddressEntity> addresses;
-//    @OneToOne
-//    private CreditCardEntity creditCard;
     @ManyToMany
-    private List<MealKitEntity> wishList;
+    private List<Long> wishList; //// stores MealKitID
 
     @OneToMany(mappedBy = "customer")
     private List<TransactionEntity> transactions;
     
+    @OneToOne(mappedBy = "customer")
+    private ShoppingCartEntity shoppingCart;
     
     public Long getCustomerId() {
         return customerId;
@@ -147,17 +147,17 @@ public class CustomerEntity implements Serializable {
 
     /**
      * @return the socialMediaAccount
-     */
-    public List<String> getSocialMediaAccount() {
-        return socialMediaAccount;
-    }
-
-    /**
-     * @param socialMediaAccount the socialMediaAccount to set
-     */
-    public void setSocialMediaAccount(List<String> socialMediaAccount) {
-        this.socialMediaAccount = socialMediaAccount;
-    }
+//     */
+//    public List<String> getSocialMediaAccount() {
+//        return socialMediaAccount;
+//    }
+//
+//    /**
+//     * @param socialMediaAccount the socialMediaAccount to set
+//     */
+//    public void setSocialMediaAccount(List<String> socialMediaAccount) {
+//        this.socialMediaAccount = socialMediaAccount;
+//    }
 
     /**
      * @return the orderHistory
@@ -173,32 +173,17 @@ public class CustomerEntity implements Serializable {
         this.orderHistory = orderHistory;
     }
 
-
-//    /**
-//     * @return the creditCard
-//     */
-//    public CreditCardEntity getCreditCard() {
-//        return creditCard;
-//    }
-//
-//    /**
-//     * @param creditCard the creditCard to set
-//     */
-//    public void setCreditCard(CreditCardEntity creditCard) {
-//        this.creditCard = creditCard;
-//    }
-
     /**
      * @return the wishList
      */
-    public List<MealKitEntity> getWishList() {
+    public List<Long> getWishList() {
         return wishList;
     }
 
     /**
      * @param wishList the wishList to set
      */
-    public void setWishList(List<MealKitEntity> wishList) {
+    public void setWishList(List<Long> wishList) {
         this.wishList = wishList;
     }
 
@@ -228,6 +213,20 @@ public class CustomerEntity implements Serializable {
      */
     public void setAddresses(List<AddressEntity> addresses) {
         this.addresses = addresses;
+    }
+
+    /**
+     * @return the shoppingCart
+     */
+    public ShoppingCartEntity getShoppingCart() {
+        return shoppingCart;
+    }
+
+    /**
+     * @param shoppingCart the shoppingCart to set
+     */
+    public void setShoppingCart(ShoppingCartEntity shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
     
 }

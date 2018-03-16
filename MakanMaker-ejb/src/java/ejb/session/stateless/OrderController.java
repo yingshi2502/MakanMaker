@@ -5,7 +5,7 @@
  */
 package ejb.session.stateless;
 
-import entity.CustomerEntity;
+
 import entity.OrderEntity;
 import entity.TransactionEntity;
 import java.util.Date;
@@ -64,14 +64,18 @@ public class OrderController implements OrderControllerLocal {
     public TransactionEntity payForOrder(OrderEntity order, PaymentTypeEnum paymentType) {
         TransactionEntity newTransaction = new TransactionEntity();
         newTransaction.setAmount(order.getTotalAmount());
-        newTransaction.setCustomer(order.getCustomer());
-        newTransaction.setOrderId(order.getOrderId());
+        
         newTransaction.setPaymentType(paymentType);
         newTransaction.setTransactionDateTime(new Date());
-        newTransaction.setTransactionType(TransactionTypeEnum.PAYMENT);
-        order.setOrderStatus(OrderStatusEnum.PAID);
+        newTransaction.setTransactionType(TransactionTypeEnum.CREDIT);
+        order.setOrderStatus(OrderStatusEnum.PREPARING);
+        
         em.persist(newTransaction);
         em.merge(order);
+        newTransaction.setOrder(order);
+        newTransaction.setCustomer(order.getCustomer());
+        order.setTransaction(newTransaction);
+        
         em.flush();
         return newTransaction;
     }
@@ -118,7 +122,8 @@ public class OrderController implements OrderControllerLocal {
         Query query = em.createQuery("SELECT o FROM Order o");
         List<OrderEntity> orders = query.getResultList();
         for (OrderEntity o : orders) {
-            o.getMealKits().size();
+            o.getCustomer();
+            o.getMealKit();
         }
         return orders;
     }
@@ -141,13 +146,16 @@ public class OrderController implements OrderControllerLocal {
     public TransactionEntity refundOrder(OrderEntity order) {
         TransactionEntity newTransaction = new TransactionEntity();
         newTransaction.setAmount(order.getTotalAmount());
-        newTransaction.setCustomer(order.getCustomer());
-        newTransaction.setOrderId(order.getOrderId());
+        
         newTransaction.setTransactionDateTime(new Date());
-        newTransaction.setTransactionType(TransactionTypeEnum.REFUND);
+        newTransaction.setTransactionType(TransactionTypeEnum.DEBIT);
+        
         order.setOrderStatus(OrderStatusEnum.REFUNDED);
         em.persist(newTransaction);
         em.merge(order);
+        newTransaction.setCustomer(order.getCustomer());
+        newTransaction.setOrder(order);
+        
         em.flush();
         return newTransaction;
     }

@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import util.enumeration.PaymentTypeEnum;
@@ -30,12 +31,8 @@ public class TransactionEntity implements Serializable {
     
     private Double amount;
     
-    @ManyToOne(optional = true)
-    @JoinColumn(nullable = false)
-    private CustomerEntity customer;
-    
-    //not sure yet
-    private Long orderId;
+    @OneToOne
+    private OrderEntity order;
     
     @Enumerated(EnumType.STRING)
     private TransactionTypeEnum transactionType;
@@ -46,16 +43,21 @@ public class TransactionEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date transactionDateTime;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private CustomerEntity customer;
+    
     public TransactionEntity() {
     }
 
-    public TransactionEntity(Double amount, Long orderId, TransactionTypeEnum transactionType, PaymentTypeEnum paymentType, Date transactionDateTime) {
+    public TransactionEntity(Double amount, TransactionTypeEnum transactionType, PaymentTypeEnum paymentType, Date transactionDateTime) {
         this.amount = amount;
-        this.orderId = orderId;
         this.transactionType = transactionType;
         this.paymentType = paymentType;
         this.transactionDateTime = transactionDateTime;
     }
+    
+    
     
     public Long getTransactionId() {
         return transactionId;
@@ -89,20 +91,6 @@ public class TransactionEntity implements Serializable {
     public String toString() {
         return "entity.TransactionEntity[ id=" + transactionId + " ]";
     }
-    
-        /**
-     * @return the orderId
-     */
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    /**
-     * @param orderId the orderId to set
-     */
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
 
      /**
      * @return the amount
@@ -118,19 +106,6 @@ public class TransactionEntity implements Serializable {
         this.amount = amount;
     }
 
-    /**
-     * @return the customer
-     */
-    public CustomerEntity getCustomer() {
-        return customer;
-    }
-
-    /**
-     * @param customer the customer to set
-     */
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
-    }
 
     /**
      * @return the transactionType
@@ -172,6 +147,34 @@ public class TransactionEntity implements Serializable {
      */
     public void setPaymentType(PaymentTypeEnum paymentType) {
         this.paymentType = paymentType;
+    }
+
+    /**
+     * @return the order
+     */
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    /**
+     * @param order the order to set
+     */
+    public void setOrder(OrderEntity order) {
+        this.order = order;
+    }
+
+    /**
+     * @return the customer
+     */
+    public CustomerEntity getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @param customer the customer to set
+     */
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
     }
 
 }
