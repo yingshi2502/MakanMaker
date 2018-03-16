@@ -37,17 +37,20 @@ public class CustomerEntity implements Serializable {
     
     @Column(nullable = false)
     private String password; 
-    private List<String> socialMediaAccount;
     
     @OneToMany(mappedBy = "customer")
     private List<OrderEntity> orderHistory;
-    @OneToOne
-    private AddressEntity address;
-    @OneToOne
-    private CreditCardEntity creditCard;
-    @ManyToMany
-    private List<MealKitEntity> wishList = new ArrayList<MealKitEntity>();
+    @OneToMany(mappedBy = "customer")
+    private List<AddressEntity> addresses;
+    
+    private List<Long> wishList; //// stores MealKitID
 
+    @OneToMany(mappedBy = "customer")
+    private List<TransactionEntity> transactions;
+    
+    @OneToOne(mappedBy = "customer")
+    private ShoppingCartEntity shoppingCart;
+    
     public Long getCustomerId() {
         return customerId;
     }
@@ -55,6 +58,11 @@ public class CustomerEntity implements Serializable {
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
+
+    public CustomerEntity() {
+    }
+    
+    
 
     public CustomerEntity(String userName, String email, String password) {
         this.userName = userName;
@@ -139,17 +147,17 @@ public class CustomerEntity implements Serializable {
 
     /**
      * @return the socialMediaAccount
-     */
-    public List<String> getSocialMediaAccount() {
-        return socialMediaAccount;
-    }
-
-    /**
-     * @param socialMediaAccount the socialMediaAccount to set
-     */
-    public void setSocialMediaAccount(List<String> socialMediaAccount) {
-        this.socialMediaAccount = socialMediaAccount;
-    }
+//     */
+//    public List<String> getSocialMediaAccount() {
+//        return socialMediaAccount;
+//    }
+//
+//    /**
+//     * @param socialMediaAccount the socialMediaAccount to set
+//     */
+//    public void setSocialMediaAccount(List<String> socialMediaAccount) {
+//        this.socialMediaAccount = socialMediaAccount;
+//    }
 
     /**
      * @return the orderHistory
@@ -166,45 +174,59 @@ public class CustomerEntity implements Serializable {
     }
 
     /**
-     * @return the address
-     */
-    public AddressEntity getAddress() {
-        return address;
-    }
-
-    /**
-     * @param address the address to set
-     */
-    public void setAddress(AddressEntity address) {
-        this.address = address;
-    }
-
-    /**
-     * @return the creditCard
-     */
-    public CreditCardEntity getCreditCard() {
-        return creditCard;
-    }
-
-    /**
-     * @param creditCard the creditCard to set
-     */
-    public void setCreditCard(CreditCardEntity creditCard) {
-        this.creditCard = creditCard;
-    }
-
-    /**
      * @return the wishList
      */
-    public List<MealKitEntity> getWishList() {
+    public List<Long> getWishList() {
         return wishList;
     }
 
     /**
      * @param wishList the wishList to set
      */
-    public void setWishList(List<MealKitEntity> wishList) {
+    public void setWishList(List<Long> wishList) {
         this.wishList = wishList;
+    }
+
+    /**
+     * @return the transactions
+     */
+    public List<TransactionEntity> getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * @param transactions the transactions to set
+     */
+    public void setTransactions(List<TransactionEntity> transactions) {
+        this.transactions = transactions;
+    }
+
+    /**
+     * @return the addresses
+     */
+    public List<AddressEntity> getAddresses() {
+        return addresses;
+    }
+
+    /**
+     * @param addresses the addresses to set
+     */
+    public void setAddresses(List<AddressEntity> addresses) {
+        this.addresses = addresses;
+    }
+
+    /**
+     * @return the shoppingCart
+     */
+    public ShoppingCartEntity getShoppingCart() {
+        return shoppingCart;
+    }
+
+    /**
+     * @param shoppingCart the shoppingCart to set
+     */
+    public void setShoppingCart(ShoppingCartEntity shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
     
 }
