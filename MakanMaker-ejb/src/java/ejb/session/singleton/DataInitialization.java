@@ -34,16 +34,6 @@ public class DataInitialization {
     
     @PostConstruct
     public void postConstruct(){
-//        Query query= em.createQuery("SELECT m FROM ManagerEntity m WHERE m.userName = :username");
-//        query.setParameter("username", "manager");
-//        try
-//        {
-//            ManagerEntity defaultMng = (ManagerEntity)query.getSingleResult();
-//        }
-//        catch(NoResultException | NonUniqueResultException ex)
-//        {
-//            initialize();
-//        }
         initialize();
     }
 

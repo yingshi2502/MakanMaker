@@ -42,7 +42,7 @@ public class CustomerEntity implements Serializable {
     private List<OrderEntity> orderHistory;
     @OneToMany(mappedBy = "customer")
     private List<AddressEntity> addresses;
-    @ManyToMany
+    
     private List<Long> wishList; //// stores MealKitID
 
     @OneToMany(mappedBy = "customer")
