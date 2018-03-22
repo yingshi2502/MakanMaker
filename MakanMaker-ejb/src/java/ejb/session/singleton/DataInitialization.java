@@ -30,7 +30,9 @@ public class DataInitialization {
     
     @PostConstruct
     public void postConstruct(){
-        initialize();
+        if (em.find(ManagerEntity.class, 1l)==null){
+            initialize();
+        }
 //        ManagerEntity manager = new ManagerEntity("manager", "password");
 //        manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
 //        em.persist(manager);
