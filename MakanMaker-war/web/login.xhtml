@@ -26,9 +26,10 @@
                 <f:validateLength minimum="4"/>
             </p:password>
             <br />
-            <p:commandButton type="reset" value="Clear" />&nbsp;
-            <p:commandButton rendered="#{sessionScope['isManager']}"value="Login" update="@form" actionListener="#{indexManagedBean.staffLogin(event)}" icon="ui-icon-key" /> 
-            <p:commandButton rendered="#{!sessionScope['isManager']}"value="Login" update="@form" actionListener="#{indexManagedBean.customerLogin(event)}" icon="ui-icon-key" /> 
+            <p:commandButton type="reset" value="Clear" />
+            <br />
+            <p:commandButton rendered="#{sessionScope['isManager']}" value="Login" update="@form" actionListener="#{indexManagedBean.staffLogin}" icon="ui-icon-key" /> 
+            <p:commandButton rendered="#{!sessionScope['isManager']}" value="Login" update="@form" actionListener="#{indexManagedBean.customerLogin}" icon="ui-icon-key" /> 
             </h:form>
         </p:panel>
     </h:body>

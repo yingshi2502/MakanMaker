@@ -30,7 +30,7 @@ public class DataInitialization {
     
     @PostConstruct
     public void postConstruct(){
-        if (em.find(ManagerEntity.class, 1l)==null){
+        if (em.find(ManagerEntity.class, 1l) == null){
             initialize();
         }
 //        ManagerEntity manager = new ManagerEntity("manager", "password");

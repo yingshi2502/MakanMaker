@@ -34,7 +34,6 @@ public class IndexManagedBean
     
     public IndexManagedBean()
     {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isManager", false);
     }
     
     public void customerLogin(ActionEvent event) throws IOException
@@ -42,6 +41,7 @@ public class IndexManagedBean
         try
         {
             CustomerEntity currentCustomerEntity = customerControllerLocal.customerLogin(username, password);FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", currentCustomerEntity);
             FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");            
@@ -55,6 +55,7 @@ public class IndexManagedBean
     public void staffLogin(ActionEvent event) throws IOException{
         try{
             ManagerEntity currentManagerEntity = staffController.staffLogin(username, password);FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentManagerEntity", currentManagerEntity);
             FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");     
@@ -63,10 +64,12 @@ public class IndexManagedBean
         }
     }
     
+    
+    
     public void setManagerIdentity() throws IOException{
+        FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isManager", true);
         FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
-
     }
     public void logout(ActionEvent event) throws IOException
     {
