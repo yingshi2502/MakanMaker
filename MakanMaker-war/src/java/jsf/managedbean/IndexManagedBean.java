@@ -5,6 +5,7 @@ import ejb.session.stateless.StaffControllerLocal;
 import entity.CustomerEntity;
 import entity.ManagerEntity;
 import java.io.IOException;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -34,7 +35,9 @@ public class IndexManagedBean
     
     public IndexManagedBean()
     {
+        
     }
+    
     
     public void customerLogin(ActionEvent event) throws IOException
     {
@@ -64,13 +67,6 @@ public class IndexManagedBean
         }
     }
     
-    
-    
-    public void setManagerIdentity() throws IOException{
-        FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isManager", true);
-        FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
-    }
     public void logout(ActionEvent event) throws IOException
     {
         ((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).invalidate();

@@ -5,7 +5,14 @@ body {
     color: #000000;  
     margin: 10px;
 }
+.ui-layout-north {
+        z-index:20 !important;
+        overflow:visible !important;
+    }
 
+.ui-layout-north .ui-layout-unit-content {
+        overflow:visible !important;
+}
 h1 {
     font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
     border-bottom: 1px solid #AFAFAF; 

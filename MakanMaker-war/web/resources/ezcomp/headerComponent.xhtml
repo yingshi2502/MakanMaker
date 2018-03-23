@@ -1,22 +1,39 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--myShoppingCart 404: haven't implement, for myProfile's header-->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-    
+
     <cc:interface>
     </cc:interface>
-    
+
     <cc:implementation>
-        
-        <h:panelGroup rendered="#{sessionScope['isLogin'] && !sessionScope['isManager']} ">
-            <h:link value="Track My Order" outcome="myOrder.xhtml" />  haven't implemented yet
-            <h:outputText value="Welcome!"/>
-            <h:link value="#{sessionScope['currentCustomerEntity'].userName}" outcome="manageMyAccount.xhtml" />
-        </h:panelGroup>
-        
+<!--        under rendered: rendered="#{sessionScope['isLogin']} "-->
+        <h:form>
+<!--       <p:link value="#{sessionScope['currentCustomerEntity'].userName}" outcome="manageMyAccount.xhtml" />-->
+            <p:menubar style="position: absolute; right: 10px; background-color: lightblue; height: 25px;width: 650px" >
+                
+                <f:facet name="options">
+                    <p:inputText style="position: absolute; right: 200px; width: 400px" placeholder="Search Meal Kit"/>
+                    <p:commandButton style="position: absolute; right: 610px" type="button" icon="fa fa-search" />
+                </f:facet>
+
+                <p:submenu  style="position: absolute; right: 25px;" label="Welcome! Username">
+                    <p:menuitem value="Manage My Account" icon="fa fa-smile-o" url="/faces/userProfile/manageMyAccount" />
+                    <p:menuitem value="My Orders" icon="fa fa-reorder" url="/faces/userProfile/myOrder.xhtml" />
+                    <p:menuitem value="Wishlist" icon="fa fa-heart" url="#" /> 
+                    <p:separator />
+                    <p:menuitem value="Log out" icon="fa fa-sign-out" url="#" />
+                </p:submenu>
+                <p:menuitem style="position: absolute; right: 5px;" url="myShoppingCart" icon='fa fa-shopping-cart'/>
+
+            </p:menubar>
+
+        </h:form>
+
     </cc:implementation>
 </html>
 

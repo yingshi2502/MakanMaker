@@ -11,7 +11,7 @@
         <p:panel rendered="#{sessionScope['isLogin']}">          
             <h3>After login shown page</h3>
         </p:panel>
-
+        <p:link value="testMyProfile" outcome="/userProfile/manageMyAccount"/>
         <p:panel rendered="#{!sessionScope['isLogin']}">
 
             <h3>Welcome</h3>
