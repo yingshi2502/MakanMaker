@@ -4,10 +4,9 @@ package util.enumeration;
 
 public enum OrderStatusEnum
 {
-    NOTSUBMITTED,
-    SUBMITTED,
     PREPARING,
+    DELIVERING,
     DELIVERED,
+    RECEIVED,
     REFUNDED
-
 }

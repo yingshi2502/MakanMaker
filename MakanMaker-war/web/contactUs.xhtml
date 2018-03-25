@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h2>Contact Us</h2>
+        
+        <h:form>
+            <p:growl id="msgs" showDetail="true" />
+
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel value="Your Email Address:" for="emailAddress" />
+                <p:autoComplete id="emailAddress" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}" />
+                
+                <p:outputLabel value="Subject" for="subject" />
+                <p:autoComplete id="subject" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}" />
+            
+                <p:outputLabel value="Description" for="description" />
+                <p:autoComplete id="description" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}" />
+
+                <p:outputLabel value="What is your question about?" for="dd1" />
+                <p:autoComplete id="dd1" dropdown="true" value="#{contactUsManagedBean.dropDownText}" completeMethod="#{contactUsManagedBean.completeTextOne}" />
+        
+                <p:outputLabel value="Is the email above associated with your Makan Maker account?" for="dd2" />
+                <p:autoComplete id="dd2" dropdown="true" value="#{contactUsManagedBean.dropDownText2}" completeMethod="#{contactUsManagedBean.completeTextTwo}" />
+            
+            </h:panelGrid>
+
+             <p:commandButton value="Submit" icon="ui-icon-check" update="" oncomplete="" />
+             
+        </h:form>
+    </ui:define>
+
+</ui:composition>

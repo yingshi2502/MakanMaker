@@ -113,7 +113,7 @@ public class CustomerController implements CustomerControllerLocal {
         
         try{
             CustomerEntity customer = (CustomerEntity) query.getSingleResult();
-            customer.getCreditCard();
+           // customer.getCreditCard();
             customer.getOrderHistory().size();
             customer.getWishList().size();
             return customer;
@@ -135,8 +135,11 @@ public class CustomerController implements CustomerControllerLocal {
         CustomerEntity customer = em.find(CustomerEntity.class, customerId);
       
         if (customer!=null){
-            customer.getWishList().size();
-            return customer.getWishList();
+            List<MealKitEntity> mealKits = null;
+            for(Long mkId: customer.getWishList()){
+                mealKits.add(em.find(MealKitEntity.class, mkId));
+            }
+            return mealKits;
         }else{
             return null;
         }
@@ -197,4 +200,5 @@ public class CustomerController implements CustomerControllerLocal {
             return false;
         }
     }
+    
 }

@@ -6,12 +6,14 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -35,8 +37,20 @@ public class AddressEntity implements Serializable {
     private String addressLine1;
     @Column(nullable = false)
     private String addressLine2;
-    @OneToOne(mappedBy = "address")
+    @Column(nullable = false)
+    private Boolean isDefault;
+    @Column(nullable = false)
+    private String phoneNumber;
+    @Column(nullable = false)
+    private String fullName;
+    @Column(nullable = false)
+    private Boolean isDeleted; //customer wants to delete the address, don't directly delete but just change the BooleanValue
+    
+    @ManyToOne
     private CustomerEntity customer;
+    
+    @OneToMany(mappedBy = "address")
+    private List<OrderEntity> orders;
     
     public AddressEntity(){
         
@@ -182,6 +196,76 @@ public class AddressEntity implements Serializable {
      */
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
+    }
+
+    /**
+     * @return the orders
+     */
+    public List<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    /**
+     * @param orders the orders to set
+     */
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
+    }
+
+    /**
+     * @return the isDefault
+     */
+    public Boolean getIsDefault() {
+        return isDefault;
+    }
+
+    /**
+     * @param isDefault the isDefault to set
+     */
+    public void setIsDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    /**
+     * @return the phoneNumber
+     */
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    /**
+     * @param phoneNumber the phoneNumber to set
+     */
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * @return the fullName
+     */
+    public String getFullName() {
+        return fullName;
+    }
+
+    /**
+     * @param fullName the fullName to set
+     */
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    /**
+     * @return the isDeleted
+     */
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    /**
+     * @param isDeleted the isDeleted to set
+     */
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
     
 }

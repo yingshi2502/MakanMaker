@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+    
+    <h:head>
+        <title>Makan Maker</title>      
+        <h:outputStylesheet library="css" name="default.css" />
+    </h:head>
+    
+    <h:body>
+        
+        <p:layout fullPage="true">
+            
+            <p:layoutUnit position="north" >
+                <ez:headerComponent />
+                <h1>Makan Maker<img src="#{request.contextPath}/images/icon.png" height="40px" /></h1>
+                
+            </p:layoutUnit>
+            
+            <p:layoutUnit size="220" position="west">
+            <h4>Hello! #{sessionScope['currentCustomerEntity'].userName}</h4>
+                <br/>
+                <h:form>
+                    <h:outputLabel for="Categories" value="Categories" />
+                    <p:menu style="width:200px;">
+                            
+                            <p:menuitem value="Chef's Favourite" icon="fa fa-smile-o"/>
+                            <p:menuitem value="Local Delights"  icon="fa fa-user"/>
+                            <p:menuitem value="Western Delicacies"  icon="fa fa-home" />
+                            
+                            <p:submenu>
+                            <p:menuitem value="My Orders"  icon="fa fa-reorder" style="font-size: 16px"/>
+                            <p:menuitem value="My returns" icon="fa fa-eraser"/>
+                            </p:submenu>
+                            <p:submenu>
+                            <p:menuitem value="My Wishlist"  icon="fa fa-heart" style="font-size: 16px"/>
+                            </p:submenu>
+                    </p:menu>
+                    
+                </h:form>
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="center" >
+                
+                <ui:insert name="content">Content</ui:insert>
+                
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="south" >
+                
+                <h6>&copy; 2018 IS3106. All Rights Reserved.</h6>
+                
+            </p:layoutUnit>
+        
+        </p:layout>
+        
+    </h:body>
+    
+</html>
