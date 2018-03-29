@@ -10,23 +10,17 @@
         <ui:insert name="header">Header</ui:insert>      
         <h:outputStylesheet library="css" name="default.css" />
     </h:head>
-    
     <h:body>
-        
         <p:layout fullPage="true">
-            
-            <p:layoutUnit position="north" >
-                <ez:headerComponent />
-                <h1>Makan Maker<p:link outcome="/index.xhtml"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link></h1>
-
+            <p:layoutUnit position="north">
+                <ez:headerComponent />  
+                <p:link outcome="/index" style="position: absolute; left: 50px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
             </p:layoutUnit>
-            
-            <p:layoutUnit size="230" position="west">
-                
+            <p:layoutUnit size="245" position="west">
                 <h4>Hello! #{sessionScope['currentCustomerEntity'].userName}</h4>
                 <br/>
                 <h:form>
-                    <p:menu style="width:200px;">
+                    <p:menu style="width:220px;">
                             <p:menuitem value="Manage My Account" outcome="manageMyAccount" icon="fa fa-smile-o" style="font-size: 16px"/>
                             <p:menuitem value="My Profile" outcome="myProfile" icon="fa fa-user"/>
                             <p:menuitem value="Address Book" outcome="myAddressBook" icon="fa fa-home" />

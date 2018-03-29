@@ -5,22 +5,27 @@ body {
     color: #000000;  
     margin: 10px;
 }
-.ui-layout-north {
-        z-index:20 !important;
-        overflow:visible !important;
-    }
 
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;
+}
+.ui-layout-pane {
+    border: 0;
+}
+.ui-layout-unit{
+    border: 0;
+}
 .ui-layout-north .ui-layout-unit-content {
-        overflow:visible !important;
+    overflow:visible !important;
 }
 
 .ui-panelgrid td, .ui-panelgrid tr
 {
     border-style: none !important;
     border: none !important
-        
 }
-.profileButton .ui-button .button{
+.profileButton .ui-button .button .ui-widget{
     background-color: blue !important; 
     border: none;
     color: white;
@@ -52,13 +57,13 @@ h1 {
 }
 
 a:link, a:visited {
-  color: #045491;
-  font-weight : bold;
-  text-decoration: none;
+    color: #045491;
+    font-weight : bold;
+    text-decoration: none;
 }
 
 a:link:hover, a:visited:hover  {
-  color: #045491;
-  font-weight : bold;
-  text-decoration : underline;
+    color: #045491;
+    font-weight : bold;
+    text-decoration : underline;
 }

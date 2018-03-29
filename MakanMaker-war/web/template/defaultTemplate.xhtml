@@ -15,14 +15,17 @@
         <title>Title of the Webpage</title>
     </ui:define>-->
     
-    <h:body>
+<h:body>
+             <style>
+        .ui-widget{
+            border: none;
+        }
+        </style>
         
         <p:layout fullPage="true">
             
             <p:layoutUnit position="north">
                 <ui:insert name="headCompoment"></ui:insert>
-                <h1>Makan Maker<p:link outcome="index"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link></h1>
-
             </p:layoutUnit>
             
             <p:layoutUnit size="200" position="west">

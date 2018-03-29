@@ -16,14 +16,13 @@
         <p:panel rendered="#{!sessionScope['isLogin']}">          
             <ez:LoginComponent />
         </p:panel>
-         
     </ui:define>
     <ui:define name="content" id="content">
 
         <p:panel rendered="#{sessionScope['isLogin']}">          
             <h3>After login shown page</h3>
         </p:panel>
-        <p:link outcome="/userProfile/manageMyAccount" />
+        <p:link value="gg" outcome="/userProfile/manageMyAccount" />
         <p:panel rendered="#{!sessionScope['isLogin']}">
 
             <h3>Welcome</h3>
