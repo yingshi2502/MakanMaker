@@ -1,14 +1,72 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="../template/userProfileTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-
+    <ui:define name="header" id="header">
+        <title>Manage My Account</title>
+    </ui:define>
     <ui:define name="content" id="content">
-        <h3>Manage My Account</h3>
-        
+
+        <h2 style="margin-left: 30px">Manage My Account</h2>
+        <div class="ui-g">
+            <div>
+                <p:panel id="personalProfile" header="Personal Profile" style="margin-left: 50px; margin-bottom:20px;width: 300px;height: 250px">
+                    <h:panelGrid columns="1" cellpadding="5">
+                        <h:panelGrid columns="3" cellpadding="10">
+                            <h:outputText style="font-size: 20px" value="#{profileManagedBean.currentCustomer.userName}" />
+                            <h:outputText style="font-size: 20px" value="|" />
+                            <p:link value="EDIT" outcome="editProfile"/>  
+                        </h:panelGrid>
+                        <h:outputText
+                            value="#{profileManagedBean.currentCustomer.email}" />
+                        <p:link value="Unsubscribe from our Newsletter" />
+                    </h:panelGrid>
+                </p:panel>
+            </div>
+            <div>
+                <p:panel id="addressSimple" header="Address Book" style="margin-left: 50px; margin-bottom:20px;width: 500px; height: 250px">
+                    <h:panelGrid columns="1" cellpadding="5">
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <h:outputText style="font-size: 20px" value="My Address" />
+                            <h:outputText style="font-size: 20px" value="| " />
+                            <p:link value="EDIT" outcome="myAddressBook"/>  
+                        </h:panelGrid>
+                        <p:panelGrid rendered="#{profileManagedBean.noAddress}" columns='2' >
+                            <h:panelGrid columns="1" style="text-align: center; ">
+                                <div>
+                                    <h:outputText style="font-size:12px; font: lighter;color: #AFAFAF" value="DEFAULT SHIPPING ADDRESS" />
+                                    <h:outputText style="font-size:14px;" value="#{profileManagedBean.defaultAddress.fullName}" />
+                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.addressLine1}" />
+                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.addressLine2}" />
+                                    <h:outputText style="font-size:12px" value=" #{profileManagedBean.defaultAddress.country} #{profileManagedBean.defaultAddress.postalCode}" />
+                                    <h:outputText style="font-size:12px" value='#{profileManagedBean.defaultAddress.phoneNumber}' />
+                                </div>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="text-align: center">
+                                <div>
+                                    <h:outputText style="font-size:12px; font: lighter;color: #AFAFAF" value="DEFAULT SHIPPING ADDRESS" />
+                                    <h:outputText style="font-size:14px;" value="Receiver's Name" />
+                                    <h:outputText style="font-size:12px;" value="Address Line 1" />
+                                    <h:outputText style="font-size:12px;" value="Address Line 2" />
+                                    <h:outputText style="font-size:12px" value='Country + postal Code' />
+                                    <h:outputText style="font-size:12px" value='phone 88888888' />
+                                </div>
+                            </h:panelGrid>
+                        </p:panelGrid>
+                        <p:panelGrid rendered="#{!profileManagedBean.noAddress}" >
+                            No Address Added Yet
+                        </p:panelGrid>
+                    </h:panelGrid>
+                </p:panel>
+            </div>
+        </div>
+        <p:panel id="recentOrder" header="Recent Orders" style="margin-left: 50px; margin-bottom:20px; width: 860px">
+            Hard Code: no order yet
+        </p:panel>
     </ui:define>
 
 </ui:composition>

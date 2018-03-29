@@ -25,5 +25,7 @@ public interface AddressControllerLocal {
     public void deleteAddress(Long addressId) throws GeneralException;
 
     public List<AddressEntity> retrieveAddressByCustomerId(Long customerId) throws EmptyListException;
+
+    public AddressEntity getDefaultAddressById(Long customerId) throws EmptyListException;
     
 }

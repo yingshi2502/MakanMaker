@@ -29,9 +29,9 @@ public interface CustomerControllerLocal {
 
     CustomerEntity createNewCustomer(CustomerEntity customer) throws CustomerExistException,GeneralException;
 
-    public CustomerEntity updateCustomer(CustomerEntity customer) throws CustomerExistException,GeneralException;
+    public CustomerEntity updateCustomer(CustomerEntity customer) throws CustomerNotFoundException;
 
-    public CustomerEntity retrieveCustomerById(Long customerId) throws CustomerNotFoundException;
+    public CustomerEntity retrieveCustomerById(Long customerId);
 
     public CustomerEntity retrieveCustomerByUsername(String username) throws CustomerNotFoundException;
 

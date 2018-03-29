@@ -13,24 +13,23 @@
     </h:head>
     <h:body>
         <h3>Customer Login</h3>
+        <p:growl id="growl" showDetail="true" sticky="true" />         
         <h:form id="contentLoginForm">
             <p:panel>
                 <p:outputLabel for="username" value="Username"/>
-                <p:inputText id="username" value="#{indexManagedBean.username}" required="true"
+                <p:inputText id="username" value="#{indexBean.username}" required="true"
                              requiredMessage="Username is required">
                     <f:validateLength minimum="4"/>
                 </p:inputText>
                 <br />
                 <p:outputLabel for="password" value="Password"/>
-                <p:password id="password" value="#{indexManagedBean.password}" required="true"
+                <p:password id="password" value="#{indexBean.password}" required="true"
                             requiredMessage="Password is required">
                     <f:validateLength minimum="4"/>
                 </p:password>
                 <br />
-                <p:commandButton type="reset" value="Clear" />
-                <p:commandButton value="Login" update="@form" actionListener="#{indexManagedBean.customerLogin}" icon="ui-icon-key" /> 
+                <p:commandButton value="Login" update="growl" actionListener="#{indexBean.customerLogin}" icon="ui-icon-key" /> 
                 Sign Up <p:link value=" here" outcome="signup" />
- 
             </p:panel>
         </h:form>
     </h:body>

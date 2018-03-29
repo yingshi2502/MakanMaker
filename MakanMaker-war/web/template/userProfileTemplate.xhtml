@@ -7,7 +7,7 @@
       xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
     
     <h:head>
-        <title>Makan Maker</title>      
+        <ui:insert name="header">Header</ui:insert>      
         <h:outputStylesheet library="css" name="default.css" />
     </h:head>
     
@@ -17,11 +17,11 @@
             
             <p:layoutUnit position="north" >
                 <ez:headerComponent />
-                <h1>Makan Maker<img src="#{request.contextPath}/images/icon.png" height="40px" /></h1>
-                
+                <h1>Makan Maker<p:link outcome="/index.xhtml"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link></h1>
+
             </p:layoutUnit>
             
-            <p:layoutUnit size="220" position="west">
+            <p:layoutUnit size="230" position="west">
                 
                 <h4>Hello! #{sessionScope['currentCustomerEntity'].userName}</h4>
                 <br/>
@@ -32,7 +32,7 @@
                             <p:menuitem value="Address Book" outcome="myAddressBook" icon="fa fa-home" />
                             <p:menuitem value="My Payment Options" outcome="myPaymentOptions" icon="fa fa-money" />
                             <p:submenu>
-                            <p:menuitem value="My Orders" outcome="myOrder" icon="fa fa-reorder" style="font-size: 16px"/>
+                            <p:menuitem value="My Orders" outcome="myOrders" icon="fa fa-reorder" style="font-size: 16px"/>
                             <p:menuitem value="My returns" icon="fa fa-eraser"/>
                             </p:submenu>
                             <p:submenu>
@@ -50,11 +50,8 @@
             </p:layoutUnit>
             
             <p:layoutUnit position="south" >
-                
                 <h6>&copy; 2018 IS3106. All Rights Reserved.</h6>
-                
             </p:layoutUnit>
-        
         </p:layout>
         
     </h:body>

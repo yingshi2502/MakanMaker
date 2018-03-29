@@ -4,14 +4,26 @@
                 template="./template/defaultTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
-
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+    <ui:define name="header" id="header">
+        <title>Makan Maker</title>
+    </ui:define>
+    <ui:define name="headCompoment">
+        <p:panel rendered="#{sessionScope['isLogin']}">          
+            <ez:headerComponent />
+        </p:panel>
+        <p:panel rendered="#{!sessionScope['isLogin']}">          
+            <ez:LoginComponent />
+        </p:panel>
+         
+    </ui:define>
     <ui:define name="content" id="content">
 
         <p:panel rendered="#{sessionScope['isLogin']}">          
             <h3>After login shown page</h3>
         </p:panel>
-        <p:link value="testMyProfile" outcome="/userProfile/manageMyAccount"/>
+        <p:link outcome="/userProfile/manageMyAccount" />
         <p:panel rendered="#{!sessionScope['isLogin']}">
 
             <h3>Welcome</h3>

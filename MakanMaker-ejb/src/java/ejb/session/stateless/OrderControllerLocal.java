@@ -22,7 +22,7 @@ import util.exception.OrderNotFoundException;
 @Local
 public interface OrderControllerLocal {
 
-    public OrderEntity createNewOrder(OrderEntity order) throws OrderExistException, GeneralException;
+    public OrderEntity createNewOrder(OrderEntity order, Long customerId, Long mealKitId, Long addressId) ;
 
     public OrderEntity updateOrder(OrderEntity order) throws OrderExistException, GeneralException;
 

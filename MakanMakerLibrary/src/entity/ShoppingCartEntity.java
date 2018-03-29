@@ -1,8 +1,12 @@
 
 package entity;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,15 +27,18 @@ public class ShoppingCartEntity implements Serializable {
 
     @OneToOne
     private CustomerEntity customer;
-    
+
     private List<Long> mealKits;//mealKitId
     
     private List<Integer> quantity;
+//    private Map<Long,Integer> items;
     
     private Double totalAmount;
 
     public ShoppingCartEntity() {
         totalAmount = Double.valueOf(0);
+        mealKits = new ArrayList<>();
+        quantity = new ArrayList<>();
     }
     
     public Long getShoppingCartId() {
@@ -80,6 +87,16 @@ public class ShoppingCartEntity implements Serializable {
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
     }
+
+//    public Map<Long, Integer> getItems() {
+//        return items;
+//    }
+//
+//    public void setItems(Map<Long, Integer> items) {
+//        this.items = items;
+//    }
+    
+    
 
     /**
      * @return the mealKits

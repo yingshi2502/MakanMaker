@@ -6,6 +6,9 @@
 package ejb.session.stateless;
 
 
+import entity.AddressEntity;
+import entity.CustomerEntity;
+import entity.MealKitEntity;
 import entity.OrderEntity;
 import entity.TransactionEntity;
 import java.util.Date;
@@ -37,21 +40,28 @@ public class OrderController implements OrderControllerLocal {
     }
 
     @Override
-    public OrderEntity createNewOrder(OrderEntity order) throws OrderExistException, GeneralException {
-        try {
+    public OrderEntity createNewOrder(OrderEntity order, Long customerId, Long mealKitId, Long addressId) {
+        
             em.persist(order);
-
+            
+            CustomerEntity customer = em.find(CustomerEntity.class, customerId);
+            MealKitEntity mealKit = em.find(MealKitEntity.class, mealKitId);
+            AddressEntity addressToDelivery = em.find(AddressEntity.class, addressId);
+            
+            order.setCustomer(customer);
+            order.setMealKit(mealKit);
+            
+            order.setAddress(addressToDelivery);
+            addressToDelivery.getOrders().add(order);
+            
+            customer.getOrderHistory().add(order);
+            mealKit.getOrders().add(order);
+            
             em.flush();
+            em.refresh(order);
+            
             return order;
-        } catch (PersistenceException ex) {
-            if (ex.getCause() != null
-                    && ex.getCause().getCause() != null
-                    && ex.getCause().getCause().getClass().getSimpleName().equals("MySQLIntegrityConstraintViolationException")) {
-                throw new OrderExistException("Order with same name already exist");
-            } else {
-                throw new GeneralException("An unexpected error has occurred: " + ex.getMessage());
-            }
-        }
+       
     }
 
     /**
@@ -95,24 +105,32 @@ public class OrderController implements OrderControllerLocal {
         }
     }
 
+    //add getTransaction&mealKit for lazy fetching
     @Override
     public OrderEntity retrieveOrderById(Long orderId) throws OrderNotFoundException {
         OrderEntity order = em.find(OrderEntity.class, orderId);
         if (order != null) {
-            //order.getMealKits().size();
+            order.getMealKit();
+            order.getTransaction();
             return order;
         } else {
             throw new OrderNotFoundException("Order ID " + orderId + " does not exists!");
         }
     }
 
+    //add get MealKit for lazy fetching
     @Override
     public List<OrderEntity> retrieveOrderByCustomerId(Long customerId) throws EmptyListException {
-        Query query = em.createQuery("SELECT o FROM OrderEntity WHERE o.customer.customerId =:id");
+        System.err.println("***** order/customerId "+customerId);
+        Query query = em.createQuery("SELECT o FROM OrderEntity o WHERE o.customer.customerId =:id");
         query.setParameter("id", customerId);
         List<OrderEntity> list = query.getResultList();
         if (list.isEmpty()) {
             throw new EmptyListException("No orders from the customer");
+        }else{
+            for (OrderEntity o:list){
+                o.getMealKit();
+            }
         }
         return list;
     }

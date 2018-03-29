@@ -5,7 +5,6 @@ import ejb.session.stateless.StaffControllerLocal;
 import entity.CustomerEntity;
 import entity.ManagerEntity;
 import java.io.IOException;
-import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -17,7 +16,7 @@ import util.exception.InvalidLoginCredentialException;
 
 
 
-@Named(value = "indexManagedBean")
+@Named(value = "indexBean")
 @RequestScoped
 
 public class IndexManagedBean
@@ -41,28 +40,35 @@ public class IndexManagedBean
     
     public void customerLogin(ActionEvent event) throws IOException
     {
+        System.err.println("****Customer Login ");
+
         try
         {
-            CustomerEntity currentCustomerEntity = customerControllerLocal.customerLogin(username, password);FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            CustomerEntity currentCustomerEntity = customerControllerLocal.customerLogin(username, password);
+            System.err.println("****Customer Login no exception thrown ");
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", currentCustomerEntity);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Login success!", "welcome"));
+
+            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");     
         }
         catch(InvalidLoginCredentialException ex)
         {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
+            System.err.println("**** error"+ex.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid login credential: " + ex.getMessage(), "Please try again"));
         }
     }
     
     public void staffLogin(ActionEvent event) throws IOException{
         try{
-            ManagerEntity currentManagerEntity = staffController.staffLogin(username, password);FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            ManagerEntity currentManagerEntity = staffController.staffLogin(username, password);
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentManagerEntity", currentManagerEntity);
             FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");     
         }catch(InvalidLoginCredentialException ex){
+            System.err.println("****"+ex.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
         }
     }
@@ -70,7 +76,7 @@ public class IndexManagedBean
     public void logout(ActionEvent event) throws IOException
     {
         ((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).invalidate();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("#{request.contextPath}/index.xhtml"); //got problem maybe
     }
     
     public String getUsername() {
