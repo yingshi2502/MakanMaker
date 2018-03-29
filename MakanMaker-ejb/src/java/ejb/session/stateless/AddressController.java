@@ -9,7 +9,7 @@ import entity.AddressEntity;
 import entity.CustomerEntity;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -22,7 +22,7 @@ import util.exception.GeneralException;
  *
  * @author yingshi
  */
-@Stateful
+@Stateless
 public class AddressController implements AddressControllerLocal {
 
     @PersistenceContext(unitName = "MakanMaker-ejbPU")

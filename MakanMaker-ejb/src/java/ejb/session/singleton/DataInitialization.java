@@ -5,6 +5,7 @@
  */
 package ejb.session.singleton;
 
+import entity.CustomerEntity;
 import entity.ManagerEntity;
 import entity.TagEntity;
 import javax.annotation.PostConstruct;
@@ -42,6 +43,11 @@ public class DataInitialization {
         ManagerEntity manager = new ManagerEntity("manager", "password");
         manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
         em.persist(manager);
+        
+        CustomerEntity customer = new CustomerEntity("customer","customer@gmail.com","password");
+        customer.setPassword(SecurityHelper.generatePassword(customer.getPassword()));
+        em.persist(customer);
+        
         
         TagEntity tag = new TagEntity("Western",TagCategoryEnum.GEOGRPHIC);
         em.persist(tag);
