@@ -7,12 +7,15 @@ package ejb.session.singleton;
 
 import ejb.session.stateless.AddressControllerLocal;
 import ejb.session.stateless.CustomerControllerLocal;
+import ejb.session.stateless.MealKitControllerLocal;
 import ejb.session.stateless.OrderControllerLocal;
+import ejb.session.stateless.ShoppingCartControllerLocal;
 import entity.AddressEntity;
 import entity.CustomerEntity;
 import entity.ManagerEntity;
 import entity.MealKitEntity;
 import entity.OrderEntity;
+import entity.ShoppingCartEntity;
 import entity.TagEntity;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +33,7 @@ import util.enumeration.OrderStatusEnum;
 import util.enumeration.TagCategoryEnum;
 import util.exception.CustomerExistException;
 import util.exception.GeneralException;
+import util.exception.MealKitExistException;
 import util.exception.OrderExistException;
 import util.helperClass.SecurityHelper;
 
@@ -42,6 +46,9 @@ import util.helperClass.SecurityHelper;
 @Startup
 public class DataInitialization {
 
+    @EJB(name = "MealKitControllerLocal")
+    private MealKitControllerLocal mealKitController;
+
     @EJB(name = "AddressControllerLocal")
     private AddressControllerLocal addressControllerLocal;
 
@@ -50,6 +57,10 @@ public class DataInitialization {
 
     @EJB
     private CustomerControllerLocal customerController;
+    
+    
+    
+    
 
     @PersistenceContext(unitName = "MakanMaker-ejbPU")
     private EntityManager em;
@@ -59,14 +70,18 @@ public class DataInitialization {
     @PostConstruct
     public void postConstruct(){
         if (em.find(ManagerEntity.class, 1l) == null){
-            initialize();
+            try {
+                initialize();
+            } catch (MealKitExistException ex) {
+                Logger.getLogger(DataInitialization.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 //        ManagerEntity manager = new ManagerEntity("manager", "password");
 //        manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
 //        em.persist(manager);
     }
 
-    private void initialize(){
+    private void initialize() throws MealKitExistException{
         ManagerEntity manager = new ManagerEntity("manager", "password");
         manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
         em.persist(manager);
@@ -80,13 +95,22 @@ public class DataInitialization {
         orderControllerLocal.createNewOrder(order, 1l, 1l,1l);
     }
     
-    private void createCustomer(){
+    
+    private void createCustomer() throws MealKitExistException{
         try {
             customer = new CustomerEntity("yingshi", "Huang Yingshi","88888888","huangyingshi@gmail.com", "password", new Date(1998, 4, 23),1);
             customerController.createNewCustomer(customer);
             
             AddressEntity address = new AddressEntity("118430", "37 PGP", "#05-28", Boolean.TRUE, Boolean.TRUE, "99999999", "Huang Yingshi");
             addressControllerLocal.createNewAddress(address,1l);
+            
+            MealKitEntity mealKit = new MealKitEntity("Rice set", 10.00, Boolean.TRUE);
+            mealKitController.createNewMealKit(mealKit);
+            
+            customer.getShoppingCart().addMealKit(mealKit);
+            customer.getShoppingCart().addQuantity(4);
+            
+          
         
         } catch (CustomerExistException | GeneralException ex) {
             System.err.println("Error in creating customer");

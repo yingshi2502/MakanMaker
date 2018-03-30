@@ -111,6 +111,10 @@ public class ShoppingCartEntity implements Serializable {
     public void setMealKits(List<Long> mealKits) {
         this.mealKits = mealKits;
     }
+    
+    public void addMealKit(MealKitEntity mealKit){
+        this.mealKits.add(mealKit.getMealKitId());
+    }
 
     /**
      * @return the quantity
@@ -124,6 +128,10 @@ public class ShoppingCartEntity implements Serializable {
      */
     public void setQuantity(List<Integer> quantity) {
         this.quantity = quantity;
+    }
+    
+    public void addQuantity(int quantity){
+        this.quantity.add(quantity);
     }
 
     /**

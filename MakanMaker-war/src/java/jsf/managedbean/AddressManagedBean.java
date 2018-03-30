@@ -23,6 +23,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 import util.exception.EmptyListException;
 import util.exception.GeneralException;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
