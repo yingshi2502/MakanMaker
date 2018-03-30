@@ -28,8 +28,7 @@ public class ReviewEntity implements Serializable {
     
     @Column(nullable = false)
     private String reviewer;
-    
-	@Column(nullable = false)
+    @Column(nullable = false)
     private Integer rating;
     
     private String review;
