@@ -41,6 +41,8 @@ public class MealKitEntity implements Serializable {
     
     private List<String> recipe;
     
+    private String coverPage;
+    
     @Column(nullable = false)
     private boolean isAvailable;
     
@@ -239,5 +241,16 @@ public class MealKitEntity implements Serializable {
     public void setTags(List<TagEntity> tags) {
         this.tags = tags;
     }
+    
+    
+
+    public String getCoverPage() {
+        return coverPage;
+    }
+
+    public void setCoverPage(String coverPage) {
+        this.coverPage = coverPage;
+    }
+    
     
 }

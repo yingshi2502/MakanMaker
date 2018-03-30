@@ -25,7 +25,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
-import org.primefaces.context.RequestContext;
+import org.primefaces.context.RequestContext; //FIXED~~
 import util.exception.CustomerNotFoundException;
 import util.exception.EmptyListException;
 import util.exception.PasswordChangeException;
@@ -86,7 +86,7 @@ public class profileManagedBean {
             CustomerEntity updated = customerControllerLocal.updateCustomer(currentCustomer);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace("currentCustomerEntity", updated);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Update Successful ", null));
-            RequestContext.getCurrentInstance().showMessageInDialog(new FacesMessage(FacesMessage.SEVERITY_INFO, "Message", "Updated Successfully!"));
+            //RequestContext.getCurrentInstance().showMessageInDialog(new FacesMessage(FacesMessage.SEVERITY_INFO, "Message", "Updated Successfully!"));
 
             FacesContext.getCurrentInstance().getExternalContext().redirect("myProfile.xhtml");
 

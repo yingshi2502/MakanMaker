@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <script type="text/javascript">
+    function handleDrop(event, ui) {
+        var droppedOrder = ui.draggable;
+ 
+        droppedOrder.fadeOut('fast');
+    }
+    </script>
+    <ui:define name="header" id="header">
+        <title>Select Schedule</title>
+    </ui:define>
+    
+    <ui:define name="content" id="content">
+        <!---
+        <h:form id="orderForm">
+            <p:fieldset id="currOrdersField" legend="Current Orders">
+                <p:dataGrid id="currOrders" var="order" value="#{paymentManagedBean.currOrders}" rows="3">
+                    <p:panel id="mealKit" header="#{mealKit.name}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:100%">
+                            <p:graphicImage name="/images/#{mealKit.coverPage}.jpg" />
+                        </h:panelGrid>
+                    </p:panel>
+
+                    <p:draggable for="mealKit" revert="true" handle=".ui-panel-titlebar" stack=".ui-panel"/>
+                </p:dataGrid>
+            </p:fieldset>
+
+            <p:fieldset id="selectedCars" legend="Schedule" style="margin-top:20px">
+                <p:outputPanel id="dropArea">
+                    <h:outputText value="!!!Drop here!!!" rendered="#{empty paymentManagedBean.droppedOrders}" style="font-size:24px;" />
+                    
+                </p:outputPanel>
+            </p:fieldset>
+
+            <p:droppable for="selectedCars" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableCars" onDrop="handleDrop">
+                <p:ajax listener="#{dndCarsView.onCarDrop}" update="dropArea availableCars" />
+            </p:droppable>
+
+            <p:dialog header="Car Detail" widgetVar="carDialog" resizable="false" draggable="false"
+                      showEffect="fade" hideEffect="fade" modal="true">
+
+                <p:outputPanel id="display">
+                    <h:panelGrid columns="2" cellpadding="5" rendered="#{not empty dndCarsView.selectedCar}">
+                        <f:facet name="header">
+                            <p:graphicImage name="/demo/images/car/#{dndCarsView.selectedCar.brand}.gif"/>
+                        </f:facet>
+                    </h:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+        -->
+        
+        <h:form>
+            <p:growl id="messages" showDetail="true" />
+
+            <h:panelGrid columnClasses="value">
+                <p:schedule id="schedule" value="#{scheduleView.eventModel}" widgetVar="myschedule" timeZone="GMT+2">
+
+                    <p:ajax event="dateSelect" listener="#{scheduleView.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                    <p:ajax event="eventSelect" listener="#{scheduleView.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                    <p:ajax event="eventMove" listener="#{scheduleView.onEventMove}" update="messages" />
+                    <p:ajax event="eventResize" listener="#{scheduleView.onEventResize}" update="messages" />
+
+                </p:schedule>
+            </h:panelGrid>
+ 
+        </h:form>
+    </ui:define>
+</ui:composition>
+
