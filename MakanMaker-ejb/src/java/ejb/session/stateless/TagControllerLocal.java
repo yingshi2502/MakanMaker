@@ -25,5 +25,9 @@ public interface TagControllerLocal {
 
     public void linkTagAndMealKit(Long tagId, Long mealKitId);
 
+    public List<TagEntity> retrieveAllTags();
+
+    public Long retrieveTagIdByTagName(String tagName);
+
     
 }

@@ -52,6 +52,13 @@ public class TagController implements TagControllerLocal {
         }
     }
     
+    @Override
+    public List<TagEntity> retrieveAllTags()
+    {
+        Query query = em.createQuery("SELECT te FROM TagEntity te");
+        return query.getResultList();
+    }
+    
     /**
      *
      * @param tagId
@@ -65,6 +72,15 @@ public class TagController implements TagControllerLocal {
         mealKit.getTags().add(tag);
         em.flush();
     }
+    
+    @Override
+    public Long retrieveTagIdByTagName(String tagName){
+        Query query = em.createQuery("SELECT tm FROM TagEntity tm WHERE tm.name = :nameOfTag");
+        query.setParameter("nameOfTag", tagName);
+        TagEntity tag = (TagEntity) query.getSingleResult();
+        return tag.getTagId();
+    }
+    
     @Override
     public List<MealKitEntity> retrieveMealKitsByTags(List<TagEntity> tags){
         List<MealKitEntity> allMealKits = mealKitControllerLocal.retrieveAllMealKits();
@@ -76,5 +92,7 @@ public class TagController implements TagControllerLocal {
         }
         return selectedMKs;
     }
+    
+    
    
 }

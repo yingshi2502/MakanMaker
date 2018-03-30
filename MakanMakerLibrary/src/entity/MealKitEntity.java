@@ -37,6 +37,18 @@ public class MealKitEntity implements Serializable {
     @Column(nullable = false)
     private Double price;
     
+    @Column(nullable = false)
+    private String description;
+    
+    @Column(nullable = false)
+    private Integer nutrition;
+   
+    @Column(nullable = false)
+    private String time;
+    
+    @Column(nullable = false)
+    private String imagePath;
+            
     private List<String> ingredients;
     
     private List<String> recipe;
@@ -54,7 +66,7 @@ public class MealKitEntity implements Serializable {
     private List<TagEntity> tags;
     
     public MealKitEntity(){
-        
+        this.price = 0.00;
     }
 
     public MealKitEntity(String name, Double price, boolean isAvailable) {
@@ -63,15 +75,29 @@ public class MealKitEntity implements Serializable {
         this.isAvailable = isAvailable;
     }
     
+    public MealKitEntity(String name, double price, List<String> ingredients, boolean isAvailable, Integer nutrition, String description, String time, String imagePath){
+        this();
+        this.name = name;
+        this.price = price;
+        this.ingredients = ingredients;
+        this.isAvailable = isAvailable;
+        this.description = description;
+        this.nutrition = nutrition;
+        this.time = time;
+        this.imagePath = imagePath;
+    }
     
-    public MealKitEntity(String name, double price, List<String> ingredients, boolean isAvailable, List<ReviewEntity> reviews){
+    public MealKitEntity(String name, double price, List<String> ingredients, boolean isAvailable, Integer nutrition, String description, String time, String imagePath, List<ReviewEntity> reviews){
         this();
         this.name = name;
         this.price = price;
         this.ingredients = ingredients;
         this.isAvailable = isAvailable;
         this.reviews = reviews;
-        
+        this.description = description;
+        this.nutrition = nutrition;
+        this.time = time;
+        this.imagePath = imagePath;
     }
     
      /**
@@ -238,6 +264,62 @@ public class MealKitEntity implements Serializable {
      */
     public void setTags(List<TagEntity> tags) {
         this.tags = tags;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the nutrition
+     */
+    public Integer getNutrition() {
+        return nutrition;
+    }
+
+    /**
+     * @param nutrition the nutrition to set
+     */
+    public void setNutrition(Integer nutrition) {
+        this.nutrition = nutrition;
+    }
+
+    /**
+     * @return the time
+     */
+    public String getTime() {
+        return time;
+    }
+
+    /**
+     * @param time the time to set
+     */
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    /**
+     * @return the imagePath
+     */
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    /**
+     * @param imagePath the imagePath to set
+     */
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
     
 }

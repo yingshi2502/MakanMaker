@@ -36,12 +36,13 @@ public class MealKitController implements MealKitControllerLocal {
         try {
             em.persist(mealKit);
             em.flush();
+            mealKit.getMealKitId();
             return mealKit;
         } catch (PersistenceException ex) {
             if (ex.getCause() != null
                     && ex.getCause().getCause() != null
                     && ex.getCause().getCause().getClass().getSimpleName().equals("MySQLIntegrityConstraintViolationException")) {
-                throw new MealKitExistException("MealKit with same name already exist");
+                throw new MealKitExistException("Meal Kit with same name already exist");
             } else {
                 throw new GeneralException("An unexpected error has occurred: " + ex.getMessage());
             }
@@ -56,7 +57,7 @@ public class MealKitController implements MealKitControllerLocal {
             if (ex.getCause() != null
                     && ex.getCause().getCause() != null
                     && ex.getCause().getCause().getClass().getSimpleName().equals("MySQLIntegrityConstraintViolationException")) {
-                throw new MealKitExistException("MealKit with same name already exist");
+                throw new MealKitExistException("Meal Kit with same name already exist");
             } else {
                 throw new GeneralException("An unexpected error has occurred: " + ex.getMessage());
             }
@@ -70,13 +71,13 @@ public class MealKitController implements MealKitControllerLocal {
             //mealKit.getReviews().size();
             return mealKit;
         }else{
-            throw new MealKitNotFoundException("MealKit ID "+ mealKitId+" does not exists!");
+            throw new MealKitNotFoundException("Meal Kit ID "+ mealKitId+" does not exists!");
         }
     }
 
     @Override
     public void deleteMealKit(MealKitEntity mealKit){
-        if (mealKit.getReviews().size() == 0) {
+        if (mealKit.getReviews().isEmpty()) {
             em.remove(mealKit);
             em.flush();
         } else {
@@ -87,7 +88,7 @@ public class MealKitController implements MealKitControllerLocal {
 
     @Override
     public List<MealKitEntity> retrieveAllMealKits() {
-        Query query = em.createQuery("SELECT mk FROM MealKit mk");
+        Query query = em.createQuery("SELECT mk FROM MealKitEntity mk");
         List<MealKitEntity> mealKits = query.getResultList();
         for (MealKitEntity mk : mealKits) {
             mk.getReviews().size();

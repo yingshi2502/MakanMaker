@@ -44,7 +44,7 @@ public class TagEntity implements Serializable {
     
     
     public Long getTagId() {
-        return tagId;
+        return tagId; 
     }
 
     public void setTagId(Long tagId) {
