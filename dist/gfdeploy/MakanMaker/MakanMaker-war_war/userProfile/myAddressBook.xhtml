@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/userProfileTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="header" id="header">
+        <title>Address Book</title>
+    </ui:define>
+    <ui:define name="content" id="content">
+        <h2 style="margin-left: 30px">Address Book</h2>
+        <h:form id="allAddresses">
+            <p:dataTable id="addressesTable" widgetVar="addressesTable" value="#{addressManagedBean.addresses}"
+                         var="address" tableStyle="table-layout: auto" 
+                         style="overflow-x: hidden !important;margin-left: 20px;margin-right: 20px; text-align: center">
+               
+                <p:column headerText="Full Name" id="fullName"  style="border: none">
+                    <h:outputText value="#{address.fullName}" />
+                </p:column>
+                <p:column headerText="Address" id="address" style="border: none">
+                    <p:outputLabel value="#{address.streetAddress}, #{address.floorUnit}" />
+                </p:column>
+                <p:column headerText="Postcode" id="postcode" style="border: none">
+                    <h:outputText value="Singapore #{address.postalCode}" />
+                </p:column>
+                <p:column headerText="Phone Number" id="phoneNumber" style="border: none">
+                    <h:outputText value="#{address.phoneNumber}" />
+                </p:column>
+                <p:column id="default" style="border: none">
+                    <h:outputText style="font-size: 12px;color: #AFAFAF" rendered="#{address.isDefaultShipping}" value="Default Shipping Address " />
+                    <br />
+                    <h:outputText style="font-size: 12px;color: #AFAFAF" rendered="#{address.isDefaultBilling}" value="Default Billing Address" />
+                </p:column>
+                <p:column id="editButton" style="border: none" >
+                    <p:commandButton update="formUpdateAddress" oncomplete="PF('dialogUpdateAddress').show()" icon="ui-icon-pencil" title="Update">
+                        <f:setPropertyActionListener value="#{address}" target="#{addressManagedBean.addressToUpdate}" />
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-trash" actionListener="#{addressManagedBean.deleteAddress}" update="@all allAddresses">
+                        <f:attribute name="addressToDelete" value="#{address}" />
+                        <p:confirm header="Confirmation" message="Are you sure you want to delete this address?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            
+             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+            <p:separator/>
+            <p:commandButton style="margin-left: 25px" value="Create New Address" oncomplete="PF('dialogCreateNewAddress').show()" icon="ui-icon-plusthick" />
+        </h:form>
+        
+        <h:form id="formCreateNewAddress">
+            <p:dialog id="dialogCreateNewAddress" widgetVar="dialogCreateNewAddress" showEffect="clip" header="Create New Address" closable="true" focus="fullName">
+                <p:messages id="messagesCreateNewAddress" redisplay="false" />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="fullName" value="Full Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText style="width: 120%" id="fullName" value="#{addressManagedBean.newAddress.fullName}" required="true" requiredMessage="Full Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="fullName" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="streetAddress" value="Street Address: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="streetAddress" style="width: 120%" value="#{addressManagedBean.newAddress.streetAddress}" required="true" requiredMessage="Street Address is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="streetAddress" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="floorUnit" value="Floor / Unit: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="floorUnit" style="width: 120%" value="#{addressManagedBean.newAddress.floorUnit}" required="true" requiredMessage="Floor / Unit is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="floorUnit" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="postcode" value="Postcode: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="postcode" style="width: 120%" value="#{addressManagedBean.newAddress.postalCode}" required="true" requiredMessage="Postcode is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="postcode" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phoneNumber" value="Phone Number: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="phoneNumber" style="width: 120%" value="#{addressManagedBean.newAddress.phoneNumber}" required="true" requiredMessage="Phone Number is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="phoneNumber" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Set Default " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="Set Default Billing? " />
+                            <p:selectBooleanCheckbox value="#{addressManagedBean.newAddress.isDefaultBilling}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="Set Default Shipping? " />
+                            <p:selectBooleanCheckbox value="#{addressManagedBean.newAddress.isDefaultShipping}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton value="Save" update="@all allAddresses" actionListener="#{addressManagedBean.createNewAddress}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        
+        <h:form id="formUpdateAddress">
+            <p:dialog id="dialogUpdateAddress" widgetVar="dialogUpdateAddress" header="Update Product" showEffect="clip" closable="true" focus="fullName">
+                <p:messages id="messagesUpdateAddress" redisplay="false" />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="fullName" value="Full Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="fullName" value="#{addressManagedBean.addressToUpdate.fullName}" required="true" requiredMessage="Full Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="fullName" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="streetAddress" value="Street Address: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="streetAddress" value="#{addressManagedBean.addressToUpdate.streetAddress}" required="true" requiredMessage="Street Address is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="streetAddress" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="floorUnit" value="Floor / Unit: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="floorUnit" value="#{addressManagedBean.addressToUpdate.floorUnit}" required="true" requiredMessage="Floor / Unit is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="floorUnit" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="postcode" value="Postcode: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="postcode" value="#{addressManagedBean.addressToUpdate.postalCode}" required="true" requiredMessage="Postcode On Hand is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="postcode" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phoneNumber" value="Phone Number: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="phoneNumber" value="#{addressManagedBean.addressToUpdate.phoneNumber}" required="true" requiredMessage="Phone Number is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="phoneNumber" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Set Default " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="Set Default Billing? " />
+                            <p:selectBooleanCheckbox value="#{addressManagedBean.addressToUpdate.isDefaultBilling}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="Set Default Shipping? " />
+                            <p:selectBooleanCheckbox value="#{addressManagedBean.addressToUpdate.isDefaultShipping}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton type="reset" value="Clear" />&nbsp;
+                            <p:commandButton value="Update" update="@all allAddresses" actionListener="#{addressManagedBean.updateAddress}"  oncomplete="dialogUpdateAddress.hide();"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>           
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+
+

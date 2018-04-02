@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="header" id="header">
+        <title>Sign Up</title>
+    </ui:define>
+    <ui:define name="content" id="content">
+        <p:outputLabel value="Create your Makan Maker Account" style="font-size: 25px;font-family: 'Georgia', fantasy,serif "/>
+        <p:outputLabel style="margin-left: 100px" >Already have an account? Login <p:link value="here" outcome="login_customer" /></p:outputLabel> 
+        <br />
+        <p:panel id='signUpPanel' header="Details" style="border: blue; border-width: 1px; width:600px">
+            <h:form id="signUpForm" style="margin-right: 30px; ">
+                <p:messages id="messages" closable="true" />
+                <p:growl id="growl" showDetail="true" sticky="true" />
+                <p:ajaxStatus oncomplete="setTimeout(function() { $('.ui-messages').fadeOut(); }, 5000)" />
+                <p:panelGrid columns="2" style="table-layout: auto; width: 500px" >
+                    <p:outputLabel for="username" value="Username" />
+                    <p:outputLabel for="email" value="Email Address" />
+                    <p:inputText id="username" value="#{signUpManagedBean.newCustomer.userName}" required="true"
+                                 requiredMessage="Username is required" /> 
+                    <p:inputText id="email" value="#{signUpManagedBean.newCustomer.email}" required="true"
+                                 requiredMessage="Email is required" validator="emailValidator" />
+                    <p:outputLabel for="fullName" value="Full Name" />
+                    <p:outputLabel for="mobile" value="Mobile" />
+                    <p:inputText id="fullName" value="#{signUpManagedBean.newCustomer.fullName}" required="true"
+                                 requiredMessage="Full Name is required" />
+                    <p:inputText id="mobile" value="#{signUpManagedBean.newCustomer.mobile}"/>
+
+                    <p:outputLabel for="pwd1" value="New Password: " />
+                    <p:outputLabel value="Birthday" />
+
+                    <p:password id="pwd1" value="#{signUpManagedBean.password}" feedback="true" 
+                                validator="passwordValidator" match="pwd2" label="Password 1" 
+                                required="true" requiredMessage="please input new password" />
+                    <p:calendar id="dob" locale="en" navigator="true" value="#{signUpManagedBean.newCustomer.dateOfBirth}" pattern="yyyy-MMM-dd" />
+
+
+                    <p:outputLabel for="pwd2" value="Repeat Password: " />
+                    <p:outputLabel value="Gender" />
+                    <p:password id="pwd2" value="#{signUpManagedBean.reTypePassword}" label="Password 2" required="true" requiredMessage="please input repeated password" />
+
+
+                    <p:selectOneRadio id="gender" value="#{signUpManagedBean.newCustomer.gender}">
+                        <f:selectItem itemLabel="Female" itemValue="1" />
+                        <f:selectItem itemLabel="Male" itemValue="0" />
+                    </p:selectOneRadio> 
+
+                    <p:commandButton value="Sign Up" style="width:150px" update="@form signUpForm growl" actionListener="#{signUpManagedBean.signup}"/>
+
+                </p:panelGrid>
+            </h:form>
+        </p:panel>
+        
+
+    </ui:define>
+
+
+</ui:composition>

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/userProfileTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="header" id="header">
+        <title>Edit Address</title>
+    </ui:define>
+    <ui:define name="content" id="content">
+        <h2 style="margin-left: 30px">Edit Address</h2>
+        <p:panelGrid columns="2" style="margin-left: 20px;margin-right: 20px;margin-bottom: 100px"  layout="grid">   
+            <h:panelGrid columns="1">
+                <h:outputText value="Full Name" /> 
+                <h:inputText style="width: 200px" value="Huang Yingshi" /> 
+            </h:panelGrid>
+            <h:panelGrid columns="1">
+                <h:outputText value="Street Address" /> 
+                <h:inputText style="width: 200px" value="123 Road" /> 
+            </h:panelGrid>    
+            <h:panelGrid columns="1">
+                <h:outputText value="Mobile" /> 
+                <h:inputText style="width: 200px" value="8888 8888" /> 
+            </h:panelGrid> 
+            <h:panelGrid columns="1">
+                <h:outputLabel value="Floor / Unit Number" />
+                <h:inputText style="width: 200px" value="12-123" /> 
+            </h:panelGrid> 
+            <h:panelGrid columns="1">
+                <p:commandButton  value="Save Changes" icon="fa fa-save" style="background-color: blue !important; 
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;"/>
+            </h:panelGrid> 
+            <h:panelGrid columns="1">
+                <h:outputLabel value="Postal Code" />
+                <h:inputText style="width: 200px" value="123456" /> 
+            </h:panelGrid> 
+        </p:panelGrid>
+
+    </ui:define>
+  
+</ui:composition>
+
+
+
