@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="header" id="header">
         <title>Select Address</title>
-    </ui:define>>
+    </ui:define>
     <ui:define name="content" id="content">
         <p:messages id="messagesCreateNewProduct" redisplay="false" />
         <p:dataTable id="addressSelect" var="address" value="#{paymentManagedBean.allAddresses}" selection="#{paymentManagedBean.selectedAddress}" rowKey="#{address.postalCode}">
@@ -28,8 +28,8 @@
                 <p:commandButton icon="ui-icon-plus" value="Select this address" actionListener="#{paymentManagedBean.setSelectedAddress}" onclick="PF('dialogAddressSelected').show()"/>
             </f:facet>
         </p:dataTable>
-        <p:column>
-            <p:panelGrid columns="2" style="width: 400px; height: 260px; border: #FFFFCC solid 2px;">
+        <p:column id="orderSummary">
+            <p:panelGrid columns="2" style="width: 400px; height: 260px; border: #FFFFCC solid 2px;" >
                 <p:outputLabel value="Total Summary" style="font-size: 15px"/>
                 <p:outputLabel />
 
@@ -45,10 +45,12 @@
             </p:panelGrid>
 
         </p:column>
-        
+        <p:button value="Select Delivery Schedule" href="select_schedule.xhtml"/>
         <p:dialog id ="dialogAddressSelected" widgetVar="dialogAddressSelected">
             Order will be delivered to this address! :)
+            <!-- show the confirmed address-->
         </p:dialog>
+        
     </ui:define>
 </ui:composition>
 

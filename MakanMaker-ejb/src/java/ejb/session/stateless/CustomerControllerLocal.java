@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.CustomerEntity;
 import entity.MealKitEntity;
 import entity.OrderEntity;
+import entity.ShoppingCartEntity;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.CustomerExistException;
@@ -38,5 +39,7 @@ public interface CustomerControllerLocal {
     public List<MealKitEntity> retrieveWishListByCustomerId(Long customerId);
 
     public List<OrderEntity> retrieveOrderHistoryByCustomerId(Long customerId);
+
+    public ShoppingCartEntity retrieveShoppingCartByCustomerId(Long customerId);
     
 }

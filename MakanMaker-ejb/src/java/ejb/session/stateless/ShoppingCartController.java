@@ -35,6 +35,14 @@ public class ShoppingCartController implements ShoppingCartControllerLocal {
         }
         return totalAmount;
     }
-
     
+   
+
+    @Override
+    public ShoppingCartEntity addItem(Long mealKitId, Integer qty, Long cartId){
+        ShoppingCartEntity shoppingCart = em.find(ShoppingCartEntity.class, cartId);
+        shoppingCart.getMealKits().add(mealKitId);
+        shoppingCart.getQuantity().add(qty);
+        return shoppingCart;
+    }
 }

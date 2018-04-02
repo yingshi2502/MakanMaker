@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.ShoppingCartEntity;
 import javax.ejb.Local;
 
 /**
@@ -15,5 +16,8 @@ import javax.ejb.Local;
 public interface ShoppingCartControllerLocal {
 
     public double calculatePriceByCartId(Long shoppingCartId);
+
+    public ShoppingCartEntity addItem(Long mealKitId, Integer qty, Long cartId);
+
     
 }

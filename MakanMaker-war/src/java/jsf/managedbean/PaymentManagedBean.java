@@ -9,14 +9,18 @@ import ejb.session.stateless.AddressControllerLocal;
 import ejb.session.stateless.CustomerControllerLocal;
 import ejb.session.stateless.MealKitControllerLocal;
 import ejb.session.stateless.OrderControllerLocal;
+import ejb.session.stateless.ShoppingCartControllerLocal;
 import entity.AddressEntity;
 import entity.CustomerEntity;
 import entity.MealKitEntity;
 import entity.OrderEntity;
 import entity.ShoppingCartEntity;
+import entity.TransactionEntity;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,8 +32,16 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
+import org.primefaces.event.ScheduleEntryMoveEvent;
+import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleEvent;
+import org.primefaces.model.ScheduleModel;
+import util.enumeration.PaymentTypeEnum;
 import util.exception.MealKitNotFoundException;
 
 /**
@@ -39,6 +51,9 @@ import util.exception.MealKitNotFoundException;
 @Named(value = "paymentManagedBean")
 @ViewScoped
 public class PaymentManagedBean implements Serializable{
+
+    @EJB(name = "ShoppingCartControllerLocal")
+    private ShoppingCartControllerLocal shoppingCartController;
 
     @EJB(name = "MealKitControllerLocal")
     private MealKitControllerLocal mealKitController;
@@ -67,10 +82,17 @@ public class PaymentManagedBean implements Serializable{
     private double subTotalPrice;
     private double shippingFees;
     private double totalPrice;
+    private ScheduleModel eventModel;
+    private ScheduleEvent event;
+    private Date date1;
+    private OrderEntity order;
+    //connect with order here...
     
     public PaymentManagedBean() {
         allAddresses = new ArrayList<>();
         currOrders = new ArrayList<>();
+        eventModel = new DefaultScheduleModel();
+        event = new DefaultScheduleEvent();
     }
     
     @PostConstruct
@@ -87,15 +109,24 @@ public class PaymentManagedBean implements Serializable{
                 Logger.getLogger(AddressManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        this.setShoppingCart(currentCustomer.getShoppingCart());
+        
+        System.err.println("Customer "+currentCustomer.getFullName());
+        shoppingCart = customerControllerLocal.retrieveShoppingCartByCustomerId(currentCustomer.getCustomerId());
+        //to be deleted after shopping cart code up.
+        shoppingCart = shoppingCartController.addItem(1l, 2, shoppingCart.getShoppingCartId());
+        
+        System.err.println("Shopping cart belongs to "+shoppingCart.getCustomer().getFullName());
         try {
-            this.setCurrOrders(shoppingCart);
+            setCurrOrders(shoppingCart);
+            System.err.println(currOrders.size());
         } catch (MealKitNotFoundException ex) {
             Logger.getLogger(PaymentManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setSubTotalPrice();
         this.shippingFees=0;
         this.setTotalPrice();
+        System.err.println("Price:"+totalPrice);
+        eventModel.addEvent(new DefaultScheduleEvent("MealKit1",today6Pm(),nextDay9Am()));
         
     }
     
@@ -109,6 +140,8 @@ public class PaymentManagedBean implements Serializable{
     public void setCurrentCustomer(CustomerEntity currentCustomer) {
         this.currentCustomer = currentCustomer;
     }
+    
+    //for select address
     
     public AddressEntity getDefaultAddress() {
         return defaultAddress;
@@ -159,6 +192,8 @@ public class PaymentManagedBean implements Serializable{
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
+    //for order summary
+    
     public List<OrderEntity> getCurrOrders() {
         return currOrders;
     }
@@ -169,7 +204,10 @@ public class PaymentManagedBean implements Serializable{
         double unitPrice;
         MealKitEntity mealKit;
         int mealKitQuantity;
+        
+        System.err.println("shoppingCar"+size);
         for (int i=0; i<size; i++){
+            System.err.println("&&&&&inside"+i);
             mealKit = mealKitController.retrieveMealKitById(shoppingCart.getMealKits().get(i));
             mealKitQuantity = shoppingCart.getQuantity().get(i);
             unitPrice = mealKit.getPrice();
@@ -181,6 +219,15 @@ public class PaymentManagedBean implements Serializable{
             currOrders.add(newOrder);
         }
     }
+    
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderEntity order) {
+        this.order = order;
+    }
+    
 
     public double getSubTotalPrice() {
         return subTotalPrice;
@@ -219,5 +266,121 @@ public class PaymentManagedBean implements Serializable{
         this.shoppingCart = shoppingCart;
     }
     
+    // for select schedule
+    
+    public ScheduleModel getEventModel() {
+        return eventModel;
+    }
+    
+    public void setEventModel(ScheduleModel eventModel) {
+        this.eventModel = eventModel;
+    }
+     //test
+    public Calendar today() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
+ 
+        return calendar;
+    }
+    //test
+    private Date today6Pm() {
+        Calendar t = (Calendar) today().clone(); 
+        t.set(Calendar.AM_PM, Calendar.PM);
+        t.set(Calendar.HOUR, 6);
+         
+        return t.getTime();
+    }
+     //test
+    private Date nextDay9Am() {
+        Calendar t = (Calendar) today().clone();
+        t.set(Calendar.AM_PM, Calendar.AM);
+        t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
+        t.set(Calendar.HOUR, 9);
+         
+        return t.getTime();
+    }
+     
+    public ScheduleEvent getEvent() {
+        return event;
+    }
+ 
+    public void setEvent(ScheduleEvent event) {
+        this.event = event;
+    }
+    
+    public void addEvent(ActionEvent actionEvent) {
+        
+        if(event.getId() == null)
+            eventModel.addEvent(event);
+        else
+            eventModel.updateEvent(event);
+        
+        event = new DefaultScheduleEvent();
+        order.setDeliveryDate(event.getStartDate());
+        
+    }
+     
+    public void onEventSelect(SelectEvent selectEvent) {
+        event = (ScheduleEvent) selectEvent.getObject();
+    }
+     
+    public void onDateSelect(SelectEvent selectEvent) {
+        event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
+    }
+     
+    public void onEventMove(ScheduleEntryMoveEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta());
+         
+        addMessage(message);
+    }
+     
+    public void onEventResize(ScheduleEntryResizeEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
+         
+        addMessage(message);
+    }
+     
+    private void addMessage(FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void onOrderSelected(){
+        //event. = order.getMealKit().getName();
+        ScheduleEvent newEvent = new DefaultScheduleEvent("asdfadsf", event.getStartDate(), event.getEndDate());
+        event = newEvent;
+        System.err.println("a##### on order select AJAX");
+    }
+
+    public Date getDate1() {
+        return date1;
+    }
+
+    public void setDate1(Date date1) {
+        this.date1 = date1;
+    }
+    //for payment
+    
+    public void confirmPayment(){
+        order = orderControllerLocal.createNewOrder(order, order.getCustomer().getCustomerId(), order.getMealKit().getMealKitId(), order.getAddress().getAddressId());
+        TransactionEntity transactionEntity = orderControllerLocal.payForOrder(order, paymentType);
+    }
+    
+    private PaymentTypeEnum paymentType;
+    public void tabChange(TabChangeEvent event){
+        String tabId = event.getTab().getId();
+        switch(tabId){
+            case "0":
+                paymentType = PaymentTypeEnum.PAYPAL;
+                break;
+            case "1":
+                paymentType = PaymentTypeEnum.CREDITCARD;
+                break;
+            case "2":
+                paymentType = PaymentTypeEnum.CASHONDELIVERY;
+                break;
+            default:
+                break;
+        }
+    }
     
 }

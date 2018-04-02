@@ -160,6 +160,18 @@ public class CustomerController implements CustomerControllerLocal {
             return null;
         }
     }
+    
+    @Override
+    public ShoppingCartEntity retrieveShoppingCartByCustomerId(Long customerId) {
+        CustomerEntity customer = em.find(CustomerEntity.class, customerId);
+
+        if (customer != null) {
+            customer.getShoppingCart().getCustomer();
+            return customer.getShoppingCart();
+        } else {
+            return null;
+        }
+    }
 
     @Override
     public CustomerEntity customerLogin(String username, String password) throws InvalidLoginCredentialException {
