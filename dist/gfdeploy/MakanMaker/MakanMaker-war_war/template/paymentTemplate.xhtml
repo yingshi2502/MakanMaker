@@ -33,27 +33,28 @@
             </p:layoutUnit>
             
             <p:layoutUnit position="center" >
-                
-                <ui:insert name="content">Content</ui:insert>
-                
+                <p:layout>
+                    <p:layoutUnit position="center">
+                        <ui:insert name="content">Content</ui:insert>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="south" size="100">
+                        <ui:insert name="stepsTracker">Track steps</ui:insert>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="east" size="300">
+                        <ui:insert name="orderSummary">Order Summary</ui:insert>
+                    </p:layoutUnit>
+                </p:layout>
             </p:layoutUnit>
-            <p:layoutUnit position="east" >
-                
-                <ui:insert name="orderSummary">Content</ui:insert>
-                
-            </p:layoutUnit>
+            
+            
+            
             
             <p:layoutUnit position="south" >
                 
                 <h6>&copy; 2018 IS3106. All Rights Reserved.</h6>
                 
             </p:layoutUnit>
-            <p:steps activeIndex="1" styleClass="custom" readonly="false">
-                <p:menuitem value="Personal" url="#"/>
-                <p:menuitem value="Seat Selection" url="#"/>
-                <p:menuitem value="Payment" url="#"/>
-                <p:menuitem value="Confirmation" url="#"/>
-            </p:steps>
+            
         
         </p:layout>
 

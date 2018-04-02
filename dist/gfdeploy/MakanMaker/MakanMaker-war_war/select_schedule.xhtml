@@ -1,13 +1,18 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/defaultTemplate.xhtml"
+                template="./template/paymentTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     
     <ui:define name="header" id="header">
         <title>Select Schedule</title>
+        <!-- to be solved/fixed:
+        use Object data to connect event with order
+        keep track of the current order (which have yet to be populated to the database as theres no status
+        add an boolean attribute to orders in currorders (how to add without interferring entity)
+        -->
     </ui:define>
     
     <ui:define name="content" id="content">
@@ -42,6 +47,33 @@
                 </h:panelGrid>
             </p:dialog>
         </h:form>
+    </ui:define>
+    <ui:define name="stepsTracker">
+        <p:steps activeIndex="1" styleClass="custom" readonly="true">
+            <p:menuitem value="Select Address" url="select_address.xhtml"/>
+            <p:menuitem value="Select Delivery Schedule" url="select_address.xhtml"/>
+            <p:menuitem value="Select Payment" url="payment.xhtml"/>
+            <p:menuitem value="Confirmation" url="#"/>
+        </p:steps>
+    </ui:define>
+    <ui:define name="orderSummary">
+        <p:column id="orderSummary">
+            <p:panelGrid columns="2" style="width: 300px; height: 260px; border: #FFFFCC solid 2px;" >
+                <p:outputLabel value="Total Summary" style="font-size: 15px"/>
+                <p:outputLabel />
+
+                <p:outputLabel value="Subtotal" style="font-size: 12px"/>
+                <p:outputLabel value="#{paymentManagedBean.subTotalPrice}" style="font-size: 12px;text-align: right;"/>
+
+                <p:outputLabel value="Shipping Fee" style="font-size: 12px"/>
+                <p:outputLabel value="#{paymentManagedBean.shippingFees}" style="font-size: 12px;text-align: right;"/>
+                <p:outputLabel /><hr />
+
+                <p:outputLabel value="Total" style="font-size: 15px"/>
+                <p:outputLabel value="#{paymentManagedBean.totalPrice}" style="font-size: 15px;text-align: right;"/>
+            </p:panelGrid>
+
+        </p:column>
     </ui:define>
 </ui:composition>
 
