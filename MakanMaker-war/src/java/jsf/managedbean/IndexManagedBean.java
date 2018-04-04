@@ -50,14 +50,14 @@ public class IndexManagedBean
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", currentCustomerEntity);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Login success!", "welcome"));
+            FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO,"Login success!", "welcome"));
 
             FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");     
         }
         catch(InvalidLoginCredentialException ex)
         {
             System.err.println("**** error"+ex.getMessage());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid login credential: " + ex.getMessage(), "Please try again"));
+            FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Invalid login credential: " + ex.getMessage(), "Please try again"));
         }
     }
     

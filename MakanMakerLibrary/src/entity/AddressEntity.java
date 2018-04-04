@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -48,7 +49,8 @@ public class AddressEntity implements Serializable {
     @Column(nullable = false)
     private Boolean isDeleted; //customer wants to delete the address, don't directly delete but just change the BooleanValue
     
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private CustomerEntity customer;
     
     @OneToMany(mappedBy = "address")

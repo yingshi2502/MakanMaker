@@ -53,9 +53,22 @@ public class OrderController implements OrderControllerLocal {
             
             order.setAddress(addressToDelivery);
             addressToDelivery.getOrders().add(order);
-            
+            System.err.println("****Order Add Address"+addressToDelivery.getOrders().size());
             customer.getOrderHistory().add(order);
+            System.err.println("****Order Meal Kit"+mealKit.getName()+mealKit.getMealKitId());
+            System.err.println("****Order Meal Kit Orders"+mealKit.getOrders().size());
+
             mealKit.getOrders().add(order);
+            
+            String transactionDescription = "Purchase order [id] = "+order.getOrderId();
+            TransactionEntity transaction = new TransactionEntity(Double.valueOf(25.0), TransactionTypeEnum.CREDIT, PaymentTypeEnum.PAYPAL, new Date(), transactionDescription);
+            
+            em.persist(transaction);
+            
+            transaction.setCustomer(customer);
+            transaction.setOrder(order);
+            order.setTransaction(transaction);
+            customer.getTransactions().add(transaction);
             
             em.flush();
             em.refresh(order);
@@ -112,6 +125,7 @@ public class OrderController implements OrderControllerLocal {
         if (order != null) {
             order.getMealKit();
             order.getTransaction();
+            order.getCustomer();
             return order;
         } else {
             throw new OrderNotFoundException("Order ID " + orderId + " does not exists!");
@@ -157,20 +171,27 @@ public class OrderController implements OrderControllerLocal {
     /**
      * create transaction entity and refund the order
      * order cannot be deliveried// refund policy???
-     * @param order
+     * @param orderId
+     * @param description
+     * @param type
      * @return
      */
     @Override
-    public TransactionEntity refundOrder(OrderEntity order) {
+    public TransactionEntity refundOrder(Long orderId, String description, PaymentTypeEnum type){
         TransactionEntity newTransaction = new TransactionEntity();
-        newTransaction.setAmount(order.getTotalAmount());
+        OrderEntity order = em.find(OrderEntity.class, orderId);
         
+        newTransaction.setAmount(order.getTotalAmount());
+        newTransaction.setPaymentType(type);
         newTransaction.setTransactionDateTime(new Date());
         newTransaction.setTransactionType(TransactionTypeEnum.DEBIT);
+        newTransaction.setDescription(description);
         
         order.setOrderStatus(OrderStatusEnum.REFUNDED);
+        order.setTransaction(newTransaction);
         em.persist(newTransaction);
-        em.merge(order);
+        
+        
         newTransaction.setCustomer(order.getCustomer());
         newTransaction.setOrder(order);
         

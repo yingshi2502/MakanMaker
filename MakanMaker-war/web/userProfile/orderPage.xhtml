@@ -8,32 +8,216 @@
     <ui:define name="header" id="header">
         <title>Order Details</title>
     </ui:define>
+<!--    <p:ajax event="load" listener="#{orderDetailManagedBean.onLoad}"/>-->
+    <f:metadata>
+        <f:viewParam name="id" value="#{orderDetailManagedBean.orderId}"/>
+    </f:metadata>
+
     <ui:define name="content" id="content">
         <h2 style="margin-left: 30px">Order Details</h2>
-        <p:panel style="margin-left: 30px; margin-right: 30px">
+        <p:panel style="margin-left: 50px; margin-right: 30px;border: #FFFFCC solid 2px;" >
             <p:panelGrid>
                 <p:outputLabel value="Order #1234123413" style="font-size: 15px; font-weight: bold" /><br />
-                <p:outputLabel value="Placed on 10 Mar 2018" style="font-size: 10px;"/>
+                <p:outputLabel value="Placed on #{orderDetailManagedBean.purchasingDate}" style="font-size: 10px;"/>
             </p:panelGrid>   
         </p:panel>
         <br />
-        <p:panel style="margin-left: 30px; margin-right: 30px; align-items: center">
+
+        <p:panel style="margin-left: 30px; margin-right: 30px;">
             <br />
-            <h:form style="border: #555" >
-                <p:steps activeIndex="1" styleClass="custom" readonly="false">
-                    <p:menuitem value="Preparing" />
+            <h:form style="border: #555;margin: 0 auto" >
+                <p:steps activeIndex="#{orderDetailManagedBean.currOrderStatusStep}" styleClass="custom" readonly="false" style="width: 800px; margin-left: auto; margin-right: auto">
+                    <p:menuitem value="Preparing"/>
                     <p:menuitem value="Deliverying"/>
                     <p:menuitem value="Delivered" />
                     <p:menuitem value="Received" />
-                </p:steps>   
-            </h:form>  
-            <img src="#{request.contextPath}/images/mealkit1.png" height="100px" width="100px"/>
+                </p:steps>
+                <br/><br />
+                <p:panel style="width: 800px; margin-left: auto; margin-right: auto;background: antiquewhite">
+                    <p:outputLabel value="19 Mar 2018 - 13:00" style="font-size: 10px; color: #AFAFAF"/>&nbsp;&nbsp;&nbsp;
+                    <p:outputLabel value="Your package is been #{orderDetailManagedBean.currOrder.orderStatus}." style="font-size: 12px;"/>
+                </p:panel>
+            </h:form>
+            <br />
+            <h:form id="orderDetailForm">
+                <p:growl id="growl" showDetail="true" sticky="true" />
 
+                <h:panelGrid columns="2" style="width: 800px;" cellpadding="10">
+                    <img scr="#{request.contextPath}/images/mealkit#{orderDetailManagedBean.mealKit.mealKitId}.png" height="200px" width="200px" align="right" style="margin-right: 30px"/>
+                    <h:panelGrid columns="1" cellpadding="10">
+                        <p:row>
+                            <p:outputLabel style="font-size: 15px" value="#{orderDetailManagedBean.mealKit.name}"/>
+                        </p:row>
+                        <p:row>
+                            <p:outputLabel value="SGD #{orderDetailManagedBean.mealKit.price}"/>
+                        </p:row>
+                        <p:row>
+                            <p:outputLabel value="Qty: #{orderDetailManagedBean.currOrder.quantity}"/>
+                        </p:row>
+                        <p:row style="text-align: right" rendered="#{orderDetailManagedBean.canRefund}">
+                            <p:commandLink id="return" value="RETURN" onclick="PF('dialogRefundRequest').show()"/>&nbsp;&nbsp;&nbsp;
+                            <p:tooltip for="return" value="Until #{orderDetailManagedBean.lastReturnDate}" showEffect="slide" hideEffect="slide" style="background-color:#FFFFCC;border:1px dotted #000000;" />
+                        </p:row>
+                        <p:row>
+                            <p:commandLink id="review" disabled="#{orderDetailManagedBean.currOrder.isReviewed}" value="WRITE A REVIEW" onclick="PF('dialogWriteReview').show()" />
+                            <p:tooltip for="review" value="#{orderDetailManagedBean.currOrder.isReviewed? 'You have already write a review' : 'Click to add a review!'}" showEffect="slide" hideEffect="slide" style="background-color:#FFFFCC;border:1px dotted #000000;" />
+
+                        </p:row>
+                    </h:panelGrid>
+                </h:panelGrid>    
+            </h:form>
         </p:panel>
+        <p:panelGrid columns="2" style="width: 900px; margin-left: auto; margin-right: auto">
+            <p:column >
+                <p:panelGrid columns="1" style="border: #FFFFCC solid 2px;width: 500px;height: 130px">
+                    <h:outputLabel value="Shipping Address" style="font-size: 16px"/>
+                    <p:outputLabel value="#{orderDetailManagedBean.currOrder.address.fullName}"/>
+                    <p:outputLabel value="#{orderDetailManagedBean.currOrder.address.postalCode} #{orderDetailManagedBean.currOrder.address.streetAddress} #{orderDetailManagedBean.currOrder.address.floorUnit}"/>
+                    <p:outputLabel value="#{orderDetailManagedBean.currOrder.address.phoneNumber}"/>
+                </p:panelGrid>
+                <br />
+                <p:panelGrid columns="1" style="border: #FFFFCC solid 2px; width: 500px;height: 130px">
+                    <h:outputLabel value="Billing Address" style="font-size: 16px"/>
+                    <p:outputLabel value="Full Name"/>
+                    <p:outputLabel value="118430, Singapore, Singapore, 37 PRINCE GEORGE'S PARK, BLK 16, #05-28"/>
+                    <p:outputLabel value="94299902"/>
+                </p:panelGrid>    
+            </p:column>
+            <p:column>
+                <p:panelGrid columns="2" style="width: 400px; height: 280px; border: #FFFFCC solid 2px;">
+                    <p:outputLabel value="Total Summary" style="font-size: 16px;font-weight: bold"/>
+                    <p:outputLabel />
+
+                    <p:outputLabel value="Subtotal" style="font-size: 14px"/>
+                    <p:outputLabel value="SGD #{orderDetailManagedBean.subtotal}" style="font-size: 14px;text-align: right;"/>
+
+                    <p:outputLabel value="Shipping Fee" style="font-size: 14px"/>
+                    <p:outputLabel value="SGD #{orderDetailManagedBean.currOrder.shippingFee}" style="font-size: 14px;text-align: right;"/>
+                    <p:outputLabel /><hr />
+
+                    <p:outputLabel value="Total" style="font-size: 15px"/>
+                    <p:outputLabel value="SGD #{orderDetailManagedBean.currOrder.totalAmount}" style="font-size: 15px;text-align: right;"/>
+                </p:panelGrid>
+
+            </p:column>
+        </p:panelGrid>
 
 
+        <h:form id="formWriteReview">
+            <p:dialog id="dialogWriteReview" widgetVar="dialogWriteReview" showEffect="clip" header="Write A Review" closable="true">
+                <p:messages id="messagesWriteReview" redisplay="false" />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <h:outputText value="Purchased on #{orderDetailManagedBean.purchasingDate}" style="font: 10px; color: #AFAFAF"/><br />
+                            <h:outputText value="rate and review purchase product" style="font: 10px;"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column rowspan="5" style="margin-top: 0px">
+                            <img scr="#{request.contextPath}/images/mealkit1.png" height="100px" width="100px" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{orderDetailManagedBean.mealKit.name}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:rating value="#{orderDetailManagedBean.newReview.rating}" required="true" requiredMessage="Please rate the meal kit" id="rating"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <h:outputText value="Review" style="font: 10px; color: #AFAFAF"/>
+                            <br />
+                            <p:inputTextarea rows="5" cols="30" value="#{orderDetailManagedBean.newReview.review}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Review As #{orderDetailManagedBean.currCustomer.userName}"/>&nbsp;&nbsp;&nbsp;
+                            <p:inputSwitch id="switcher" value="#{orderDetailManagedBean.isAnomy}"  offLabel="No" onLabel="Yes" onchange="changeColor(anonymousLabel)" style="width: 70px"/>&nbsp;
+                            <p:outputLabel id="anonymousLabel" value="Anonymous" style="color: appworkspace"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton update="@all orderDetailForm" value="Submit" style="width: 70px" actionListener="#{orderDetailManagedBean.submitReview}" oncomplete="PF('dialogWriteReview').hide();"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
 
 
+        <h:form id="formRefundRequest">
+            <p:dialog id="dialogRefundRequest" widgetVar="dialogRefundRequest" showEffect="clip" header="Refund Request" closable="true">
+                <p:messages id="messagesRefundRequest" redisplay="false" />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <h:outputText value="Purchased on #{orderDetailManagedBean.purchasingDate}" style="font: 10px; color: #AFAFAF"/><br />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column rowspan="5" style="margin-top: 0px">
+                            <img scr="#{request.contextPath}/images/mealkit1.png" height="100px" width="100px" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{orderDetailManagedBean.mealKit.name}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Qty: #{orderDetailManagedBean.currOrder.quantity}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <h:outputText value="Refund Reason" style="font: 10px; color: #AFAFAF"/>
+                            <br />
+                            <p:inputTextarea rows="5" cols="30" required="true" requiredMessage="Please write the reason" value="#{orderDetailManagedBean.refundDescription}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel for="paymentSelector" value="Refund method:" />
+                            <h:selectOneMenu id="paymentSelector" value="#{orderDetailManagedBean.refundPaymentMethod}" required="true" label="Payment Selector">
+                                <f:selectItem itemLabel="Select payment method" itemValue="" noSelectionOption="true" />
+                                <f:selectItem itemLabel="PayPal" itemValue="1" />
+                                <f:selectItem itemLabel="Credit Card" itemValue="2" />
+                            </h:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:selectBooleanCheckbox value="#{orderDetailManagedBean.checkedRefundPolicy}" />
+                            <p:outputLabel value=" I have read and accepted the Return Policy of Makan Maker." />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton value="Submit" style="width: 70px" update="@all" actionListener="#{orderDetailManagedBean.submitRefund}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+
+        <script type="text/javascript">
+            $(switcher).on('change', function () {
+                alert('asdfasdfa');
+            });
+            function changeColor(param) {
+                jQuery("[id*=" + param + "]".toggleClass('red'));
+                alert('asdfasdfa');
+            }
+            ;
+            function alerrr() {
+                alert('sdfasdfadf');
+            }
+            ;
+        </script>
         <style type="text/css">
             .ui-steps .ui-steps-item {
                 width: 24%;
@@ -65,6 +249,11 @@
             .ui-steps.custom .ui-steps-item.ui-state-highlight .ui-steps-title {
                 color: #555;
             }
+            .red {
+                background-color: red;
+                color: yellow
+            }
+
         </style>
 
 

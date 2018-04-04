@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/mealkitTemplate.xhtml"               
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:dataGrid var="mealKit" value="#{mealKitManagedBean.mealKits}" columns="3" layout="grid"
+                rows="12" paginator="true" id="mealkits"
+                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                rowsPerPageTemplate="3,6,12" style="table-layout: auto"
+                
+                >
+
+                <f:facet name="header">
+                    Meal Kits
+                </f:facet>
+
+                <p:panel header="#{mealKit.name}" >
+                    <h:panelGrid columns="1" style="width:100%; text-align: center">
+                        <img src="#{mealKit.imagePath}" height="180px" width="330px" align="middle"></img>
+                        
+                        <h:link  value="#{mealKit.description}" outcome="viewMealKitDetails.xhtml?id=#{mealKit.mealKitId}">      
+                            <f:attribute  name="mealKitId" value="#{mealKit.mealKitId}" />
+                        </h:link>
+                    </h:panelGrid>
+                </p:panel>
+
+            </p:dataGrid>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

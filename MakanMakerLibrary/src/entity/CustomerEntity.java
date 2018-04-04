@@ -46,6 +46,7 @@ public class CustomerEntity implements Serializable {
     
     @OneToMany(mappedBy = "customer")
     private List<OrderEntity> orderHistory;
+    
     @OneToMany(mappedBy = "customer")
     private List<AddressEntity> addresses;
     

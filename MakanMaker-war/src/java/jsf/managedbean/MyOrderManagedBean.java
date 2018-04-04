@@ -12,8 +12,11 @@ import java.util.List;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import entity.OrderEntity;
+import entity.ReviewEntity;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -34,11 +37,12 @@ public class MyOrderManagedBean implements Serializable{
     private OrderControllerLocal orderControllerLocal;
 
     private List<OrderEntity> orders;
-    private OrderEntity currentOrder;
     private boolean noOrder;
+    private ReviewEntity newReview;
 
     public MyOrderManagedBean() {
         orders = new ArrayList<>();
+        newReview = new ReviewEntity();
     }
 
     @PostConstruct
@@ -51,26 +55,25 @@ public class MyOrderManagedBean implements Serializable{
         }
     }
 
-    public Integer getCurrOrderStatusStep() {
-        int activeIndex = -1;
-        switch (currentOrder.getOrderStatus().toString()) {
+    public String getDeliveryDate(Date date){
+        SimpleDateFormat ft1= new SimpleDateFormat("dd-MMM-yyyy");
+        return ft1.format(date);
+    }
+    
+    public String getLcOrderStatus(OrderStatusEnum status){
+        switch (status.toString()) {
             case "PREPARING":
-                activeIndex = 0;
-                break;
+                return "Preparing";
             case "DELIVERING":
-                activeIndex = 1;
-                break;
+                return "Deliverying";
             case "DELIVERED":
-                activeIndex = 2;
-                break;
+                return "Delivered";
             case "RECEIVED":
-                activeIndex = 3;
-                break;
+                return "Reveived";
             default:
-                break;
+                return "No News";
 
         }
-        return activeIndex;
     }
 
     /**
@@ -87,19 +90,6 @@ public class MyOrderManagedBean implements Serializable{
         this.orders = orders;
     }
 
-    /**
-     * @return the currentOrder
-     */
-    public OrderEntity getCurrentOrder() {
-        return currentOrder;
-    }
-
-    /**
-     * @param currentOrder the currentOrder to set
-     */
-    public void setCurrentOrder(OrderEntity currentOrder) {
-        this.currentOrder = currentOrder;
-    }
 
     /**
      * @return the noOrder
@@ -113,6 +103,20 @@ public class MyOrderManagedBean implements Serializable{
      */
     public void setNoOrder(boolean noOrder) {
         this.noOrder = noOrder;
+    }
+
+    /**
+     * @return the newReview
+     */
+    public ReviewEntity getNewReview() {
+        return newReview;
+    }
+
+    /**
+     * @param newReview the newReview to set
+     */
+    public void setNewReview(ReviewEntity newReview) {
+        this.newReview = newReview;
     }
 
 }

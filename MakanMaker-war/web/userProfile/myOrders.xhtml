@@ -5,41 +5,52 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
+    
     <ui:define name="header" id="header">
         <title>My Orders</title>
     </ui:define>
     <ui:define name="content" id="content">
         <h2 style="margin-left: 30px">My Orders</h2>
-        <p:dataTable style="margin-left: 30px; margin-right: 30px" var="order" value="" rows="10"
-                     paginator="true"
-                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="5,10,15">
-            <p:subTable var="order" value="">
-                <f:facet name="header">
-                    <h:outputText value="Order" />
-                    <p:link value=" #5333814339935" outcome="orderPage" />&nbsp;&nbsp;&nbsp;
-                    <h:outputText value="  Placed on 10 Mar 2018" />&nbsp;&nbsp;&nbsp;
-                    <p:commandLink style="position: absolute;right: 50px" value="Manage" />
-                </f:facet>
-                <p:column >
-                    <h:outputText value="image" />
-                </p:column>
+        <p:dataTable style="margin-left: 30px; margin-right: 30px" var="order" value="#{myOrderManagedBean.orders}" tableStyle="table-layout: auto">
+            <p:column>
+                <p:panelGrid>
+                    <p:row >
+                        <p:column>
+                            <h:outputText value="Order" />
+                            <h:link value="#5333814339935" outcome="orderPage.xhtml?id=#{order.orderId}"/><br />
+                            <h:outputText value="  Placed on 10 Mar 2018" />&nbsp;&nbsp;&nbsp;
+                        </p:column>
+                        <p:column>
+                            <p:link style="position: absolute;right: 50px" value="Manage" outcome="orderPage.xhtml?id=#{order.orderId}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="5">
+                           <div style="border-bottom: 1px solid #AFAFAF;">
+                           </div>  
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <img scr="#{request.contextPath}/images/mealkit#{order.mealKit.mealKitId}.png" height="100px" width="100px" />
+                        </p:column>
+                        <p:column >
+                            <h:link value="#{order.mealKit.name}" style="font: 14px;color: #0081c2"/>
+                        </p:column>
 
-                <p:column >
-                    <h:outputText value="item Name" />
-                </p:column>
+                        <p:column>
+                            <h:outputText value="Qty: #{order.quantity}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{myOrderManagedBean.getLcOrderStatus(order.orderStatus)}" style="font-size: 12px;padding: 4px 12px; display: inline-block; border-radius: 24px; background-color: #eff0f5; max-width: 150px;" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{myOrderManagedBean.getDeliveryDate(order.deliveryDate)}" />
+                        </p:column>
 
-                <p:column>
-                    <h:outputText value="Quantity" />
-                </p:column>
-                <p:column>
-                    <h:outputText value="Status" />
-                </p:column>
-                <p:column >
-                    <h:outputText value="Delivery Date" />
-                </p:column>
-
-            </p:subTable>
+                    </p:row>
+                </p:panelGrid>
+            </p:column>
 
         </p:dataTable>
     </ui:define>

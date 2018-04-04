@@ -47,14 +47,6 @@ public class ReviewEntity implements Serializable {
         this.review = review;
     }
     
-    public ReviewEntity(String reviewer, int rating, String review, MealKitEntity mealKit){
-        this();
-        this.reviewer = reviewer;
-        this.rating = rating;
-        this.review = review;
-        this.mealKit = mealKit;
-    }
-
     public Long getReviewId() {
         return reviewId;
     }

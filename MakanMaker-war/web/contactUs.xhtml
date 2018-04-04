@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/homePagesTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    
+    
+    <ui:define name="content">
+        
+        
+        <h:form>
+            <p:growl id="msgs" showDetail="true" />
+            <h:panelGrid columns="1" cellpadding="5" style="position: relative; left:15%;">
+                <p:outputLabel value="Contact Us"  style="font-size: 20px; font-weight: bold;" />
+                
+                <p:outputLabel value="Your Email Address" for="emailAddress" />
+                <p:autoComplete id="emailAddress" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}" inputStyle="width: 800px"/>
+                
+                <p:outputLabel value="Subject" for="subject" />
+                <p:autoComplete id="subject" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}"  inputStyle="width: 800px" />
+            
+                <p:outputLabel value="Description" for="description" />
+                <p:inputTextarea id="description" rows="3" cols="33" style="width: 800px; height:100px;"/>
+
+                <p:outputLabel value="What is your question about?" for="dd1" />
+                <p:autoComplete id="dd1" dropdown="true" value="#{contactUsManagedBean.dropDownText}" completeMethod="#{contactUsManagedBean.completeTextOne}" inputStyle="width: 800px" />
+        
+                <p:outputLabel value="Is the email above associated with your Makan Maker account?" for="dd2" />
+                <p:autoComplete id="dd2" dropdown="true" value="#{contactUsManagedBean.dropDownText2}" completeMethod="#{contactUsManagedBean.completeTextTwo}" inputStyle="width: 800px"/>
+            
+            </h:panelGrid>
+
+             <p:commandButton value="Submit" icon="ui-icon-check" update="" oncomplete="" style="position:relative; left:40%;margin-top: 20px;  width: 100px;height:30px; font-size: 15px;"/>
+             
+        </h:form>
+    </ui:define>
+
+</ui:composition>

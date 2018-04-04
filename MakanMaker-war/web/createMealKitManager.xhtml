@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html template="./template/managerTemplate.xhtml"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Create Meal Kit :: Manager Administration Portal </title>
+    </h:head>
+    <h:body>
+        
+        <h:form id="formCreateMealKit">
+            
+            <p:growl id="growl" showSummary="true" showDetail="false" sticky="true" /> 
+            <p:panel header="Create Meal Kit">
+                
+                <p:panelGrid id="panelGrid" style="width: 100%">
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="mealKitName" value="Meal Kit Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="mealKitName" value="#{createMealKitManagedBean.newMealKit.name}" required="true" requiredMessage="Meal Kit Name is required" />
+                            
+                            <p:message for="mealKitName" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="mealKitPrice" value="Meal Kit Price: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputNumber id="mealKitPrice" value="#{createMealKitManagedBean.newMealKit.price}" maxlength="10" minValue="0.01" decimalPlaces="2" required="true" requiredMessage="Meal Kit Price is required" />
+                            
+                            <p:message for="mealKitPrice" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="description" value="Description: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="description" value="#{createMealKitManagedBean.newMealKit.description}" rows="5" cols="33" required="true" requiredMessage="Description is required" />
+                            
+                            <p:message for="description" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="nutrition" value="Nutrition: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputNumber id="nutrition" value="#{createMealKitManagedBean.newMealKit.nutrition}" decimalPlaces="0" minValue="0" required="true" requiredMessage="Nutrition is required" />
+                            
+                            <p:message for="nutrition" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="time" value="Duration of cooking: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="time" value="#{createMealKitManagedBean.newMealKit.time}" required="true" requiredMessage="Duration of cooking is required" placeholder="e.g. 50-60 min" />
+                            
+                            <p:message for="time" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="fileUploadPanel" value="Upload Image: " />
+                        </p:column>
+                        <p:column>
+                            <p:panel id="fileUploadPanel" header="File Upload">
+<!--                                <p:messages autoUpdate="true" showSummary="true" showDetail="false" />-->
+                                    <p:fileUpload value="#{createMealKitManagedBean.uploadedImage}" disabled="#{createMealKitManagedBean.uploadedOne}" fileUploadListener="#{createMealKitManagedBean.handleFileUpload}" fileLimit="1" fileLimitMessage="File Limit is 1" update="growl fileUploadPanel" />
+                                    <p:graphicImage url="http://knowledge.wharton.upenn.edu/wp-content/uploads/2016/01/compassion.jpg" />
+<!--                                    value="#{createMealKitManagedBean.uploadedImage}"-->
+                            </p:panel>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="isAvailable" value="Set as Available?: " />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanButton id="isAvailable" value="#{createMealKitManagedBean.newMealKit.isAvailable}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:100px" valueChangeListener="#{createMealKitManagedBean.addNewMealKitMessage()}" >
+                                <p:ajax update="growl" />
+                            </p:selectBooleanButton>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="tagGrid" value="Select one or more tags: " />
+                        </p:column>
+                        <p:column>
+                            <p:selectManyCheckbox id="tagGrid" value="#{createMealKitManagedBean.newMealKitSelectedTagNames}" layout="responsive" columns="2" required="true" requiredMessage="One or more tags is required">
+                                <f:selectItems value="#{createMealKitManagedBean.tagNames}" var="tag" itemLabel="#{tag}" itemValue="#{tag}" />
+                            </p:selectManyCheckbox>
+                            
+                            <p:message for="tagGrid" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton id="createMealKit" value="Save and Create" icon="ui-icon-disk" actionListener="#{createMealKitManagedBean.saveNewMealKit}" update="panelGrid" />
+                            <!-- additional attr: update="@form formDataTable:dataTableBooks"  -->
+                        </p:column>
+                    </p:row>
+                    
+                </p:panelGrid>
+ 
+            </p:panel>
+            
+        </h:form>
+        
+    </h:body>
+</html>
+

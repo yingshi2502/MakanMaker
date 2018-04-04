@@ -1,37 +1,43 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!--session attributes: manager/customer, then direct to different bean methods of mb-->
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+    <ui:define name="header" id="header">
+        <title>Customer Login</title>
+    </ui:define>
+    <ui:define name="headCompoment">
+        <ez:LoginComponent />
+    </ui:define>
+    <ui:define name="content" id="content">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
-
-    <h:head>
-        <title>Login</title>
-    </h:head>
-    <h:body>
         <h3>Customer Login</h3>
-        <p:growl id="growl" showDetail="true" sticky="true" />         
-        <h:form id="contentLoginForm">
-            <p:panel>
-                <p:outputLabel for="username" value="Username"/>
-                <p:inputText id="username" value="#{indexBean.username}" required="true"
-                             requiredMessage="Username is required">
-                    <f:validateLength minimum="4"/>
-                </p:inputText>
-                <br />
-                <p:outputLabel for="password" value="Password"/>
-                <p:password id="password" value="#{indexBean.password}" required="true"
-                            requiredMessage="Password is required">
-                    <f:validateLength minimum="4"/>
-                </p:password>
-                <br />
-                <p:commandButton value="Login" update="growl" actionListener="#{indexBean.customerLogin}" icon="ui-icon-key" /> 
-                Sign Up <p:link value=" here" outcome="signup" />
-            </p:panel>
-        </h:form>
-    </h:body>
-</html>
+        <!--        <p:growl id="growl" showDetail="true" sticky="true" />         -->
+        <h:form id="contentLoginForm" style="border: #555;margin: auto">
+             <p:growl id="growl" showDetail="true" sticky="true" />
+                <p:panelGrid columns="3">
+                    <p:outputLabel for="username" value="Username" style="width:200px;height:30px;font-size: 16px" />
+                    <p:inputText id="username" value="#{indexBean.username}" required="true"
+                                 requiredMessage="Username is required" style="width:200px;height:30px;font-size: 16px">
+                    </p:inputText>
+                    <p:messages for="username"/>
+                    <p:outputLabel for="password" value="Password" style="width:200px;height:30px;font-size: 16px" />
+                    <p:password id="password" value="#{indexBean.password}" required="true"
+                                requiredMessage="Password is required" style="width:200px;height:30px">
+                        <f:validateLength minimum="4"/>
+                    </p:password>
+                    <p:messages for="password"/>
+                    <p:commandButton value="Login" actionListener="#{indexBean.customerLogin}" update = "growl" icon="ui-icon-key" style="width:200px;height: 40px; font-size: 18px"/> 
+                    <p:outputLabel value="Sign Up "><p:link value="here" outcome="signup" style="text-decoration: underline"/></p:outputLabel>
+                </p:panelGrid>
 
+        </h:form>
+
+    </ui:define>
+
+
+</ui:composition>

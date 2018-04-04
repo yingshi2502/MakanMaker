@@ -39,8 +39,9 @@ public class WishListManagedBean {
     @PostConstruct
     public void postConstruct(){
         CustomerEntity currCustomer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
-        setCustomerId(currCustomer.getCustomerId());
-        setWishListMealKits(wishListControllerLocal.getWishListByCustomerId(getCustomerId()));
+        customerId = currCustomer.getCustomerId();
+        
+        wishListMealKits = wishListControllerLocal.getWishListByCustomerId(getCustomerId());
     }
     
     public void deleteFromWishList(ActionEvent event){

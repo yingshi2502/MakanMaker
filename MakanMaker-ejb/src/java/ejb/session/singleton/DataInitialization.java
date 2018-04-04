@@ -42,10 +42,10 @@ import util.helperClass.SecurityHelper;
 @Startup
 public class DataInitialization {
 
-    @EJB(name = "AddressControllerLocal")
+    @EJB
     private AddressControllerLocal addressControllerLocal;
 
-    @EJB(name = "OrderControllerLocal")
+    @EJB
     private OrderControllerLocal orderControllerLocal;
 
     @EJB
@@ -71,20 +71,22 @@ public class DataInitialization {
         manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
         em.persist(manager);
         createCustomer();
-        createTags();
+        createMKTag();
         createOrder();
+
     }
     
     private void createOrder(){
-        OrderEntity order = new OrderEntity(Double.valueOf(20), 2, new Date(), new Date(), OrderStatusEnum.PREPARING, "Add more flavour");
-        orderControllerLocal.createNewOrder(order, 1l, 1l,1l);
+        OrderEntity order = new OrderEntity(Double.valueOf(25), 2, new Date(), new Date(), OrderStatusEnum.PREPARING, "Add more flavour",Double.valueOf(5));
+        orderControllerLocal.createNewOrder(order, 1l, 1l,1l);  
     }
     
     private void createCustomer(){
         try {
-            customer = new CustomerEntity("yingshi", "Huang Yingshi","88888888","huangyingshi@gmail.com", "password", new Date(1998, 4, 23),1);
+            customer = new CustomerEntity("yingshi", "Huang Yingshi","88888888","huangyingshi@gmail.com", "password", new Date(1998-2000, 4, 23),1);
             customerController.createNewCustomer(customer);
-            
+            customer.getWishList().add(1l);
+
             AddressEntity address = new AddressEntity("118430", "37 PGP", "#05-28", Boolean.TRUE, Boolean.TRUE, "99999999", "Huang Yingshi");
             addressControllerLocal.createNewAddress(address,1l);
         
@@ -117,7 +119,7 @@ public class DataInitialization {
         ingre.add("Spicy Sambal");
         mealKit.setIngredients(ingre); 
         em.persist(mealKit);
-        customer.getWishList().add(mealKit.getMealKitId());
+        
         
         tag = new TagEntity("Vegetarian",TagCategoryEnum.DIET);
         em.persist(tag);
@@ -135,5 +137,113 @@ public class DataInitialization {
         
     }
 
+    private void createMKTag(){
+        TagEntity tag = new TagEntity("Western",TagCategoryEnum.GEOGRPHIC);
+        em.persist(tag);
+        
+        tag = new TagEntity("Chinese",TagCategoryEnum.GEOGRPHIC);
+        em.persist(tag);
+        
+        tag = new TagEntity("Japanese",TagCategoryEnum.GEOGRPHIC);
+        em.persist(tag);
+        
+        tag = new TagEntity("Indian",TagCategoryEnum.GEOGRPHIC);
+        em.persist(tag);
+        
+        tag = new TagEntity("Malay",TagCategoryEnum.GEOGRPHIC);
+        em.persist(tag);
+        
+        tag = new TagEntity("Vegetarian",TagCategoryEnum.DIET);
+        em.persist(tag);
+        
+        tag = new TagEntity("Seafood",TagCategoryEnum.DIET);
+        em.persist(tag);
+        
+        tag = new TagEntity("Beef",TagCategoryEnum.DIET);
+        em.persist(tag);
+        
+        
+        List<String> ingredients = new ArrayList<String>();
+        ingredients.add("For the coconut rice:");
+        ingredients.add("2 cups basmati rice");
+        ingredients.add("6 pandan leaves, knotted");
+        ingredients.add("8cm knob of ginger, bruised");
+        ingredients.add("270ml coconut milk");
+        ingredients.add("For the sambal:");
+        ingredients.add("30 dried chillies, seeds removed and soaked in hot water");
+        ingredients.add("5 shallots, 3 quartered and 2 thinly sliced");
+        ingredients.add("1 tbsp ginger or garlic paste");
+        MealKitEntity mealKit = new MealKitEntity("Nasi Lemak", 2.00, ingredients, true, 30, "The best Nasi Lemak in town", "40 to 30 min", "../images/mealKit1.jpg", "Easy"); 
+        em.persist(mealKit);
+
+        ingredients = new ArrayList<String>();
+        ingredients.add("For the coconut rice:");
+        ingredients.add("2 cups basmati rice");
+        ingredients.add("6 pandan leaves, knotted");
+        ingredients.add("8cm knob of ginger, bruised");
+        ingredients.add("270ml coconut milk");
+        ingredients.add("For the sambal:");
+        ingredients.add("30 dried chillies, seeds removed and soaked in hot water");
+        ingredients.add("5 shallots, 3 quartered and 2 thinly sliced");
+        ingredients.add("1 tbsp ginger or garlic paste");       
+        mealKit = new MealKitEntity("Bobo Chaha", 4.00, ingredients, true, 100, "Cooling for a hot day", "20 to 30 min", "../images/mealKit2.jpg","Easy"); 
+        em.persist(mealKit);
+        
+        ingredients = new ArrayList<String>();
+        ingredients.add("For the coconut rice:");
+        ingredients.add("2 cups basmati rice");
+        ingredients.add("6 pandan leaves, knotted");
+        ingredients.add("8cm knob of ginger, bruised");
+        ingredients.add("270ml coconut milk");
+        ingredients.add("For the sambal:");
+        ingredients.add("30 dried chillies, seeds removed and soaked in hot water");
+        ingredients.add("5 shallots, 3 quartered and 2 thinly sliced");
+        ingredients.add("1 tbsp ginger or garlic paste");       
+        mealKit = new MealKitEntity("Chicken Chop", 4.00, ingredients, true, 100, "For meat lovers all day everyday", "20 to 30 min", "../images/mealKit3.jpg","Hard"); 
+        em.persist(mealKit);
+        
+        
+        ingredients = new ArrayList<String>();
+        ingredients.add("For the coconut rice:");
+        ingredients.add("2 cups basmati rice");
+        ingredients.add("6 pandan leaves, knotted");
+        ingredients.add("8cm knob of ginger, bruised");
+        ingredients.add("270ml coconut milk");
+        ingredients.add("For the sambal:");
+        ingredients.add("30 dried chillies, seeds removed and soaked in hot water");
+        ingredients.add("5 shallots, 3 quartered and 2 thinly sliced");
+        ingredients.add("1 tbsp ginger or garlic paste");   
+        mealKit = new MealKitEntity("Fish & Chips", 4.00, ingredients, true, 100, "For fish lovers all day everyday", "20 to 30 min", "../images/mealKit4.jpg","Hard"); 
+        em.persist(mealKit);
+        
+        
+        ingredients = new ArrayList<String>();
+        ingredients.add("For the coconut rice:");
+        ingredients.add("2 cups basmati rice");
+        ingredients.add("6 pandan leaves, knotted");
+        ingredients.add("8cm knob of ginger, bruised");
+        ingredients.add("270ml coconut milk");
+        ingredients.add("For the sambal:");
+        ingredients.add("30 dried chillies, seeds removed and soaked in hot water");
+        ingredients.add("5 shallots, 3 quartered and 2 thinly sliced");
+        ingredients.add("1 tbsp ginger or garlic paste");    
+        mealKit = new MealKitEntity("Mee Goreng", 4.00, ingredients, true, 100, "Fried Noodles Stir Fried with Beef", "20 to 30 min", "../images/mealKit5.jpg","Easy"); 
+        em.persist(mealKit);        
+        
+        ingredients = new ArrayList<String>();
+        ingredients.add("For the coconut rice:");
+        ingredients.add("2 cups basmati rice");
+        ingredients.add("6 pandan leaves, knotted");
+        ingredients.add("8cm knob of ginger, bruised");
+        ingredients.add("270ml coconut milk");
+        ingredients.add("For the sambal:");
+        ingredients.add("30 dried chillies, seeds removed and soaked in hot water");
+        ingredients.add("5 shallots, 3 quartered and 2 thinly sliced");
+        ingredients.add("1 tbsp ginger or garlic paste");    
+        mealKit = new MealKitEntity("Rojak", 4.00, ingredients, true, 100, "For the all in one fans", "10 to 20 min", "../images/mealKit6.jpg","Very Easy"); 
+        em.persist(mealKit);    
+        System.err.println("***Finished Create MKs");
+
+    }
     
 }

@@ -10,38 +10,45 @@
     </ui:define>
     <ui:define name="content" id="content">
         <h2 style="margin-left: 30px">Edit Profile</h2>
-        <p:messages id="messages" showDetail="true" closable="true" />
         <h:form id="profile">
-        <p:panelGrid columns="3" style="margin-left: 20px;margin-right: 20px;margin-bottom: 100px"  layout="grid"> 
-            <h:panelGrid columns="1">
-                <h:outputText value="Full Name" /> 
-                <p:inputText style="width: 200px" value="#{profileManagedBean.currentCustomer.fullName}" /> 
+            <p:growl id="message" showDetail="true" showSummary="true" sticky="true"/>
+            <p:panelGrid columns="3" style="margin-left: 20px;margin-right: 20px;margin-bottom: 100px"  layout="grid"> 
+                <h:panelGrid columns="1">
+                    <h:outputText value="Full Name" /> 
+                    <p:inputText style="width: 200px" value="#{profileManagedBean.currentCustomer.fullName}" required="true" requiredMessage="Please input Full Name"/> 
+                </h:panelGrid>
+                <h:panelGrid columns="1">
+                    <h:outputText value="Email Address" /> 
+                    <p:inputText style="width: 200px" value="#{profileManagedBean.currentCustomer.email}" required="true" requiredMessage="Please input Email Address"/> 
+                </h:panelGrid>    
+                <h:panelGrid columns="1">
+                    <h:outputText value="Mobile" /> 
+                    <p:inputText style="width: 200px" value="#{profileManagedBean.currentCustomer.mobile}" /> 
+                </h:panelGrid> 
+                <h:panelGrid columns="1">
+                    <p:outputLabel value="Birthday" />
+                    <p:calendar id="dob" locale="en" navigator="true" value="#{profileManagedBean.currentCustomer.dateOfBirth}" pattern="yyyy-MMM-dd" />
+                </h:panelGrid> 
+                <h:panelGrid columns="1">
+                    <h:outputText value="Gender" /> 
+                    <p:selectOneRadio id="gender" value="#{profileManagedBean.currentCustomer.gender}">
+                        <f:selectItem itemLabel="Female" itemValue="1" />
+                        <f:selectItem itemLabel="Male" itemValue="0" />
+                    </p:selectOneRadio> 
+                </h:panelGrid> 
+            </p:panelGrid>
+            <h:panelGrid columns="1" style="margin-left: 30px">
+                <p:commandLink value="Unsubscribe from our Newsletter">
+                    <p:confirm header="Confirmation" message="Are you sure you want to delete this MealKit from wishlist?" icon="ui-icon-alert" />
+                </p:commandLink>
+                <p:commandButton value="Save Changes" update="@form profile" actionListener="#{profileManagedBean.updateProfile}">
+                </p:commandButton>
             </h:panelGrid>
-            <h:panelGrid columns="1">
-                <h:outputText value="Email Address" /> 
-                <p:inputText style="width: 200px" value="#{profileManagedBean.currentCustomer.email}" /> 
-            </h:panelGrid>    
-            <h:panelGrid columns="1">
-                <h:outputText value="Mobile" /> 
-                <p:inputText style="width: 200px" value="#{profileManagedBean.currentCustomer.mobile}" /> 
-            </h:panelGrid> 
-            <h:panelGrid columns="1">
-                <p:outputLabel value="Birthday" />
-                <p:calendar id="dob" locale="en" navigator="true" value="#{profileManagedBean.currentCustomer.dateOfBirth}" pattern="yyyy-MMM-dd" />
-            </h:panelGrid> 
-            <h:panelGrid columns="1">
-                <h:outputText value="Gender" /> 
-                <p:selectOneRadio id="gender" value="#{profileManagedBean.currentCustomer.gender}">
-                    <f:selectItem itemLabel="Female" itemValue="1" />
-                    <f:selectItem itemLabel="Male" itemValue="0" />
-                </p:selectOneRadio> 
-            </h:panelGrid> 
-        </p:panelGrid>
-        <h:panelGrid columns="1" style="margin-left: 30px">
-            <p:link value="Unsubscribe from our Newsletter" />
-            <p:commandButton value="Save Changes" update="@form profile" actionListener="#{profileManagedBean.updateProfile}"/>
-        </h:panelGrid>
-            </h:form>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>

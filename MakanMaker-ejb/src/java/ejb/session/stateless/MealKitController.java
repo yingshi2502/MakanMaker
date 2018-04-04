@@ -51,6 +51,16 @@ public class MealKitController implements MealKitControllerLocal {
     @Override
     public MealKitEntity updateMealKit(MealKitEntity mealKit) throws MealKitExistException,GeneralException {
         try {
+            MealKitEntity mkToUpdate = em.find(MealKitEntity.class, mealKit.getMealKitId());
+            mkToUpdate.setDescription(mealKit.getDescription());
+            mkToUpdate.setDifficulty(mealKit.getDifficulty());
+            mkToUpdate.setImagePath(mealKit.getImagePath());
+            mkToUpdate.setIngredients(mealKit.getIngredients());
+            mkToUpdate.setName(mealKit.getName());
+            mkToUpdate.setNutrition(mealKit.getNutrition());
+            mkToUpdate.setPrice(mealKit.getPrice());
+            mkToUpdate.setRecipe(mealKit.getRecipe());
+            mkToUpdate.setTime(mealKit.getTime());
             return em.merge(mealKit);
         } catch (PersistenceException ex) {
             if (ex.getCause() != null
@@ -76,18 +86,14 @@ public class MealKitController implements MealKitControllerLocal {
 
     @Override
     public void deleteMealKit(MealKitEntity mealKit){
-        if (mealKit.getReviews().size() == 0) {
-            em.remove(mealKit);
-            em.flush();
-        } else {
-            mealKit.setIsAvailable(false);
-        };
+        MealKitEntity mk = em.find(MealKitEntity.class, mealKit.getMealKitId());
+        mk.setIsAvailable(false);
     }
     
 
     @Override
     public List<MealKitEntity> retrieveAllMealKits() {
-        Query query = em.createQuery("SELECT mk FROM MealKit mk");
+        Query query = em.createQuery("SELECT mk FROM MealKitEntity mk");
         List<MealKitEntity> mealKits = query.getResultList();
         for (MealKitEntity mk : mealKits) {
             mk.getReviews().size();

@@ -11,6 +11,7 @@
     <ui:define name="content" id="content">
         <h2 style="margin-left: 30px">Address Book</h2>
         <h:form id="allAddresses">
+            <p:growl id="growl" showDetail="true" sticky="true" />
             <p:dataTable id="addressesTable" widgetVar="addressesTable" value="#{addressManagedBean.addresses}"
                          var="address" tableStyle="table-layout: auto" 
                          style="overflow-x: hidden !important;margin-left: 20px;margin-right: 20px; text-align: center">
@@ -125,15 +126,15 @@
                     </p:row>
                     <p:row>
                         <p:column colspan="3">
-                            <p:commandButton value="Save" update="@all allAddresses" actionListener="#{addressManagedBean.createNewAddress}" />
+                            <p:commandButton value="Save" update="@all allAddresses" actionListener="#{addressManagedBean.createNewAddress}" oncomplete="PF('dialogCreateNewAddress').hide();"/>
                         </p:column>
                     </p:row>
                 </p:panelGrid>
             </p:dialog>
         </h:form>
-        
+       
         <h:form id="formUpdateAddress">
-            <p:dialog id="dialogUpdateAddress" widgetVar="dialogUpdateAddress" header="Update Product" showEffect="clip" closable="true" focus="fullName">
+            <p:dialog id="dialogUpdateAddress" widgetVar="dialogUpdateAddress" header="Update Address" showEffect="clip" closable="true" focus="fullName">
                 <p:messages id="messagesUpdateAddress" redisplay="false" />
                 <p:panelGrid>
                     <p:row>
@@ -207,15 +208,13 @@
                     <p:row>
                         <p:column colspan="3">
                             <p:commandButton type="reset" value="Clear" />&nbsp;
-                            <p:commandButton value="Update" update="@all allAddresses" actionListener="#{addressManagedBean.updateAddress}"  oncomplete="dialogUpdateAddress.hide();"/>
+                            <p:commandButton value="Update" update="@all allAddresses" actionListener="#{addressManagedBean.updateAddress}" oncomplete="PF('dialogUpdateAddress').hide();"/>
                         </p:column>
                     </p:row>
                 </p:panelGrid>           
             </p:dialog>
         </h:form>
-        
     </ui:define>
-
 </ui:composition>
 
 

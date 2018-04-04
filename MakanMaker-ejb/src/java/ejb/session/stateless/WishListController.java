@@ -30,7 +30,11 @@ public class WishListController implements WishListControllerLocal {
         CustomerEntity customer = em.find(CustomerEntity.class, customerId);
         List<Long> mealKitsIds = customer.getWishList();
         List<MealKitEntity> wishlist = new ArrayList<>();
+        if (mealKitsIds == null || mealKitsIds.isEmpty()) return wishlist;
+        System.err.println("*****"+ mealKitsIds.size()+" "+mealKitsIds.get(0));
+        
         for (Long id: mealKitsIds){
+            System.err.println("***** id:"+ id);
             MealKitEntity me = em.find(MealKitEntity.class, id);
             if (me.isIsAvailable()){
                 wishlist.add(me);

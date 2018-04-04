@@ -34,8 +34,9 @@ public interface OrderControllerLocal {
 
 //    public void refundOrder(OrderEntity order);
 
-    public TransactionEntity refundOrder(OrderEntity order);
 
     public TransactionEntity payForOrder(OrderEntity order, PaymentTypeEnum paymentType);
+
+    public TransactionEntity refundOrder(Long orderId, String description,PaymentTypeEnum paymentType);
     
 }

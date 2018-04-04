@@ -5,50 +5,50 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
-    
+
     <h:head>
         <ui:insert name="header">Header</ui:insert>      
         <h:outputStylesheet library="css" name="default.css" />
     </h:head>
-<!-- To use the "header" part of the template
-<ui:define name="header" id="header">
-        <title>Title of the Webpage</title>
-    </ui:define>-->
-    
-<h:body>
-             <style>
-        .ui-widget{
-            border: none;
-        }
+    <!-- To use the "header" part of the template
+    <ui:define name="header" id="header">
+            <title>Title of the Webpage</title>
+        </ui:define>-->
+
+    <h:body>
+        <style>
+            .ui-widget{
+                border: none;
+            }
         </style>
-        
+
         <p:layout fullPage="true">
-            
+
             <p:layoutUnit position="north">
                 <ui:insert name="headCompoment"></ui:insert>
             </p:layoutUnit>
-            
+
             <p:layoutUnit size="200" position="west">
-                
+
                 <h3>Side Bar</h3>
                 <br/>
-                
+
             </p:layoutUnit>
-            
+
             <p:layoutUnit position="center" >
-                
+
                 <ui:insert name="content">Content</ui:insert>
-                
+
             </p:layoutUnit>
-            
+
             <p:layoutUnit position="south" >
-                
+
                 <h6>&copy; 2018 IS3106. All Rights Reserved.</h6>
-                
+
             </p:layoutUnit>
-        
+
         </p:layout>
-        
+
     </h:body>
-    
+
 </html>

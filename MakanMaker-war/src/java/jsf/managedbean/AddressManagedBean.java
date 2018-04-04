@@ -85,11 +85,11 @@ public class AddressManagedBean implements Serializable{
         try
         {
             AddressEntity ae = addressControllerLocal.createNewAddress(newAddress, customerId);
-            addresses.add(ae);
+            setAddresses(addressControllerLocal.retrieveAddressByCustomerId(getCustomerId()));
             setNewAddress(new AddressEntity());
-            
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New address created successfully", null));
         } catch (GeneralException ex) {
+        } catch (EmptyListException ex) {
         }
     }
     

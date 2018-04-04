@@ -11,13 +11,28 @@
         <h:outputStylesheet library="css" name="default.css" />
     </h:head>
     <h:body>
+        <style>
+            .ui-widget{
+                border: none;
+            };
+
+            .orderStatusLabel .ui-widget{
+                font-size: 12px;
+                padding: 4px 12px;
+                display: inline-block;
+                border-radius: 24px;
+                background-color: #eff0f5;
+                max-width: 150px;
+            }
+        </style>
         <p:layout fullPage="true">
             <p:layoutUnit position="north">
-                <ez:headerComponent />  
+                <ez:headerComponent />      
                 <p:link outcome="/index" style="position: absolute; left: 50px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
+                Makan Maker
             </p:layoutUnit>
             <p:layoutUnit size="245" position="west">
-                <h4>Hello! #{sessionScope['currentCustomerEntity'].userName}</h4>
+                <h4>Hello! #{sessionScope['currentCustomerEntity'].fullName}</h4>
                 <br/>
                 <h:form>
                     <p:menu style="width:220px;">

@@ -41,7 +41,8 @@ public class OrderEntity implements Serializable {
     @Column(nullable = false)
     private Double totalAmount;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private MealKitEntity mealKit;
     
     private Integer quantity;
@@ -58,7 +59,8 @@ public class OrderEntity implements Serializable {
     @Column(nullable = false)
     private OrderStatusEnum orderStatus;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private AddressEntity address;
     
     @OneToOne(mappedBy="order")
@@ -66,20 +68,24 @@ public class OrderEntity implements Serializable {
     
     private String extraRequest;
     
+    private Double shippingFee;
+   
+    private boolean isReviewed;
+    
     public OrderEntity(){
         
     }
 
-    public OrderEntity(Double totalAmount, Integer quantity, Date deliveryDate, Date purchasingDate, OrderStatusEnum orderStatus, String extraRequest) {
+    public OrderEntity(Double totalAmount, Integer quantity, Date deliveryDate, Date purchasingDate, OrderStatusEnum orderStatus, String extraRequest, Double shippingFee) {
         this.totalAmount = totalAmount;
         this.quantity = quantity;
         this.deliveryDate = deliveryDate;
         this.purchasingDate = purchasingDate;
         this.orderStatus = orderStatus;
         this.extraRequest = extraRequest;
+        this.shippingFee = shippingFee;
     }
     
-
     public Long getOrderId() {
         return orderId;
     }
@@ -265,6 +271,34 @@ public class OrderEntity implements Serializable {
      */
     public void setTransaction(TransactionEntity transaction) {
         this.transaction = transaction;
+    }
+
+    /**
+     * @return the shippingFee
+     */
+    public Double getShippingFee() {
+        return shippingFee;
+    }
+
+    /**
+     * @param shippingFee the shippingFee to set
+     */
+    public void setShippingFee(Double shippingFee) {
+        this.shippingFee = shippingFee;
+    }
+
+    /**
+     * @return the isReviewed
+     */
+    public Boolean getIsReviewed() {
+        return isReviewed;
+    }
+
+    /**
+     * @param isReviewed the isReviewed to set
+     */
+    public void setIsReviewed(Boolean isReviewed) {
+        this.isReviewed = isReviewed;
     }
     
 }
