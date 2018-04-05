@@ -5,21 +5,36 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.EmailControllerLocal;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.view.ViewScoped;
 
 /**
  *
  * @author Ismahfaris
  */
 @Named(value = "contactUsManagedBean")
-@Dependent
-public class contactUsManagedBean {
+@ViewScoped
+public class contactUsManagedBean implements Serializable{
 
-    private String dropDownText;
-    private String dropDownText2;
+    @EJB(name = "EmailControllerLocal")
+    private EmailControllerLocal emailControllerLocal;
+    
+    
+    
+    private String fromEmailAddress;
+    private String content;
+    private String title;
+    private String isMMAcc;
+    private String typeOfQuestions;
     
     public contactUsManagedBean() {
     }
@@ -48,32 +63,84 @@ public class contactUsManagedBean {
         return results;
     }
 
+    public void sendContactUsForm(ActionEvent event){
+        try {
+            emailControllerLocal.emailSendContactUs(getFromEmailAddress(), getTitle(), getContent(),typeOfQuestions, isMMAcc.equals("Yes"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Email Sent", "Thanks for contacting us!"));
+        } catch (InterruptedException ex) {
+        }
+    }
+        
+        
+        
     /**
-     * @return the dropDownText
+     * @return the typeOfQuestions
      */
-    public String getDropDownText() {
-        return dropDownText;
+    public String getTypeOfQuestions() {
+        return typeOfQuestions;
     }
 
     /**
-     * @param dropDownText the dropDownText to set
+     * @param typeOfQuestions the typeOfQuestions to set
      */
-    public void setDropDownText(String dropDownText) {
-        this.dropDownText = dropDownText;
+    public void setTypeOfQuestions(String typeOfQuestions) {
+        this.typeOfQuestions = typeOfQuestions;
     }
 
     /**
-     * @return the dropDownText2
+     * @return the isMMAcc
      */
-    public String getDropDownText2() {
-        return dropDownText2;
+    public String getIsMMAcc() {
+        return isMMAcc;
     }
 
     /**
-     * @param dropDownText2 the dropDownText2 to set
+     * @param isMMAcc the isMMAcc to set
      */
-    public void setDropDownText2(String dropDownText2) {
-        this.dropDownText2 = dropDownText2;
+    public void setIsMMAcc(String isMMAcc) {
+        this.isMMAcc = isMMAcc;
+    }
+
+    /**
+     * @return the content
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * @param content the content to set
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * @return the fromEmailAddress
+     */
+    public String getFromEmailAddress() {
+        return fromEmailAddress;
+    }
+
+    /**
+     * @param fromEmailAddress the fromEmailAddress to set
+     */
+    public void setFromEmailAddress(String fromEmailAddress) {
+        this.fromEmailAddress = fromEmailAddress;
     }
 
 

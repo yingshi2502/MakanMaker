@@ -81,14 +81,11 @@ public class EmailManager {
         //refund order, create new Letter;
 
     
-    public Boolean AprFool(String fromEmailAddress, String toEmailAddress, String name, String title, String content, String luokuan) {
+    public Boolean sendContactUs(String fromEmailAddress, String toEmailAddress, String title, String content, String questionType, String customerUsername) {
         String emailBody = "";
-        emailBody += "Dear " +name + ",\n\n";
-        emailBody += content;
-        emailBody += "Click the link to see more details. \n";
-        emailBody += "https://nussync.wixsite.com/apr1 \n";
-        emailBody += "Sincerely,\n";
-        emailBody += luokuan +"\n";
+        emailBody += "From " +fromEmailAddress + ",\n\n";
+        emailBody += content+"\n";
+        emailBody += "Customer Username "+ customerUsername;
         
 
         try {

@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <h:head>
+        <ui:insert name="header">Header</ui:insert>      
+        <h:outputStylesheet library="css" name="default.css" />
+    </h:head>
+
+    <h:body>
+
+             <style>
+        .ui-widget{
+            border: none;
+        }
+        </style>
+        
+        <p:layout fullPage="true">
+            
+            <p:layoutUnit position="north">
+                <ui:insert name="headCompoment"></ui:insert>
+            </p:layoutUnit>
+            
+            <p:layoutUnit size="200" position="west">
+                
+                <h3>Side Bar</h3>
+                <br/>
+                
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="center" >
+                <p:layout>
+                    <p:layoutUnit position="center">
+                        <ui:insert name="content">Content</ui:insert>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="south" size="100">
+                        <ui:insert name="stepsTracker">Track steps</ui:insert>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="east" size="300">
+                        <ui:insert name="orderSummary">Order Summary</ui:insert>
+                    </p:layoutUnit>
+                </p:layout>
+            </p:layoutUnit>
+            
+            
+            
+            
+            <p:layoutUnit position="south" >
+                
+                <h6>&copy; 2018 IS3106. All Rights Reserved.</h6>
+                
+            </p:layoutUnit>
+            
+        
+        </p:layout>
+
+    </h:body>
+
+</html>

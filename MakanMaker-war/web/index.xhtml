@@ -1,44 +1,29 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/defaultTemplate.xhtml"
+                template="./template/homePagesTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
-    <ui:define name="header" id="header">
-        <title>Makan Maker</title>
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">   
+          <p:panelGrid style="text-align: center;" columns="3">
+            <p:graphicImage style="position:relative;  height: 140px; width: 140px" url="/images/home1.png" />
+            <p:graphicImage style="position:relative;  height: 140px; width: 140px" url="/images/home2.png" />
+            <p:graphicImage style="position:relative;  height: 140px; width: 140px" url="/images/home3.png" />
+              
+
+            <h:outputText style="font-weight: bold;font-size: 16px;" value="Convenient Offering"/>
+            <h:outputText style="font-weight: bold;font-size: 16px;" value="Personalized Menu"/>
+            <h:outputText style="font-weight: bold;font-size: 16px;"  value="Fresh Ingredients"/>
+            
+            <h:outputText style="font-size: 14px;"  value="We provide ample options for your meal plans. Meat, seafood, vegetarian, vegan choices for your breakfast, lunch and dinner, all ready to your home. What you need to do is just a simple click on our platform." />
+
+            <h:outputText  style="font-size: 14px;" value="Our experienced nutritionists are ready for consultation to help you design recipes that take into account your family taste, allergies or weight management considerations. " />
+
+            <h:outputText  style="font-size: 14px;" value="We strictly supervise the production chain of the farm-to-table food to make sure they are of high quality, nutritional value and safety. Add some healthy elements to our bustling city life!" />
+            
+        </p:panelGrid>
     </ui:define>
-    <ui:define name="headCompoment">
-        <p:panel rendered="#{sessionScope['isLogin']}">          
-            <ez:headerComponent />
-        </p:panel>
-        <p:panel rendered="#{!sessionScope['isLogin']}">          
-            <ez:LoginComponent />
-        </p:panel>
-    </ui:define>
-    <ui:define name="content" id="content">
-
-        <p:panel rendered="#{sessionScope['isLogin']}">          
-            <h3>After login shown page</h3>
-        </p:panel>
-        <p:link value="gg" outcome="/userProfile/manageMyAccount" />
-        <p:panel rendered="#{!sessionScope['isLogin']}">
-
-            <h3>Welcome</h3>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque augue odio, malesuada sodales euismod id, rhoncus vel metus. Cras at felis ac purus sodales euismod. Ut dictum viverra eros, ut posuere libero imperdiet ac. Mauris risus sem, fringilla in condimentum eget, posuere a nunc. Sed fringilla augue urna. Cras lobortis dui arcu, sed pellentesque nibh tincidunt vel. Integer vitae dignissim tortor. Cras a ligula lectus. Donec malesuada placerat dui a fermentum. Proin interdum imperdiet felis, a dapibus urna accumsan sed. Donec est ipsum, vestibulum ac maximus non, faucibus tincidunt quam. Aenean auctor vestibulum suscipit. Donec et pharetra justo, eu aliquam felis. Sed vitae tortor nec mi feugiat laoreet.
-            </p>
-            <p>
-                Mauris aliquam ipsum vulputate libero tempus accumsan. Nam venenatis, risus sed finibus eleifend, sem velit porta neque, vitae lacinia ante enim nec enim. Proin dictum gravida tortor at pellentesque. In dictum nunc ut dolor tempus, quis dignissim enim tristique. Pellentesque aliquam facilisis arcu, nec ultrices ex tincidunt ut. Nulla facilisi. Vestibulum hendrerit pulvinar diam. Pellentesque elit ex, dignissim id nibh at, cursus sollicitudin nulla. In id cursus lorem.
-            </p>
-            <p>
-                Donec porttitor nibh in sapien pretium, eget cursus enim ornare. Etiam felis massa, ornare in tempus ut, congue accumsan nunc. Vivamus sit amet urna feugiat, dictum lorem non, feugiat nulla. Etiam eget odio pharetra, semper quam sed, bibendum mauris. Sed gravida mattis lectus id facilisis. Curabitur aliquam arcu quis urna scelerisque varius. Sed in accumsan nunc.
-            </p>
-
-        </p:panel>
-
-    </ui:define>
-
 
 </ui:composition>

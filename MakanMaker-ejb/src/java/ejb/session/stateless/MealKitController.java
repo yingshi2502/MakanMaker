@@ -90,6 +90,14 @@ public class MealKitController implements MealKitControllerLocal {
         mk.setIsAvailable(false);
     }
     
+    
+    @Override
+    public List<MealKitEntity> searchMealKits(String keywords){
+        Query query = em.createQuery("SELECT mk FROM MealKitEntity mk WHERE lower(mk.name) LIKE lower(concat('%', :keywords,'%'))");
+        query.setParameter("keywords", keywords);
+        return query.getResultList();
+    }
+            
 
     @Override
     public List<MealKitEntity> retrieveAllMealKits() {

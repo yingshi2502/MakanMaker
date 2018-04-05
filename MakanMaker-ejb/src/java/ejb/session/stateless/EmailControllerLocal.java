@@ -18,6 +18,7 @@ public interface EmailControllerLocal {
 
     public Future<Boolean> emailPlaceOrder(OrderEntity order, String fromEmailAddress, String toEmailAddress) throws InterruptedException;
 
-    public Future<Boolean> emailAprFool(String fromEmailAddress, String toEmailAddress, String name, String title, String content, String luokuan) throws InterruptedException;
+    public Future<Boolean> emailSendContactUs(String fromEmailAddress, String subject, String content, String typeOfQuestion,boolean isMMAcct) throws InterruptedException;
+
     
 }

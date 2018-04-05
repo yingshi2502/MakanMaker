@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/homePagesTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    
+    
+    <ui:define name="content">
+            <p:panelGrid columns="2">
+                <p:graphicImage style="position:relative;  height: 100px; width: 150px; left:90px;" url="/images/client1.png" />
+                <p:panelGrid columns="1">   
+                    <p:outputLabel value="Veganics Co." style="font-size: 18px; font-weight: bold;"/>    
+                    <p:outputLabel value="We are amazed at the quality of Makan Maker. Just what our company was looking for." style="font-size: 15px;"/>
+                </p:panelGrid>   
+                   
+                <p:graphicImage style="position:relative;  height: 100px; width: 150px; left:90px;" url="/images/client2.png" />
+                <p:panelGrid columns="1">   
+                    <p:outputLabel value="Meat Lovers Inc." style="font-size: 18px; font-weight: bold;"/>    
+                    <p:outputLabel value="I have gotten at least 20 times the value from Makan Maker. Your company is truly upstanding and is behind its product 100%." style="font-size: 15px;"/>
+                </p:panelGrid> 
+
+
+                <p:graphicImage style="position:relative;  height: 100px; width: 150px; left:90px;" url="/images/client3.png" />
+                <p:panelGrid columns="1">   
+                    <p:outputLabel value="Seafood Pte Ltd." style="font-size: 18px; font-weight: bold;"/>    
+                    <p:outputLabel value="A must try for all. Makan Maker is exactly what our business has been lacking. I have gotten at least 50 times the value from Makan Maker. Great job!" style="font-size: 15px;"/>
+                </p:panelGrid>                 
+                
+                
+            </p:panelGrid>            
+
+            
+
+    </ui:define>
+
+</ui:composition>

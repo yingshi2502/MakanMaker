@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/paymentTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="header" id="header">
+        <title>Select Schedule</title>
+        <!-- to be solved/fixed:
+        use Object data to connect event with order
+        keep track of the current order (which have yet to be populated to the database as theres no status
+        add an boolean attribute to orders in currorders (how to add without interferring entity)
+        -->
+    </ui:define>
+    
+    <ui:define name="content" id="content">
+        <h:form>
+            <p:growl id="messages" showDetail="true" />
+
+<!--            <p:calendar value="#{paymentManagedBean.date1}" mode="inline" />-->
+            <h:panelGrid columnClasses="value" style="width:800px">
+                <p:schedule id="schedule" value="#{paymentManagedBean.eventModel}" widgetVar="myschedule" timeZone="GMT+8" showHeader="true" view="month">
+                    <p:ajax event="dateSelect" listener="#{paymentManagedBean.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                    <p:ajax event="eventSelect" listener="#{paymentManagedBean.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                    <p:ajax event="eventMove" listener="#{paymentManagedBean.onEventMove}" update="messages" />
+                    <p:ajax event="eventResize" listener="#{paymentManagedBean.onEventResize}" update="messages" />
+
+                </p:schedule>
+            </h:panelGrid>
+            <p:button value="Select Payment Method" href="payment.xhtml"/>
+            <p:dialog id="eventDialog" widgetVar="eventDialog" header="Delivery Details" showEffect="clip" hideEffect="clip">
+                <h:panelGrid id="eventDetails" columns="2">
+                    <p:outputLabel for="event" value="Meal Kit" />
+                    <p:selectOneMenu id="event" style="width:125px" value="#{paymentManagedBean.event.title}">
+                        <p:ajax listener="#{paymentManagedBean.onOrderSelected}" update="event"/>
+                        <f:selectItem itemLabel="Select One" itemValue="#{order.mealKit.name}" /> 
+                        <f:selectItems value="#{paymentManagedBean.currOrders}" var="order" itemLabel="#{order.mealKit.name}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="deliveryDate" value="Delivery Date" />
+                    <p:calendar id="deliveryDate" value="#{paymentManagedBean.event.startDate}" timeZone="GMT+8" pattern="dd/MM/yyyy"/>
+                    
+                    <p:commandButton type="reset" value="Reset" />
+                    <p:commandButton id="addButton" value="Save" actionListener="#{paymentManagedBean.addEvent}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+    <ui:define name="stepsTracker">
+        <p:steps activeIndex="1" styleClass="custom" readonly="true">
+            <p:menuitem value="Select Address" url="select_address.xhtml"/>
+            <p:menuitem value="Select Delivery Schedule" url="select_address.xhtml"/>
+            <p:menuitem value="Select Payment" url="payment.xhtml"/>
+            <p:menuitem value="Confirmation" url="#"/>
+        </p:steps>
+    </ui:define>
+    <ui:define name="orderSummary">
+        <p:column id="orderSummary">
+            <p:panelGrid columns="2" style="width: 300px; height: 260px; border: #FFFFCC solid 2px;" >
+                <p:outputLabel value="Total Summary" style="font-size: 15px"/>
+                <p:outputLabel />
+
+                <p:outputLabel value="Subtotal" style="font-size: 12px"/>
+                <p:outputLabel value="#{paymentManagedBean.subTotalPrice}" style="font-size: 12px;text-align: right;"/>
+
+                <p:outputLabel value="Shipping Fee" style="font-size: 12px"/>
+                <p:outputLabel value="#{paymentManagedBean.shippingFees}" style="font-size: 12px;text-align: right;"/>
+                <p:outputLabel /><hr />
+
+                <p:outputLabel value="Total" style="font-size: 15px"/>
+                <p:outputLabel value="#{paymentManagedBean.totalPrice}" style="font-size: 15px;text-align: right;"/>
+            </p:panelGrid>
+
+        </p:column>
+    </ui:define>
+</ui:composition>
+

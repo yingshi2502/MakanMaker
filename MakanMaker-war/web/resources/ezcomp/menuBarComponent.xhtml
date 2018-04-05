@@ -13,15 +13,16 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         
-            <h:form>  
+            <h:form style = "align-items: center;table-layout: auto;text-align: center; display: inline-block">  
                <p:growl id="messages"/>
-               <p:menubar style = "">
-                   <p:menuitem style = "text-align: center;font-size: 18px; padding-right:90px; padding-left:90px;" value="Home" outcome="/homepage.xhtml"/>
-                   <p:menuitem style = "text-align: center;font-size: 18px; padding-right:90px; padding-left:90px;" value="About Us" outcome="/aboutUs.xhtml" />
-                   <p:menuitem style = "text-align: center;font-size: 18px; padding-right:90px; padding-left:90px;" value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" />
-                   <p:menuitem style = "text-align: center;font-size: 18px; padding-right:90px; padding-left:90px;" value="Contact Us" outcome="/contactUs.xhtml" />
-                   <p:menuitem style = "text-align: center; font-size:18px; padding-right:90px; padding-left:90px;" value="Our Clients" url="#" />
+               <p:menubar style="table-layout: auto !important; text-align: center !important; display: inline-block; ">
+                   <p:menuitem value="Home" outcome="/index.xhtml"/>
+                   <p:menuitem value="About Us" outcome="/aboutUs.xhtml" />
+                   <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" />
+                   <p:menuitem value="Contact Us" outcome="/contactUs.xhtml" />
+                   <p:menuitem value="Our Clients" url="/ourClients.xhtml" />
                </p:menubar>
+<!--               style = "text-align: center;font-size: 18px; padding-right:90px; padding-left:90px;" -->
            </h:form> 
         
     </cc:implementation>

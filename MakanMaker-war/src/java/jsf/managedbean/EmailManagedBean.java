@@ -28,7 +28,6 @@ public class EmailManagedBean {
     private EmailControllerLocal emailControllerLocal;
 
     
-    
     /**
      * Creates a new instance of EmailManagedBean
      */
@@ -36,21 +35,15 @@ public class EmailManagedBean {
     private String toEmailAddress;
     private String name;
     private String content;
-    private String luokuan;
     private String title;
+    private String typeOfQuestion;
+    private boolean isMMAcct;
     
     public EmailManagedBean() {
     }
 
-    public void sendAprFool(ActionEvent event){
-        try {
-            emailControllerLocal.emailAprFool(fromEmailAddress, toEmailAddress, name, getTitle(), getContent(), getLuokuan());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Email Sent", null));
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EmailManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
+    
+    
     
     public void setFromEmailAddress(String fromEmailAddress) {
         this.fromEmailAddress = fromEmailAddress;
@@ -89,19 +82,7 @@ public class EmailManagedBean {
         this.content = content;
     }
 
-    /**
-     * @return the luokuan
-     */
-    public String getLuokuan() {
-        return luokuan;
-    }
-
-    /**
-     * @param luokuan the luokuan to set
-     */
-    public void setLuokuan(String luokuan) {
-        this.luokuan = luokuan;
-    }
+    
 
     /**
      * @return the title
@@ -115,6 +96,34 @@ public class EmailManagedBean {
      */
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    /**
+     * @return the typeOfQuestion
+     */
+    public String getTypeOfQuestion() {
+        return typeOfQuestion;
+    }
+
+    /**
+     * @param typeOfQuestion the typeOfQuestion to set
+     */
+    public void setTypeOfQuestion(String typeOfQuestion) {
+        this.typeOfQuestion = typeOfQuestion;
+    }
+
+    /**
+     * @return the isMMAcct
+     */
+    public boolean isIsMMAcct() {
+        return isMMAcct;
+    }
+
+    /**
+     * @param isMMAcct the isMMAcct to set
+     */
+    public void setIsMMAcct(boolean isMMAcct) {
+        this.isMMAcct = isMMAcct;
     }
 
     

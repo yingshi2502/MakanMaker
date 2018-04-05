@@ -7,12 +7,16 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        <h:form id="form">
+        <h:form id="mkForm">
+            <p:selectManyButton value="#{mealKitManagedBean.selectedTags}">
+                <f:selectItems value="#{mealKitManagedBean.tags}" var="tag" itemLabel="#{tag.name}" 
+                               itemValue="#{tag.name}" />
+                <p:ajax event="change" listener="#{mealKitManagedBean.onSelectTag}" update="@form mkForm"/>
+            </p:selectManyButton>
             <p:dataGrid var="mealKit" value="#{mealKitManagedBean.mealKits}" columns="3" layout="grid"
                 rows="12" paginator="true" id="mealkits"
                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                 rowsPerPageTemplate="3,6,12" style="table-layout: auto"
-                
                 >
 
                 <f:facet name="header">
@@ -30,6 +34,11 @@
                 </p:panel>
 
             </p:dataGrid>
+
+
+
+            
+
         </h:form>
     </ui:define>
 

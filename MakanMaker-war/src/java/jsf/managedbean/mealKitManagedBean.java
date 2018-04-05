@@ -6,9 +6,13 @@
 package jsf.managedbean;
 
 import ejb.session.stateless.MealKitControllerLocal;
+import ejb.session.stateless.TagControllerLocal;
 import entity.MealKitEntity;
+import entity.TagEntity;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -16,6 +20,8 @@ import javax.inject.Named;
 import javax.enterprise.context.Dependent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.view.ViewScoped;
+import javax.servlet.http.HttpServletRequest;
 import util.exception.EmptyListException;
 
 /**
@@ -23,28 +29,52 @@ import util.exception.EmptyListException;
  * @author Ismahfaris
  */
 @Named(value = "mealKitManagedBean")
-@Dependent
-public class mealKitManagedBean {
+@ViewScoped
+public class mealKitManagedBean implements Serializable{
 
+    @EJB(name = "TagControllerLocal")
+    private TagControllerLocal tagControllerLocal;
     @EJB
     private MealKitControllerLocal mealKitControllerLocal;
     private List<MealKitEntity> mealKits;
     private boolean noMealKit;
     private MealKitEntity currMealKit;
-    
+    private String searchKeywords;
+    private List<TagEntity> tags;
+    private List<String> selectedTags;
     
     @PostConstruct
     public void postConstruct() {       
         
-        setMealKits(mealKitControllerLocal.retrieveAllMealKits());
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String keywords = request.getParameter("keywords");
+        if (keywords == null){
+            setMealKits(mealKitControllerLocal.retrieveAllMealKits());
+        }else{
+            System.err.println("***Keywords retrieved from HTTP: "+keywords);
+            setMealKits(mealKitControllerLocal.searchMealKits(keywords));
+            System.err.println("***mks retrieved from HTTP: "+mealKits.size());
+        }
         
+        tags = tagControllerLocal.retrieveAllTags();
+        System.err.println("******Tags： "+ tags.size());
     }
     
     
     public mealKitManagedBean() {
         mealKits = new ArrayList<MealKitEntity>();
+        tags = new ArrayList<>();
+        selectedTags = new ArrayList<>();
     }
 
+    public void onSelectTag(){
+        for (String s: selectedTags){
+            System.err.println("***"+s);
+        }
+        
+        mealKits = tagControllerLocal.retrieveMealKitsByTags(selectedTags);
+    }
+    
     /**
      * @return the mealKits
      */
@@ -63,7 +93,7 @@ public class mealKitManagedBean {
      * @return the noMealKit
      */
     public boolean noMealKit() {
-        return noMealKit;
+        return isNoMealKit();
     }
 
     /**
@@ -92,5 +122,54 @@ public class mealKitManagedBean {
         Long mealKitIdToView = (Long)event.getComponent().getAttributes().get("mealKitId");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("mealKitIdToView", mealKitIdToView);
         FacesContext.getCurrentInstance().getExternalContext().redirect("viewMealKitDetails.xhtml"+"?id="+mealKitIdToView);
+    }
+
+    /**
+     * @return the noMealKit
+     */
+    public boolean isNoMealKit() {
+        return noMealKit;
+    }
+
+    /**
+     * @return the searchKeywords
+     */
+    public String getSearchKeywords() {
+        return searchKeywords;
+    }
+
+    /**
+     * @param searchKeywords the searchKeywords to set
+     */
+    public void setSearchKeywords(String searchKeywords) {
+        this.searchKeywords = searchKeywords;
+    }
+
+    /**
+     * @return the tags
+     */
+    public List<TagEntity> getTags() {
+        return tags;
+    }
+
+    /**
+     * @param tags the tags to set
+     */
+    public void setTags(List<TagEntity> tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * @return the selectedTags
+     */
+    public List<String> getSelectedTags() {
+        return selectedTags;
+    }
+
+    /**
+     * @param selectedTags the selectedTags to set
+     */
+    public void setSelectedTags(List<String> selectedTags) {
+        this.selectedTags = selectedTags;
     }
 }

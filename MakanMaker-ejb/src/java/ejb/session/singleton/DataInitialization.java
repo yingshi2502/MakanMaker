@@ -8,6 +8,7 @@ package ejb.session.singleton;
 import ejb.session.stateless.AddressControllerLocal;
 import ejb.session.stateless.CustomerControllerLocal;
 import ejb.session.stateless.OrderControllerLocal;
+import ejb.session.stateless.TagControllerLocal;
 import entity.AddressEntity;
 import entity.CustomerEntity;
 import entity.ManagerEntity;
@@ -43,6 +44,9 @@ import util.helperClass.SecurityHelper;
 public class DataInitialization {
 
     @EJB
+    private TagControllerLocal tagControllerLocal;
+
+    @EJB
     private AddressControllerLocal addressControllerLocal;
 
     @EJB
@@ -51,6 +55,8 @@ public class DataInitialization {
     @EJB
     private CustomerControllerLocal customerController;
 
+    
+    
     @PersistenceContext(unitName = "MakanMaker-ejbPU")
     private EntityManager em;
     
@@ -61,6 +67,7 @@ public class DataInitialization {
         if (em.find(ManagerEntity.class, 1l) == null){
             initialize();
         }
+        
 //        ManagerEntity manager = new ManagerEntity("manager", "password");
 //        manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
 //        em.persist(manager);
@@ -72,9 +79,18 @@ public class DataInitialization {
         em.persist(manager);
         createCustomer();
         createMKTag();
+        linkMKToTag();
         createOrder();
 
     }
+    private void linkMKToTag(){
+        tagControllerLocal.linkTagAndMealKit(1l, 1l);
+        tagControllerLocal.linkTagAndMealKit(7l, 1l);
+        tagControllerLocal.linkTagAndMealKit(7l, 4l);
+        tagControllerLocal.linkTagAndMealKit(6l, 5l);
+        tagControllerLocal.linkTagAndMealKit(6l, 6l);
+    }
+    
     
     private void createOrder(){
         OrderEntity order = new OrderEntity(Double.valueOf(25), 2, new Date(), new Date(), OrderStatusEnum.PREPARING, "Add more flavour",Double.valueOf(5));

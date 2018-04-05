@@ -11,29 +11,31 @@
     <ui:define name="content">
         
         
-        <h:form>
-            <p:growl id="msgs" showDetail="true" />
+        <h:form id="contactForm">
+            <p:growl showSummary="true" sticky="true" showDetail="true" />
             <h:panelGrid columns="1" cellpadding="5" style="position: relative; left:15%;">
                 <p:outputLabel value="Contact Us"  style="font-size: 20px; font-weight: bold;" />
                 
                 <p:outputLabel value="Your Email Address" for="emailAddress" />
-                <p:autoComplete id="emailAddress" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}" inputStyle="width: 800px"/>
+                <p:autoComplete id="emailAddress" value="#{contactUsManagedBean.fromEmailAddress}" inputStyle="width: 350px"/>
                 
                 <p:outputLabel value="Subject" for="subject" />
-                <p:autoComplete id="subject" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}"  inputStyle="width: 800px" />
+                <p:autoComplete id="subject" value="#{contactUsManagedBean.title}"  inputStyle="width: 350px" />
             
                 <p:outputLabel value="Description" for="description" />
-                <p:inputTextarea id="description" rows="3" cols="33" style="width: 800px; height:100px;"/>
+                <p:inputTextarea id="description" value="#{contactUsManagedBean.content}" rows="5" cols="20" style="width: 350px;"/>
 
                 <p:outputLabel value="What is your question about?" for="dd1" />
-                <p:autoComplete id="dd1" dropdown="true" value="#{contactUsManagedBean.dropDownText}" completeMethod="#{contactUsManagedBean.completeTextOne}" inputStyle="width: 800px" />
+                <p:autoComplete id="dd1" dropdown="true" value="#{contactUsManagedBean.typeOfQuestions}" completeMethod="#{contactUsManagedBean.completeTextOne}" inputStyle="width: 350px" />
         
                 <p:outputLabel value="Is the email above associated with your Makan Maker account?" for="dd2" />
-                <p:autoComplete id="dd2" dropdown="true" value="#{contactUsManagedBean.dropDownText2}" completeMethod="#{contactUsManagedBean.completeTextTwo}" inputStyle="width: 800px"/>
+                <p:autoComplete id="dd2" dropdown="true" value="#{contactUsManagedBean.isMMAcc}" completeMethod="#{contactUsManagedBean.completeTextTwo}" inputStyle="width: 350px"/>
             
             </h:panelGrid>
 
-             <p:commandButton value="Submit" icon="ui-icon-check" update="" oncomplete="" style="position:relative; left:40%;margin-top: 20px;  width: 100px;height:30px; font-size: 15px;"/>
+            <p:commandButton value="Submit" icon="ui-icon-check" actionListener="#{contactUsManagedBean.sendContactUsForm}" 
+                             update="@all contactForm" 
+                             style="position:relative; left:20%;margin-top: 20px;  width: 100px;height:30px; font-size: 15px;"/>
              
         </h:form>
     </ui:define>

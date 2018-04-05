@@ -4,18 +4,21 @@
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <cc:interface>
     </cc:interface>
 
     <cc:implementation>
         <p:link outcome="/index" style="position: absolute; left: 50px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
-        <h:form>
-            <p:menubar style="position: absolute; right: 10px; background-color: lightblue; height: 25px;width: 680px" >
+        <h:form style="text-align: right">
+            
+            <p:menubar style="position: absolute; right: 10px; background-color: lightblue; height: 25px;width: 880px" >
                 <f:facet name="options">
-                    <p:inputText style="position: absolute; right: 240px; width: 400px" placeholder="Search Meal Kit"/>
-                    <p:commandButton style="position: absolute; right: 650px" type="button" icon="fa fa-search" />
+                    <div style="margin-right: 250px">
+                        <ezcomp:searchBar />
+                    </div>
                 </f:facet>
                 <p:submenu  style="position: absolute; right: 25px;" label="Welcome! #{sessionScope['currentCustomerEntity'].fullName}">
                     <p:menuitem value="Manage My Account" style="width: 110%" icon="fa fa-smile-o" url="/userProfile/manageMyAccount.xhtml" />
@@ -23,7 +26,6 @@
                     <p:menuitem value="Wishlist" icon="fa fa-heart" url="/userProfile/myWishList.xhtml" /> 
                     <p:separator />
                     <p:menuitem value="Log out" icon="fa fa-sign-out" actionListener="#{profileManagedBean.logout}"/>
-
                 </p:submenu>
                 <p:menuitem style="position: absolute; right: 5px;" icon='fa fa-shopping-cart'/>
 
