@@ -13,9 +13,8 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         
-            <h:form style = "align-items: center;table-layout: auto;text-align: center; display: inline-block">  
-               <p:growl id="messages"/>
-               <p:menubar style="table-layout: auto !important; text-align: center !important; display: inline-block; ">
+            <p:panel style = "align-items: center;">  
+               <p:menubar style="text-align: center !important; display: inline-block; ">
                    <p:menuitem value="Home" outcome="/index.xhtml"/>
                    <p:menuitem value="About Us" outcome="/aboutUs.xhtml" />
                    <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" />
@@ -23,7 +22,7 @@
                    <p:menuitem value="Our Clients" url="/ourClients.xhtml" />
                </p:menubar>
 <!--               style = "text-align: center;font-size: 18px; padding-right:90px; padding-left:90px;" -->
-           </h:form> 
+           </p:panel> 
         
     </cc:implementation>
 </html>

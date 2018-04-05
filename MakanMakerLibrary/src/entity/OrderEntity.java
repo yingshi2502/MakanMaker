@@ -63,6 +63,8 @@ public class OrderEntity implements Serializable {
     @JoinColumn(nullable = false)
     private AddressEntity address;
     
+    private String orderNumber;
+    
     @OneToOne(mappedBy="order")
     private TransactionEntity transaction;
     
@@ -73,18 +75,22 @@ public class OrderEntity implements Serializable {
     private boolean isReviewed;
     
     public OrderEntity(){
-        
+        isReviewed = false;
     }
 
-    public OrderEntity(Double totalAmount, Integer quantity, Date deliveryDate, Date purchasingDate, OrderStatusEnum orderStatus, String extraRequest, Double shippingFee) {
+    public OrderEntity(Double totalAmount, Integer quantity, Date purchasingDate,  Date deliveryDate, OrderStatusEnum orderStatus, String orderNumber,  String extraRequest, Double shippingFee) {
         this.totalAmount = totalAmount;
-        this.quantity = quantity;
         this.deliveryDate = deliveryDate;
-        this.purchasingDate = purchasingDate;
+        this.quantity = quantity;
         this.orderStatus = orderStatus;
+        this.orderNumber = orderNumber;
+        this.purchasingDate = purchasingDate;
         this.extraRequest = extraRequest;
         this.shippingFee = shippingFee;
+        this.isReviewed = false;
     }
+
+   
     
     public Long getOrderId() {
         return orderId;
@@ -291,13 +297,41 @@ public class OrderEntity implements Serializable {
      * @return the isReviewed
      */
     public Boolean getIsReviewed() {
-        return isReviewed;
+        return isIsReviewed();
     }
 
     /**
      * @param isReviewed the isReviewed to set
      */
     public void setIsReviewed(Boolean isReviewed) {
+        this.setIsReviewed((boolean) isReviewed);
+    }
+
+    /**
+     * @return the orderNumber
+     */
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    /**
+     * @param orderNumber the orderNumber to set
+     */
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    /**
+     * @return the isReviewed
+     */
+    public boolean isIsReviewed() {
+        return isReviewed;
+    }
+
+    /**
+     * @param isReviewed the isReviewed to set
+     */
+    public void setIsReviewed(boolean isReviewed) {
         this.isReviewed = isReviewed;
     }
     

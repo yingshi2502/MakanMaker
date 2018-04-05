@@ -14,21 +14,19 @@
     <ui:define name="content" id="content">
         <h3 style="margin-left: 30px">Payment Options</h3>
         <p:tabView>
-            <!---<p:ajax event="tabChange" listener="#{paymentManagedBean.tabChange}"/>-->
             <p:tab title="Paypal" id="0">
                 <h:panelGrid columns="2" cellpadding="10">
-                    <p:graphicImage name="#{request.contextPath}/images/paypal_icon.png" />
+<!--                    <p:graphicImage name="#{request.contextPath}/images/paypal_icon.png" />-->
                     <h:outputText value="You will be redirected to Paypal to complete payment" />
-                    <p:commandButton value="PLACE ORDER NOW" actionListener="#{paymentManagedBean.confirmPayment}" oncomplete="PF('dialogPayConfirmed').show()"/>
+<!--                    <p:commandButton value="PLACE ORDER NOW" actionListener="#{paymentManagedBean.confirmPayment}" oncomplete="PF('dialogPayConfirmed').show()"/>-->
                 </h:panelGrid>
-            </p:tab>
+            </p:tab> 
             <p:tab title="Credit Card" id="1">
                 <h:panelGrid columns="2" cellpadding="10">
-                    <p:graphicImage name="#{request.contextPath}/images/creditCard_icon.png" />
                     <h:form id="cardInfo" style="margin-right: 30px; ">
                         <p:messages id="messages" closable="true" />
                         <p:growl id="growl" showDetail="true" sticky="true" />
-                        <p:ajaxStatus oncomplete="setTimeout(function() { $('.ui-messages').fadeOut(); }, 5000)" />
+<!--                        <p:ajaxStatus oncomplete="setTimeout(function() { $('.ui-messages').fadeOut(); }, 5000)" />-->
                         <p:panelGrid columns="1" style="table-layout: auto; width: 500px" >
                             <p:outputLabel for="cardNumber" value="Card Number" />
                             <p:inputText id="cardNumber" value="" required="true"
@@ -42,18 +40,18 @@
                             <p:outputLabel for="cvv" value="CVV" />
                             <p:inputText id="cvv" value="" required="true"
                                          requiredMessage="CVV is required" /> 
-                            <p:commandButton value="PLACE ORDER NOW" update="@form cardInfo growl" actionListener="#{paymentManagedBean.confirmPayment}" oncomplete="PF('dialogPayConfirmed').show()"/>
+<!--                            <p:commandButton value="PLACE ORDER NOW" update="@form cardInfo growl" actionListener="#{paymentManagedBean.confirmPayment}" oncomplete="PF('dialogPayConfirmed').show()"/>-->
                             </p:panelGrid>
                     </h:form>
                 </h:panelGrid>
             </p:tab>
             <p:tab title="Cash on Delivery" id="2">
                 <h:panelGrid columns="2" cellpadding="10">
-                    <p:graphicImage name="#{request.contextPath}/images/cash_icon.png" />
+<!--                    <p:graphicImage name="#{request.contextPath}/images/cash_icon.png" />-->
                     <h:outputText value=""/>
-                    <p:commandButton value="PLACE ORDER NOW" actionListener="#{paymentManagedBean.confirmPayment}" oncomplete="PF('dialogPayConfirmed').show()"/>
+<!--                    <p:commandButton value="PLACE ORDER NOW" actionListener="#{paymentManagedBean.confirmPayment}" oncomplete="PF('dialogPayConfirmed').show()"/>-->
                 </h:panelGrid>
-            </p:tab>
+            </p:tab> 
         </p:tabView>
         <p:dialog id ="dialogPayConfirmed" widgetVar="dialogPayConfirmed">
             Your order has been confirmed. Enjoy the comfort of MakanMaker at home!

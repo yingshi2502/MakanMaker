@@ -27,6 +27,8 @@ public interface TagControllerLocal {
 
     public List<TagEntity> retrieveAllTags();
 
+    public Long retrieveTagIdByTagName(String tagName);
+
 
     
 }

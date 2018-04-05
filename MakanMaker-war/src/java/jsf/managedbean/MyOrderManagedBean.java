@@ -71,7 +71,7 @@ public class MyOrderManagedBean implements Serializable{
             case "RECEIVED":
                 return "Reveived";
             default:
-                return "No News";
+                return "Refunded";
 
         }
     }

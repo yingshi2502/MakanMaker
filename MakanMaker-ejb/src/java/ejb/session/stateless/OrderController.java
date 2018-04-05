@@ -11,9 +11,16 @@ import entity.CustomerEntity;
 import entity.MealKitEntity;
 import entity.OrderEntity;
 import entity.TransactionEntity;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.ejb.Timeout;
+import javax.ejb.TimerConfig;
+import javax.ejb.TimerService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -25,6 +32,8 @@ import util.exception.EmptyListException;
 import util.exception.GeneralException;
 import util.exception.OrderExistException;
 import util.exception.OrderNotFoundException;
+import javax.ejb.Timer;
+
 
 /**
  *
@@ -35,13 +44,19 @@ public class OrderController implements OrderControllerLocal {
 
     @PersistenceContext(unitName = "MakanMaker-ejbPU")
     private EntityManager em;
-
+    
+    @Resource
+    TimerService timerService;
+    
+    
     public OrderController() {
     }
 
     @Override
     public OrderEntity createNewOrder(OrderEntity order, Long customerId, Long mealKitId, Long addressId) {
         
+            SimpleDateFormat sf = new SimpleDateFormat("ssmmhhddMMyy");
+            order.setOrderNumber(""+customerId+sf.format((new Date()))+mealKitId);    
             em.persist(order);
             
             CustomerEntity customer = em.find(CustomerEntity.class, customerId);
@@ -59,16 +74,19 @@ public class OrderController implements OrderControllerLocal {
             System.err.println("****Order Meal Kit Orders"+mealKit.getOrders().size());
 
             mealKit.getOrders().add(order);
+
+                        
+//            String transactionDescription = "Purchase order [id] = "+order.getOrderId();
+//            String transactionCode = order.getPurchasingDate().toString();
+//            TransactionEntity transaction = new TransactionEntity(Double.valueOf(25.0), TransactionTypeEnum.CREDIT, PaymentTypeEnum.PAYPAL, new Date(), transactionDescription);
+//            
+//            em.persist(transaction);
+//            
+//            transaction.setCustomer(customer);
+//            transaction.setOrder(order);
+//            order.setTransaction(transaction);
+//            customer.getTransactions().add(transaction);
             
-            String transactionDescription = "Purchase order [id] = "+order.getOrderId();
-            TransactionEntity transaction = new TransactionEntity(Double.valueOf(25.0), TransactionTypeEnum.CREDIT, PaymentTypeEnum.PAYPAL, new Date(), transactionDescription);
-            
-            em.persist(transaction);
-            
-            transaction.setCustomer(customer);
-            transaction.setOrder(order);
-            order.setTransaction(transaction);
-            customer.getTransactions().add(transaction);
             
             em.flush();
             em.refresh(order);
@@ -91,31 +109,29 @@ public class OrderController implements OrderControllerLocal {
         newTransaction.setPaymentType(paymentType);
         newTransaction.setTransactionDateTime(new Date());
         newTransaction.setTransactionType(TransactionTypeEnum.CREDIT);
+        OrderEntity thisOrder = em.find(OrderEntity.class, order.getOrderId());
+        
         order.setOrderStatus(OrderStatusEnum.PREPARING);
+        createTimer(thisOrder.getOrderId(), getBeginningOfDay(thisOrder.getDeliveryDate()));
         
         em.persist(newTransaction);
-        em.merge(order);
+        
         newTransaction.setOrder(order);
         newTransaction.setCustomer(order.getCustomer());
         order.setTransaction(newTransaction);
+        
         
         em.flush();
         return newTransaction;
     }
 
     @Override
-    public OrderEntity updateOrder(OrderEntity order) throws OrderExistException, GeneralException {
-        try {
-            return em.merge(order);
-        } catch (PersistenceException ex) {
-            if (ex.getCause() != null
-                    && ex.getCause().getCause() != null
-                    && ex.getCause().getCause().getClass().getSimpleName().equals("MySQLIntegrityConstraintViolationException")) {
-                throw new OrderExistException("Order with same name already exist");
-            } else {
-                throw new GeneralException("An unexpected error has occurred: " + ex.getMessage());
-            }
-        }
+    public OrderEntity updateOrder(OrderEntity order){
+        OrderEntity toUpdate = em.find(OrderEntity.class, order.getOrderId());
+        toUpdate.setOrderStatus(order.getOrderStatus());
+        
+        return order;
+        
     }
 
     //add getTransaction&mealKit for lazy fetching
@@ -178,11 +194,13 @@ public class OrderController implements OrderControllerLocal {
      */
     @Override
     public TransactionEntity refundOrder(Long orderId, String description, PaymentTypeEnum type){
+        SimpleDateFormat sf = new SimpleDateFormat("ssmmhhddMMyy");
         TransactionEntity newTransaction = new TransactionEntity();
         OrderEntity order = em.find(OrderEntity.class, orderId);
         
         newTransaction.setAmount(order.getTotalAmount());
         newTransaction.setPaymentType(type);
+        newTransaction.setTransactionCode("RE"+sf.format(new Date())+orderId);
         newTransaction.setTransactionDateTime(new Date());
         newTransaction.setTransactionType(TransactionTypeEnum.DEBIT);
         newTransaction.setDescription(description);
@@ -198,4 +216,47 @@ public class OrderController implements OrderControllerLocal {
         em.flush();
         return newTransaction;
     }
+    
+    private void createTimer(Long orderId, Date dateTime) {
+        TimerConfig timerConfig = new TimerConfig(orderId, true);
+        Timer timer = timerService.createSingleActionTimer(dateTime, timerConfig);
+    }
+    
+    @Timeout
+    private void timeOut(Timer timer) {
+        System.err.println("******TimerOut: OrderId " + timer.getInfo() + "******");
+        Long orderId = (Long) timer.getInfo();
+        try {
+            OrderEntity order = retrieveOrderById(orderId);
+            if (order.getOrderStatus().equals(OrderStatusEnum.PREPARING)) {
+                order.setOrderStatus(OrderStatusEnum.DELIVERING);
+                createTimer(orderId, order.getDeliveryDate());
+            } else {
+                if (order.getOrderStatus().equals(OrderStatusEnum.DELIVERING)) {
+                    order.setOrderStatus(OrderStatusEnum.DELIVERED);
+                    createTimer(orderId, getEndOfDay(new Date()));
+                }else{
+                    if (order.getOrderStatus().equals(OrderStatusEnum.DELIVERED)){
+                        order.setOrderStatus(OrderStatusEnum.RECEIVED);
+                    }
+                }
+            }
+        } catch (OrderNotFoundException ex) {
+            Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private Date getEndOfDay(Date now){
+        Date date = new Date(now.getYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+        return date;
+    }
+    
+    private Date getBeginningOfDay(Date now){
+        
+        Date date = new Date(now.getYear(), now.getMonth(), now.getDate(), 6, 0, 0);
+        return date;
+    }
+    
+    
+    
 }

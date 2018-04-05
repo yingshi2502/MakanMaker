@@ -24,7 +24,7 @@ public interface OrderControllerLocal {
 
     public OrderEntity createNewOrder(OrderEntity order, Long customerId, Long mealKitId, Long addressId) ;
 
-    public OrderEntity updateOrder(OrderEntity order) throws OrderExistException, GeneralException;
+    public OrderEntity updateOrder(OrderEntity order);
 
     public OrderEntity retrieveOrderById(Long orderId) throws OrderNotFoundException;
 

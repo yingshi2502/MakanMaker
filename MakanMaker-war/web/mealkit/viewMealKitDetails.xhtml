@@ -6,90 +6,89 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-<f:metadata>
-    <f:viewParam name="id" value="#{viewMealKitDetailsManagedBean.mealKitId}" />
+    <f:metadata>
+        <f:viewParam name="id" value="#{viewMealKitDetailsManagedBean.mealKitId}" />
     </f:metadata>
-    
+
     <ui:define name="content">
-                <p:dataTable var="mealKit" value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
+        <p:dataTable var="mealKit" value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
+            <p:column>
+                <h:outputText style="font-weight: bold; font-size: 25px; text-align: center"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.name}"/>        
+
+                <p:dataTable value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
                     <p:column>
-                            <h:outputText style="font-weight: bold;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.name}"/>        
-                            
-                            <p:dataTable value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
-                                <p:column>
-                                    <img src="../images/duration.png" height="60px" width="60px" align="middle"></img>
-                                    <h:outputText style="font-weight: bold;"  value="Time"/>
-                                    <br> </br>
-                                    <h:outputText style="font-weight: bold;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.time}"/> 
-                                </p:column> 
-                                
-                                <p:column>
-                                    <img src="../images/difficulty.png" height="60px" width="60px" align="middle"></img>
-                                    <h:outputText style="font-weight: bold;"  value="Difficulty"/> 
-                                    <br> </br>
-                                    <h:outputText style="font-weight: bold;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.difficulty}"/>                                                                   
-                                </p:column>
-                                
-                                <p:column>
-                                    <img src="../images/nutrition.png" height="60px" width="60px" align="middle"></img>
-                                    <h:outputText style="font-weight: bold;"  value="Nutrition"/> 
-                                    <br> </br>
-                                    <h:outputText style="font-weight: bold;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.nutrition} Calories"/>                                       
-                                </p:column>                                 
-                                
-                            </p:dataTable>
-                            
-                            <p:dataTable value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
-                                <p:column> 
-                                    <h:form>
-                                        <h:outputLabel for="quantityOfServings" value="Quantity of Servings     " style="font-weight: bold;" />
-                                        <p:spinner id="quantityOfServings" value="#{spinnerView.number1}" />
-                                    </h:form>
-                                </p:column>                              
-                            </p:dataTable>                            
- 
-                            <p:dataTable value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
-                                <p:column>
-                                    <p:outputLabel value="Special Remarks" for="description" style="font-weight: bold;" />
-                                    <p:inputTextarea id="description" rows="3" cols="33" style="width: 600px; height:100px;" placeholder="Please only put remarks if they are absolutely necessary. If not, it may delay your order processing."/>
-                                </p:column>       
-                            </p:dataTable>                                   
-                            
-                         <br></br>
-                         <p:commandButton value="Add to Cart" icon="fa fa-shopping-cart" update="" oncomplete=""/>
-                         <p:commandButton value="Add to Wishlist" icon="fa fa-star" update="" oncomplete=""/>
-                            
+                        <img src="../images/duration.png" height="60px" width="60px" align="middle"></img>
+                        <h:outputText style="font-weight: bold;"  value="Time"/>
+                        <br> </br>
+                        <h:outputText style="font-weight: bold;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.time}"/> 
                     </p:column> 
 
-                    <p:column >
-                        <img src="#{viewMealKitDetailsManagedBean.mealKitEntityToView.imagePath}" height="330px" width="650px" align="middle"></img>
-                        <br></br>
-                       
+                    <p:column>
+                        <img src="../images/difficulty.png" height="60px" width="60px" align="middle"></img>
+                        <h:outputText style="font-weight: bold;"  value="Difficulty"/> 
+                        <br> </br>
+                        <h:outputText style="font-weight: bold;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.difficulty}"/>                                                                   
                     </p:column>
- 
+
+                    <p:column>
+                        <img src="../images/nutrition.png" height="60px" width="60px" align="middle"></img>
+                        <h:outputText style="font-weight: bold;"  value="Nutrition"/> 
+                        <br> </br>
+                        <h:outputText style="font-weight: bold;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.nutrition} Calories"/>                                       
+                    </p:column>                                 
+
                 </p:dataTable>
-        
-                <p:dataTable var="view" value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
-                    <p:column>
-                        
-                         <h:outputText style="font-weight: bold;"  value="INGREDIENTS"/> 
-                         <br></br>
-                        <ui:repeat value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.ingredients}" var="divis">
-                            <h:outputText value="#{divis}" />
-                            <br></br>
-                            <br></br>
-                        </ui:repeat>
-                    </p:column> 
 
-                    <p:column >    
+                <p:dataTable value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
+                    <p:column> 
                         <h:form>
-                        <p:commandButton value="DOWNLOAD PDF OF RECIPE" icon="fa fa-download" actionListener="#{reportManagedBean.generateReport}" ajax="false"/>
+                            <h:outputLabel for="quantityOfServings" value="Quantity of Servings     " style="font-weight: bold;" />
+                            <p:spinner id="quantityOfServings" value="#{spinnerView.number1}" placeholder="0"/>
                         </h:form>
-                    </p:column>
- 
-                </p:dataTable>        
-       
-        
+                    </p:column>                              
+                </p:dataTable>                            
+
+                <p:dataTable value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
+                    <p:column>
+                        <p:outputLabel value="Special Remarks" for="description" style="font-weight: bold;" />
+                        <p:inputTextarea id="description" rows="3" cols="33" style="width: 600px; height:100px;" placeholder="Please only put remarks if they are absolutely necessary. If not, it may delay your order processing."/>
+                    </p:column>       
+                </p:dataTable>                                   
+
+                <br></br>
+                <p:commandButton value="Add to Cart" icon="fa fa-shopping-cart" update="" oncomplete=""/>
+                <p:commandButton value="Add to Wishlist" icon="fa fa-star" update="" oncomplete=""/>
+
+            </p:column> 
+
+            <p:column >
+                <img src="#{viewMealKitDetailsManagedBean.mealKitEntityToView.imagePath}" height="330px" width="650px" align="middle"></img>
+                <br></br>
+
+            </p:column>
+
+        </p:dataTable>
+
+        <p:dataTable var="view" value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
+            <p:column>
+                <h:outputText style="font-weight: bold;margin-bottom: 10px"  value="INGREDIENTS"/> 
+                <br></br>
+                <ui:repeat value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.ingredients}" var="divis">
+                    <h:outputText value="#{divis}" />
+                    <br></br>
+                    <br></br>
+                </ui:repeat>
+            </p:column> 
+
+            <p:column >    
+                <h:form>
+                    <p:commandButton value="DOWNLOAD PDF OF RECIPE" icon="fa fa-download" actionListener="#{reportManagedBean.generateReport}" ajax="false"/>
+                </h:form>
+            </p:column>
+
+        </p:dataTable>        
+
+
     </ui:define>
 
 </ui:composition>

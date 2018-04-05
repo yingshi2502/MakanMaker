@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/managerTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="header">
+        <title>Manager Portal : Create MealKit</title>
+    </ui:define>
+    <ui:define name="content">
+        <h2>Create Meal Kit</h2>
+
+        <h:form id="formCreateMealKit">
+            <p:growl id="growl" showSummary="true" redisplay="false" life="800"/> 
+            <p:panel>
+                <p:panelGrid id="panelGrid" style="table-layout: auto; border: 3px">
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="mealKitName" value="Meal Kit Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="mealKitName" style="width: 240px" value="#{createMealKitManagedBean.newMealKit.name}" required="true" requiredMessage="Meal Kit Name is required" placeholder="e.g. Nasi Lemak"/>
+                            
+                            <p:message for="mealKitName" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="mealKitPrice" value="Meal Kit Price: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputNumber id="mealKitPrice" style="width: 240px" value="#{createMealKitManagedBean.newMealKit.price}" maxlength="10" minValue="0.01" decimalPlaces="2" required="true" requiredMessage="Meal Kit Price is required" placeholder="e.g. 20.00"/>
+                            
+                            <p:message for="mealKitPrice" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="description" value="Description: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="description" style="width: 240px" value="#{createMealKitManagedBean.newMealKit.description}" rows="5" cols="33" required="true" requiredMessage="Description is required" placeholder="e.g. Fragrant coconut rice with sambal ikan bilis"/>
+                            
+                            <p:message for="description" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="nutrition" value="Nutrition: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputNumber id="nutrition" style="width: 300px" value="#{createMealKitManagedBean.newMealKit.nutrition}" decimalPlaces="0" minValue="0" required="true" requiredMessage="Nutrition is required" placeholder="Please enter only a number without decimals (e.g. 200)" />
+                            
+                            <p:message for="nutrition" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="difficulty" value="Difficulty: " />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneRadio id="difficulty" value="#{createMealKitManagedBean.newMealKit.difficulty}">
+                                <f:selectItem itemLabel="Easy" itemValue="Easy" />
+                                <f:selectItem itemLabel="Medium" itemValue="Medium" />
+                                <f:selectItem itemLabel="Difficult" itemValue="Difficult" />
+                            </p:selectOneRadio>
+                            
+                            <p:message for="difficulty" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="time" value="Duration of cooking: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="time" style="width: 240px" value="#{createMealKitManagedBean.newMealKit.time}" required="true" requiredMessage="Duration of cooking is required" placeholder="e.g. 50-60 min" />
+                            
+                            <p:message for="time" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="fileUploading" value="Upload Image: " />
+                        </p:column>
+                        <p:column>
+                            <p:panel id="fileUploadPanel" header="File Upload" style="width: 440px" >
+                                <p:message for="fileUploading" />
+                                <p:fileUpload id="fileUploading" value="#{createMealKitManagedBean.uploadedImage}" disabled="#{createMealKitManagedBean.uploadedOne}" fileUploadListener="#{createMealKitManagedBean.handleFileUpload}" update="growl fileUploadPanel" />
+                            </p:panel>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="isAvailable" value="Set as Available?: " />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanButton id="isAvailable" value="#{createMealKitManagedBean.newMealKit.isAvailable}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:100px" valueChangeListener="#{createMealKitManagedBean.addNewMealKitMessage()}" >
+                                <p:ajax update="growl" />
+                            </p:selectBooleanButton>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="ingredients" value="Ingredients: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="ingredients" style="width: 240px"  value="#{createMealKitManagedBean.inputStringIngredients}" required="true" requiredMessage="Ingredients are required" placeholder="e.g. 100ml of coconut milk; 100g of rice; 100g fine green beans, cut in half (please separate each line with semicolons)" >
+                                <p:ajax update="#{createMealKitManagedBean.handleIngredientsText()}" />
+                            </p:inputTextarea>
+
+                            <p:message for="ingredients" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="recipe" value="Recipe: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="recipe" style="width: 240px"  value="#{createMealKitManagedBean.inputStringRecipe}" required="true" requiredMessage="Recipe is required" placeholder="Please number each step and separate each line with semicolons. For e.g. 1. Put the rice in a medium heavy-based saucepan and add 520ml water. Quickly bring to the boil, stir once and cover with a tight-fitting lid.; 2. Reduce the heat to low and cook for 10 mins. Uncover, fluff up with a fork and spread over a tray. Set aside to cool." >
+                                <p:ajax update="#{createMealKitManagedBean.handleRecipeText()}" />
+                            </p:inputTextarea>
+
+                            <p:message for="recipe" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="tagGrid" value="Select one or more tags: " />
+                        </p:column>
+                        <p:column>
+                            <p:selectManyCheckbox id="tagGrid" value="#{createMealKitManagedBean.newMealKitSelectedTagNames}" layout="responsive" columns="2" required="true" requiredMessage="One or more tags is required">
+                                <f:selectItems value="#{createMealKitManagedBean.tagNames}" var="tag" itemLabel="#{tag}" itemValue="#{tag}" />
+                            </p:selectManyCheckbox>
+                            <p:message for="tagGrid" />
+                        </p:column>
+                    </p:row>
+                    
+                    <!-- if time permits, a row option for the user to create a new tag and category -->
+                    
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton id="createMealKit" value="Save and Create" icon="ui-icon-disk" actionListener="#{createMealKitManagedBean.saveNewMealKit}" update="panelGrid growl" />
+                        </p:column>
+                    </p:row>
+                    
+                </p:panelGrid>
+ 
+            </p:panel>
+            
+        </h:form>
+        
+    </ui:define>
+</ui:composition>
+

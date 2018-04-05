@@ -8,25 +8,26 @@
 
     <ui:define name="content">
         <h:form id="mkForm">
-            <p:selectManyButton value="#{mealKitManagedBean.selectedTags}">
-                <f:selectItems value="#{mealKitManagedBean.tags}" var="tag" itemLabel="#{tag.name}" 
-                               itemValue="#{tag.name}" />
-                <p:ajax event="change" listener="#{mealKitManagedBean.onSelectTag}" update="@form mkForm"/>
-            </p:selectManyButton>
             <p:dataGrid var="mealKit" value="#{mealKitManagedBean.mealKits}" columns="3" layout="grid"
-                rows="12" paginator="true" id="mealkits"
-                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                rowsPerPageTemplate="3,6,12" style="table-layout: auto"
-                >
-
+                        rows="12" paginator="true" id="mealkits" paginatorPosition="bottom"
+                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        rowsPerPageTemplate="3,6,12" style="table-layout: auto"
+                        >
                 <f:facet name="header">
-                    Meal Kits
+                    <p:outputLabel value="Meal Kits" style="font-size: 22px;font-weight: bold"/>&nbsp;&nbsp;&nbsp;
+                    <!--                    <p:outputLabel value="Browse the tags " style="color: chocolate; font-weight: bold"/>&nbsp;-->
+                    <p:selectManyButton styleClass="menu" value="#{mealKitManagedBean.selectedTags}">
+                        <f:selectItems  value="#{mealKitManagedBean.tags}" var="tag" itemLabel="#{tag.name}" 
+                                        itemValue="#{tag.name}" >
+                        </f:selectItems>
+                        <p:ajax event="change" listener="#{mealKitManagedBean.onSelectTag}" update="@form mkForm"/>
+                    </p:selectManyButton> 
                 </f:facet>
 
                 <p:panel header="#{mealKit.name}" >
                     <h:panelGrid columns="1" style="width:100%; text-align: center">
                         <img src="#{mealKit.imagePath}" height="180px" width="330px" align="middle"></img>
-                        
+
                         <h:link  value="#{mealKit.description}" outcome="viewMealKitDetails.xhtml?id=#{mealKit.mealKitId}">      
                             <f:attribute  name="mealKitId" value="#{mealKit.mealKitId}" />
                         </h:link>
@@ -37,7 +38,7 @@
 
 
 
-            
+
 
         </h:form>
     </ui:define>

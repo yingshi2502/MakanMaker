@@ -174,7 +174,7 @@ public class PaymentManagedBean implements Serializable{
         return selectedAddress;
     }
 
-    public void setSelectedAddress(ActionEvent event) {
+    public void setSelectedAddress() {
         //this.selectedAddress = (AddressEntity) event.getComponent().getAttributes().get("")
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Address added successfully (Product ID: " + selectedAddress.getPostalCode() + ")", null));
         this.setShippingFees();
@@ -359,7 +359,7 @@ public class PaymentManagedBean implements Serializable{
     }
     //for payment
     
-    public void confirmPayment(){
+    public void confirmPayment(ActionEvent event){
 //        order = orderControllerLocal.createNewOrder(order, order.getCustomer().getCustomerId(), order.getMealKit().getMealKitId(), order.getAddress().getAddressId());
 //        TransactionEntity transactionEntity = orderControllerLocal.payForOrder(order, paymentType);
     }

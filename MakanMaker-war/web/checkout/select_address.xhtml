@@ -18,7 +18,7 @@
                 <f:facet name="header">
                     Select Address
                 </f:facet>
-                <p:ajax event="rowSelect" listener="#{paymentManagedBean.setSelectedAddress}" update=":form:selectedAddress"/>
+                <p:ajax event="rowSelect" process="addressSelect" listener="#{paymentManagedBean.setSelectedAddress}" update=":form:selectedAddress"/>
                 <!--somehow the selected address is not updated-->
                 <p:column selectionMode="single" style="width:16px;text-align:center"/>
                 <p:column headerText="Street Address">

@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/managerTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="header">
+        <title>Manager Portal : View/Update MealKits</title>
+    </ui:define>
+    <ui:define name="content">
+        <script type="text/javascript">
+            function handleDrop(event, ui) {
+                var droppedMealKit = ui.draggable;
+                droppedMealKit.fadeOut('fast');
+            }
+        </script>
+        <h2>View and Update Meal Kits</h2>
+        <h:form id="mealKitForm">
+            <p:growl id="growl" showSummary="true" redisplay="false" life="800"/> 
+            <p:fieldset id="allMealKits" legend="All Meal Kits">
+                <p:dataTable id="dataTableMealKits" style="width: 100%; font-size: 14px" 
+                             widgetVar="dataTableMealKits" tableStyle="table-layout: auto"
+                             value="#{viewUpdateAllMealKitsManagerManagedBean.mealKits}" 
+                             var="mealKit" rowKey="#{mealKit.mealKitId}" rowIndexVar="row"
+                             >
+                    <p:column style="width:20px">
+                        <h:outputText id="dragIcon" styleClass="ui-icon ui-icon-arrow-4" />
+                        <p:draggable for="dragIcon" revert="true" helper="clone"/>
+                    </p:column>
+
+                    <p:column headerText="Id">
+                        <h:outputText value="#{mealKit.mealKitId}" />
+                    </p:column>
+
+                    <p:column headerText="Name">
+                        <h:outputText value="#{mealKit.name}" />
+                    </p:column>
+
+                    <p:column headerText="Price">
+                        $<h:outputText value="#{mealKit.price}" />
+                    </p:column>
+
+                    <p:column headerText="Is Available">
+                        <h:outputText value="#{mealKit.isAvailable}" />
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+
+            <p:fieldset id="selectedMealKits" legend="Selected Meal Kits" style="margin-top:20px">
+                <p:outputPanel id="dropArea">
+                    <h:outputText value="Drop Meal Kits Here to View More Details!" rendered="#{empty viewUpdateAllMealKitsManagerManagedBean.droppedMealKits}" style="font-size:24px;" />
+                    <p:dataTable id="selectedMealKitsTable" var="mealKit" value="#{viewUpdateAllMealKitsManagerManagedBean.droppedMealKits}" rendered="#{not empty viewUpdateAllMealKitsManagerManagedBean.droppedMealKits}">
+
+                        <p:column headerText="Id">
+                            <h:outputText value="#{mealKit.mealKitId}" />
+                        </p:column>
+
+                        <p:column headerText="Name">
+                            <h:outputText value="#{mealKit.name}" />
+                        </p:column>
+
+                        <p:column headerText="Price">
+                            <h:outputText value="#{mealKit.price}" />
+                        </p:column>
+
+                        <p:column headerText="IsDeleted">
+                            <h:outputText value="#{mealKit.isAvailable}" />
+                        </p:column>
+
+                        <p:column headerText="Description">
+                            <h:outputText value="#{mealKit.description}" />
+                        </p:column>
+
+                        <p:column headerText="Nutrition">
+                            <h:outputText value="#{mealKit.nutrition}" />
+                        </p:column>
+
+                        <p:column headerText="Difficulty">
+                            <h:outputText value="#{mealKit.difficulty}" />
+                        </p:column>
+
+                        <p:column headerText="Time">
+                            <h:outputText value="#{mealKit.time}" />
+                        </p:column>
+
+                        <p:column headerText="Ingredients">
+                            <p:dataList value="#{mealKit.ingredients}" var="ingredient" type="ordered" emptyMessage="No ingredients recorded yet.">
+                                #{ingredient.toString()}
+                            </p:dataList>
+                        </p:column>
+
+                        <p:column headerText="Recipe">
+                            <p:dataList value="#{mealKit.recipe}" var="step" type="definition" emptyMessage="No recipe recorded yet.">
+                                Step #{step.toString()}
+                            </p:dataList>
+                        </p:column>
+
+                        <p:column headerText="Reviews">
+                            <p:dataList value="#{mealKit.reviews}" var="review" type="definition" emptyMessage="No reviews left yet." >
+                                User #{review.reviewer} left a rating of #{review.rating.toString()}/5. Here's what #{review.reviewer} said:
+                                #{review.toString()}
+                            </p:dataList>
+                        </p:column>
+
+                        <p:column headerText="Orders">
+                            <p:dataList value="#{mealKit.orders}" var="order" type="definition" emptyMessage="No orders for this meal kit yet." >
+                                Order ID #{order.orderId} - Total Order Amount: $ #{order.totalAmount.toString()}. Quantity: #{order.quantity.toString()}. Date Purchased: #{order.purchasingDate.toString()}
+                            </p:dataList>
+                        </p:column>
+
+                        <p:column headerText="Tags">
+                            <p:dataList value="#{mealKit.tags}" var="tag" type="definition" emptyMessage="No tags for this meal kit yet." >
+                                #{tag.name}
+                            </p:dataList>
+                        </p:column>
+
+                        <p:column style="width:32px">
+                            <p:commandButton update=":mealKitForm:updateMealKit" oncomplete="PF('mealKitDialog').show()" icon="fa-pencil-square-o">
+                                <f:setPropertyActionListener value="#{mealKit}" target="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:outputPanel>
+            </p:fieldset>
+
+            <p:droppable for="selectedMealKits" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="dataTableMealKits" onDrop="handleDrop">
+                <p:ajax listener="#{viewUpdateAllMealKitsManagerManagedBean.onMKDrop}" update="dropArea allMealKits" />
+            </p:droppable>
+
+            <p:dialog header="Update Meal Kit Details" widgetVar="mealKitDialog" resizable="false" draggable="false"
+                      showEffect="fade" hideEffect="fade" modal="true" closable="true">
+
+                <p:outputPanel id="updateMealKit">
+                    <p:messages id="messagesUpdateMealKit" redisplay="false" />
+
+                    <p:panelGrid id="panelGrid" columns="2">
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="mealKitName" value="Meal Kit Name: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="mealKitName" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.name}" required="true" requiredMessage="Meal Kit Name is required" placeholder="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.name}"/>
+
+                                <p:message for="mealKitName" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="mealKitPrice" value="Meal Kit Price: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputNumber id="mealKitPrice" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.price}" maxlength="10" minValue="0.01" decimalPlaces="2" required="true" requiredMessage="Meal Kit Price is required" placeholder="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.price}"/>
+
+                                <p:message for="mealKitPrice" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="description" value="Description: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputTextarea id="description" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.description}" rows="5" cols="33" required="true" requiredMessage="Description is required" placeholder="e.g. Fragrant coconut rice with sambal ikan bilis"/>
+
+                                <p:message for="description" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="nutrition" value="Nutrition: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputNumber id="nutrition" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.nutrition}" decimalPlaces="0" minValue="0" required="true" requiredMessage="Nutrition is required" placeholder="Please enter only a number without decimals (e.g. 200)" />
+
+                                <p:message for="nutrition" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="difficulty" value="Difficulty: " />
+                            </p:column>
+                            <p:column>
+                                <p:selectOneRadio id="difficulty" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.difficulty}">
+                                    <f:selectItem itemLabel="Easy" itemValue="Easy" />
+                                    <f:selectItem itemLabel="Medium" itemValue="Medium" />
+                                    <f:selectItem itemLabel="Difficult" itemValue="Difficult" />
+                                </p:selectOneRadio>
+
+                                <p:message for="difficulty" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="time" value="Duration of cooking: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="time" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.time}" required="true" requiredMessage="Duration of cooking is required" placeholder="e.g. 50-60 min" />
+
+                                <p:message for="time" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="isAvailable" value="Set as Available?: " />
+                            </p:column>
+                            <p:column>
+                                <p:selectBooleanButton id="isAvailable" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.isAvailable}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:100px" valueChangeListener="#{viewUpdateAllMealKitsManagerManagedBean.addNewMealKitMessage()}" >
+                                    <p:ajax update="growl" />
+                                </p:selectBooleanButton>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="ingredients" value="Ingredients: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputTextarea id="ingredients" style="width: 50%" value="#{viewUpdateAllMealKitsManagerManagedBean.inputStringIngredients}" required="true" requiredMessage="Ingredients are required" placeholder="e.g. 100ml of coconut milk; 100g of rice; 100g fine green beans, cut in half (please separate each line with semicolons)" >
+                                    <p:ajax update="#{viewUpdateAllMealKitsManagerManagedBean.handleIngredientsText()}" />
+                                </p:inputTextarea>
+
+                                <p:message for="ingredients" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="recipe" value="Recipe: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputTextarea id="recipe" style="width: 90%" value="#{viewUpdateAllMealKitsManagerManagedBean.inputStringRecipe}" required="true" requiredMessage="Recipe is required" placeholder="Please number each step and separate each line with semicolons. For e.g. 1. Put the rice in a medium heavy-based saucepan and add 520ml water. Quickly bring to the boil, stir once and cover with a tight-fitting lid.; 2. Reduce the heat to low and cook for 10 mins. Uncover, fluff up with a fork and spread over a tray. Set aside to cool." >
+                                    <p:ajax update="#{viewUpdateAllMealKitsManagerManagedBean.handleRecipeText()}" />
+                                </p:inputTextarea>
+
+                                <p:message for="recipe" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="tagGrid" value="Select one or more tags: " />
+                            </p:column>
+                            <p:column>
+                                <p:selectManyCheckbox id="tagGrid" value="#{viewUpdateAllMealKitsManagerManagedBean.updatedMealKitSelectedTagNames}" layout="responsive" columns="2" required="true" requiredMessage="One or more tags is required">
+                                    <f:selectItems value="#{viewUpdateAllMealKitsManagerManagedBean.tagNames}" var="tag" itemLabel="#{tag}" itemValue="#{tag}" />
+                                </p:selectManyCheckbox>
+                                <p:message for="tagGrid" />
+                            </p:column>
+                        </p:row>
+
+                        <!-- if time permits, a row option for the user to create a new tag and category -->
+
+                        <p:row>
+                            <p:column colspan="3">
+                                <p:commandButton id="updateMealKitBtn" value="Save and Update" icon="ui-icon-disk" actionListener="#{viewUpdateAllMealKitsManagerManagedBean.updateMealKit}" update="growl updateMealKit messagesUpdateMealKit" oncomplete="PF('mealKitDialog').show();"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+
+        </h:form>
+        
+    </ui:define>
+</ui:composition>
+

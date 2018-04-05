@@ -102,36 +102,20 @@ public class TagController implements TagControllerLocal {
             }
             if (!containsThis) return false;
         }
-        
         return true;
-//        
-//        
-//        TagEntity[] mkOwnTags = new TagEntity[tags.size()];
-//        tags.toArray(mkOwnTags);
-//        System.err.println("****" + Arrays.toString(mkOwnTags));
-//
-//        TagEntity[] selected = new TagEntity[selectedTags.size()];
-//        tags.toArray(selected);
-//        System.err.println("****" + Arrays.toString(selected));
-//
-//        for (int j = 0; j < selected.length; j++) {
-//            boolean containsThis = false;
-//            for (int i = 0; i < mkOwnTags.length; i++) {
-//                if (mkOwnTags[i].getName().equals(selected[j].getName())) {
-//                    containsThis = true;
-//                }
-//            }
-//            if (!containsThis) {
-//                return false;
-//            }
-//        }
-//
-//        return true;
     }
 
     @Override
     public List<TagEntity> retrieveAllTags() {
         Query query = em.createQuery("SELECT t FROM TagEntity t");
         return query.getResultList();
+    }
+    
+    @Override
+     public Long retrieveTagIdByTagName(String tagName){
+        Query query = em.createQuery("SELECT tm FROM TagEntity tm WHERE tm.name = :nameOfTag");
+        query.setParameter("nameOfTag", tagName);
+        TagEntity tag = (TagEntity) query.getSingleResult();
+        return tag.getTagId();
     }
 }

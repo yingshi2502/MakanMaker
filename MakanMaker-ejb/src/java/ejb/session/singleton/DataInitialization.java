@@ -56,7 +56,6 @@ public class DataInitialization {
     private CustomerControllerLocal customerController;
 
     
-    
     @PersistenceContext(unitName = "MakanMaker-ejbPU")
     private EntityManager em;
     
@@ -68,6 +67,7 @@ public class DataInitialization {
             initialize();
         }
         
+        
 //        ManagerEntity manager = new ManagerEntity("manager", "password");
 //        manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
 //        em.persist(manager);
@@ -77,7 +77,9 @@ public class DataInitialization {
         ManagerEntity manager = new ManagerEntity("manager", "password");
         manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
         em.persist(manager);
+        
         createCustomer();
+        createAddress();
         createMKTag();
         linkMKToTag();
         createOrder();
@@ -89,12 +91,29 @@ public class DataInitialization {
         tagControllerLocal.linkTagAndMealKit(7l, 4l);
         tagControllerLocal.linkTagAndMealKit(6l, 5l);
         tagControllerLocal.linkTagAndMealKit(6l, 6l);
+        em.flush();
     }
     
     
     private void createOrder(){
-        OrderEntity order = new OrderEntity(Double.valueOf(25), 2, new Date(), new Date(), OrderStatusEnum.PREPARING, "Add more flavour",Double.valueOf(5));
-        orderControllerLocal.createNewOrder(order, 1l, 1l,1l);  
+        String code = ""+1+(new Date())+1;
+//        OrderEntity order = new OrderEntity(Double.NaN, deliveryDate, purchasingDate, OrderStatusEnum.PREPARING, code, code, Double.MIN_VALUE)
+        Date now = new Date();        
+        Date date = new Date(now.getYear(), now.getMonth(), now.getDate()+1, 23, 59, 59);
+
+        OrderEntity order = new OrderEntity(Double.valueOf(25), 2, new Date(), date, OrderStatusEnum.PREPARING, code, "Add more flavour", Double.valueOf(5));
+        
+       orderControllerLocal.createNewOrder(order, 1l, 1l,1l);  
+    }
+    
+    private void createAddress(){
+        try {
+            AddressEntity address = new AddressEntity("118430", "37 PGP", "#05-28", Boolean.TRUE, Boolean.TRUE, "99999999", "Huang Yingshi");
+            addressControllerLocal.createNewAddress(address,1l);
+            em.flush();
+        } catch (GeneralException ex) {
+           System.err.println("****Error in creating address");
+        }
     }
     
     private void createCustomer(){
@@ -102,12 +121,10 @@ public class DataInitialization {
             customer = new CustomerEntity("yingshi", "Huang Yingshi","88888888","huangyingshi@gmail.com", "password", new Date(1998-2000, 4, 23),1);
             customerController.createNewCustomer(customer);
             customer.getWishList().add(1l);
-
-            AddressEntity address = new AddressEntity("118430", "37 PGP", "#05-28", Boolean.TRUE, Boolean.TRUE, "99999999", "Huang Yingshi");
-            addressControllerLocal.createNewAddress(address,1l);
-        
+            em.flush();
+            em.refresh(customer);
         } catch (CustomerExistException | GeneralException ex) {
-            System.err.println("Error in creating customer");
+            System.err.println("***Error in creating customer");
         }
     }
     
@@ -260,6 +277,7 @@ public class DataInitialization {
         em.persist(mealKit);    
         System.err.println("***Finished Create MKs");
 
+        em.flush();
     }
     
 }

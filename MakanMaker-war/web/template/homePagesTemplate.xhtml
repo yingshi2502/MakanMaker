@@ -37,7 +37,7 @@
         </style>
         <p:layout fullPage="true">
             
-            <p:layoutUnit position="north" >
+            <p:layoutUnit position="north">
                 <br></br>
                 <p:panel rendered="#{sessionScope['isLogin']}">          
                     <ez:headerComponent />
@@ -49,19 +49,19 @@
             </p:layoutUnit>
             
             <p:layoutUnit position="center" size="800" >
-                
                 <ui:insert name="content">Content</ui:insert>
-                
             </p:layoutUnit>
-            
-            <p:layoutUnit position="south" size="65"  >
-                
-                <h6>&copy; 2018 IS3106. All Rights Reserved.</h6>
-                
+            <p:layoutUnit position="south" size="30"  >
+                <p:outputLabel style="font-size: 10px; font-weight: bold" value="&copy; 2018 Makan Maker. All Rights Reserved." />
             </p:layoutUnit>
         
         </p:layout>
-        
+        <p:stack icon="/images/dock/stack.png" openSpeed="250" closeSpeed="250">
+            <p:menuitem value="Contact" icon="/images/dock/email.png" url="/contactUs.xhtml"/>
+            <p:menuitem value="MealKits" icon="/images/dock/mealKit.png" url="/mealkit/viewAllMealkits.xhtml"/>
+            <p:menuitem value="Orders" icon="/images/home3.png" url="/userProfile/myOrders.xhtml"/>
+            <p:menuitem value="Cart" icon="/images/dock/shoppingCart.png" url="#"/>
+        </p:stack>
     </h:body>
     
 </html>

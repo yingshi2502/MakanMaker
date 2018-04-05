@@ -34,6 +34,8 @@ public class TransactionEntity implements Serializable {
     @OneToOne
     private OrderEntity order;
     
+    private String transactionCode;
+    
     @Enumerated(EnumType.STRING)
     private TransactionTypeEnum transactionType;
     
@@ -52,8 +54,9 @@ public class TransactionEntity implements Serializable {
     public TransactionEntity() {
     }
 
-    public TransactionEntity(Double amount, TransactionTypeEnum transactionType, PaymentTypeEnum paymentType, Date transactionDateTime, String description) {
+    public TransactionEntity(Double amount, String transactionCode, TransactionTypeEnum transactionType, PaymentTypeEnum paymentType, Date transactionDateTime, String description) {
         this.amount = amount;
+        this.transactionCode = transactionCode;
         this.transactionType = transactionType;
         this.paymentType = paymentType;
         this.transactionDateTime = transactionDateTime;
@@ -191,6 +194,20 @@ public class TransactionEntity implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * @return the transactionCode
+     */
+    public String getTransactionCode() {
+        return transactionCode;
+    }
+
+    /**
+     * @param transactionCode the transactionCode to set
+     */
+    public void setTransactionCode(String transactionCode) {
+        this.transactionCode = transactionCode;
     }
 
 

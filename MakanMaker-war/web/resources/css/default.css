@@ -5,7 +5,13 @@ body {
     color: #000000;  
     margin: 10px;
 }
-
+.menu .ui-selectonemenu-label { 
+    background: pink;
+    padding-left: 10px
+}
+.panel .ui-selectonemenu-list { 
+    background: pink;
+}
 .ui-layout-north {
     z-index:20 !important;
     overflow:visible !important;

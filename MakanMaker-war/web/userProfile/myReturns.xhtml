@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="../template/userProfileTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -7,7 +9,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="header" id="header">
-        <title>My Orders</title>
+        <title>My Returns</title>
     </ui:define>
     <ui:define name="content" id="content">
         <h2 style="margin-left: 30px">My Orders</h2>
@@ -15,10 +17,10 @@
             <p:column>
                 <p:panelGrid>
                     <p:row >
-                        <p:column style="width:200px">
+                        <p:column>
                             <h:outputText value="Order" />
-                            <h:link value=" ##{order.orderNumber}" outcome="orderPage.xhtml?id=#{order.orderId}"/><br />
-                            <h:outputText value="Placed on 10 Mar 2018" />
+                            <h:link value="#{order.orderNumber}" outcome="orderPage.xhtml?id=#{order.orderId}"/><br />
+                            <h:outputText value="  Placed on 10 Mar 2018" />
                         </p:column>
                         <p:column>
                             <p:link style="position: absolute;right: 50px" value="Manage" outcome="orderPage.xhtml?id=#{order.orderId}" />
@@ -55,4 +57,6 @@
         </p:dataTable>
     </ui:define>
 </ui:composition>
+
+
 

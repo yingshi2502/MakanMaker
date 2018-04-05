@@ -76,7 +76,7 @@ public class MealKitEntity implements Serializable {
         this.isAvailable = isAvailable;
     }
     
-    public MealKitEntity(String name, double price, List<String> ingredients, boolean isAvailable, Integer nutrition, String description, String time, String imagePath, String difficulty){
+    public MealKitEntity(String name, Double price, List<String> ingredients, boolean isAvailable, Integer nutrition, String description, String time, String imagePath, String difficulty){
         this.name = name;
         this.price = price;
         this.ingredients = ingredients;

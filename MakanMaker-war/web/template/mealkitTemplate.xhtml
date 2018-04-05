@@ -14,6 +14,13 @@
 
     <h:body>
         <style>
+            .menu .ui-selectonemenu-label { 
+                background: pink;
+                padding-left: 10px
+            }
+            .panel .ui-selectonemenu-list { 
+                background: pink;
+            }
             .ui-widget{
                 border:none;
             }
@@ -71,10 +78,8 @@
 
             </p:layoutUnit>
 
-            <p:layoutUnit position="south" >
-
-                <h6>&copy; 2018 IS3106. All Rights Reserved.</h6>
-
+            <p:layoutUnit position="south" size="30"  >
+                <p:outputLabel style="font-size: 10px; font-weight: bold" value="&copy; 2018 Makan Maker. All Rights Reserved." />
             </p:layoutUnit>
 
         </p:layout>

@@ -27,6 +27,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpServletRequest;
+import util.enumeration.OrderStatusEnum;
 import util.enumeration.PaymentTypeEnum;
 import util.exception.OrderNotFoundException;
 
@@ -77,7 +78,7 @@ public class OrderDetailManagedBean implements Serializable {
             currCustomer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
             mealKit = currOrder.getMealKit();
             
-            canRefund = currOrder.getDeliveryDate().after(new Date())? true: false;
+            canRefund = currOrder.getOrderStatus().equals(OrderStatusEnum.PREPARING);
             
             System.err.println("***adfasdfasdfasdfads");
             if (currCustomer==null){
@@ -109,10 +110,26 @@ public class OrderDetailManagedBean implements Serializable {
             newReview.setReviewer(currCustomer.getUserName());
         }
         reviewControllerLocal.createNewReiview(newReview.getReviewer(),currOrder.getOrderId(), currOrder.getMealKit().getMealKitId(), newReview.getReview(), newReview.getRating());
+        currOrder.setIsReviewed(true);
         newReview = new ReviewEntity();
         
         FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Review Submitted", null));
 
+    }
+    
+    
+    public void submitRefund(ActionEvent event){
+        if (CheckedRefundPolicy){
+            orderControllerLocal.refundOrder(currOrder.getOrderId(), refundDescription,getPaymentMethodEnum(refundPaymentMethod));
+            canRefund = false;
+        }else{
+            FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please accept the refund policy", null));
+        }
+    }
+
+    public void confirmReceipt(ActionEvent event){
+        currOrder.setOrderStatus(OrderStatusEnum.RECEIVED);
+        orderControllerLocal.updateOrder(currOrder);
     }
     
     private PaymentTypeEnum getPaymentMethodEnum(String value){
@@ -123,14 +140,6 @@ public class OrderDetailManagedBean implements Serializable {
         return null;
     }
     
-    public void submitRefund(ActionEvent event){
-        if (CheckedRefundPolicy){
-            orderControllerLocal.refundOrder(currOrder.getOrderId(), refundDescription,getPaymentMethodEnum(refundPaymentMethod));
-        }else{
-            FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please accept the refund policy", null));
-        }
-    }
-
     public String getRefundDescription() {
         return refundDescription;
     }
@@ -216,10 +225,6 @@ public class OrderDetailManagedBean implements Serializable {
     }
     
     
-    
-    
-    
-    
     private void redirectTo404() throws IOException{
                 System.err.println("***adfasdfasdfasdfads");
 
@@ -265,6 +270,7 @@ public class OrderDetailManagedBean implements Serializable {
      * @param CheckedRefundPolicy the CheckedRefundPolicy to set
      */
     public void setCheckedRefundPolicy(boolean CheckedRefundPolicy) {
+        System.err.println("***Order MB: Modified CheckedRefundPolicy");
         this.CheckedRefundPolicy = CheckedRefundPolicy;
     }
 
