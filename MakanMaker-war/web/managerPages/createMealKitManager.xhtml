@@ -127,7 +127,7 @@
                         </p:column>
                         <p:column>
                             <p:inputTextarea id="recipe" style="width: 240px"  value="#{createMealKitManagedBean.inputStringRecipe}" required="true" requiredMessage="Recipe is required" placeholder="Please number each step and separate each line with semicolons. For e.g. 1. Put the rice in a medium heavy-based saucepan and add 520ml water. Quickly bring to the boil, stir once and cover with a tight-fitting lid.; 2. Reduce the heat to low and cook for 10 mins. Uncover, fluff up with a fork and spread over a tray. Set aside to cool." >
-                                <p:ajax update="#{createMealKitManagedBean.handleRecipeText()}" />
+                                <p:ajax update="#{createMealKitManagedBean.handleRecipeText()}"/>
                             </p:inputTextarea>
 
                             <p:message for="recipe" />

@@ -12,10 +12,10 @@
     </cc:interface>
 
     <cc:implementation>
-
         <div style="text-align: right;">
             <h:panelGroup style="display: inline-block">
                 <h:form id="contentLoginForm">
+                    <p:commandButton id="oriButton" style="position: absolute; left: 10px" widgetVar="oriButton" icon="fa fa-reorder" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
                     <p:link outcome="/index" style="position: absolute; left: 50px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
                     <ezcomp:searchBar />
                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

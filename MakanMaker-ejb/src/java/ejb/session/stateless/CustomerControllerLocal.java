@@ -24,15 +24,15 @@ import util.exception.PasswordChangeException;
 @Local
 public interface CustomerControllerLocal {
 
-    CustomerEntity customerLogin(String usename, String password) throws InvalidLoginCredentialException;
+    CustomerEntity customerLogin(String usename, String password, boolean detach) throws InvalidLoginCredentialException;
 
     Boolean changePassword(Long customerId, String newPassword, String oldPassword) throws PasswordChangeException;
 
-    CustomerEntity createNewCustomer(CustomerEntity customer) throws CustomerExistException,GeneralException;
+    CustomerEntity createNewCustomer(CustomerEntity customer, boolean detach) throws CustomerExistException,GeneralException;
 
     public CustomerEntity updateCustomer(CustomerEntity customer) throws CustomerNotFoundException;
 
-    public CustomerEntity retrieveCustomerById(Long customerId);
+    public CustomerEntity retrieveCustomerById(Long customerId, boolean detach);
 
     public CustomerEntity retrieveCustomerByUsername(String username) throws CustomerNotFoundException;
 

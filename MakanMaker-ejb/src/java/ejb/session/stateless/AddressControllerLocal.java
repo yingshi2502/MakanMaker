@@ -18,14 +18,17 @@ import util.exception.GeneralException;
 @Local
 public interface AddressControllerLocal {
 
-    public AddressEntity createNewAddress(AddressEntity address, Long customerId) throws GeneralException;
+    public AddressEntity createNewAddress(AddressEntity address, Long customerId, boolean detach) throws GeneralException;
 
     public void updateAddress(AddressEntity address);
 
     public void deleteAddress(Long addressId) throws GeneralException;
 
-    public List<AddressEntity> retrieveAddressByCustomerId(Long customerId) throws EmptyListException;
+    public List<AddressEntity> retrieveAddressByCustomerId(Long customerId, boolean detach) throws EmptyListException;
 
     public AddressEntity getDefaultAddressById(Long customerId) throws EmptyListException;
+
+    public AddressEntity retrieveAddressById(Long id, boolean detach);
+
     
 }

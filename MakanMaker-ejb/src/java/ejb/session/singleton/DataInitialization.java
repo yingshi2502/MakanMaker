@@ -109,7 +109,7 @@ public class DataInitialization {
     private void createAddress(){
         try {
             AddressEntity address = new AddressEntity("118430", "37 PGP", "#05-28", Boolean.TRUE, Boolean.TRUE, "99999999", "Huang Yingshi");
-            addressControllerLocal.createNewAddress(address,1l);
+            addressControllerLocal.createNewAddress(address,1l,false);
             em.flush();
         } catch (GeneralException ex) {
            System.err.println("****Error in creating address");
@@ -119,7 +119,7 @@ public class DataInitialization {
     private void createCustomer(){
         try {
             customer = new CustomerEntity("yingshi", "Huang Yingshi","88888888","huangyingshi@gmail.com", "password", new Date(1998-2000, 4, 23),1);
-            customerController.createNewCustomer(customer);
+            customerController.createNewCustomer(customer,false);
             customer.getWishList().add(1l);
             em.flush();
             em.refresh(customer);

@@ -47,7 +47,6 @@ public class MealKitEntity implements Serializable {
     @Column(nullable = false)
     private String time;
     
-    @Column(nullable = false)
     private String imagePath;
             
     private List<String> ingredients;

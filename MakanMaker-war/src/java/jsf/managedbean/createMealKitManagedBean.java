@@ -173,7 +173,7 @@ public class createMealKitManagedBean implements Serializable{
     {
         try
         {
-            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + event.getFile().getFileName();
+            String newFilePath = System.getProperty("user.dir").replaceAll("config", "docroot") + System.getProperty("file.separator") + event.getFile().getFileName();
             newMealKit.setImagePath(newFilePath);
             
             System.err.println("********** createMealKitManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());

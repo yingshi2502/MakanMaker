@@ -47,9 +47,8 @@ public class StaffController implements StaffControllerLocal {
             ManagerEntity manager = (ManagerEntity) query.getSingleResult();
             return manager;
         }catch(NoResultException ex){
-            
+            throw new ManagerNotFoundException();
         }
-        return null;
     }
 
 

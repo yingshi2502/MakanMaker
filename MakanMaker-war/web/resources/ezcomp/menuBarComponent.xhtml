@@ -12,17 +12,17 @@
         
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        
-            <p:panel style = "align-items: center;">  
-               <p:menubar style="text-align: center !important; display: inline-block; ">
+        <div align="center" >
+            <p:panel >  
+               <p:menubar style="text-align: center !important; display: inline-block; font-size:15px;background: antiquewhite">
                    <p:menuitem value="Home" outcome="/index.xhtml"/>
-                   <p:menuitem value="About Us" outcome="/aboutUs.xhtml" />
+                   <p:menuitem value="About Us" style="margin-left: 50px;margin-right: 50px" outcome="/aboutUs.xhtml" />
                    <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" />
-                   <p:menuitem value="Contact Us" outcome="/contactUs.xhtml" />
+                   <p:menuitem value="Contact Us" style="margin-left: 50px;margin-right: 50px" outcome="/contactUs.xhtml" />
                    <p:menuitem value="Our Clients" url="/ourClients.xhtml" />
                </p:menubar>
 <!--               style = "text-align: center;font-size: 18px; padding-right:90px; padding-left:90px;" -->
            </p:panel> 
-        
+        </div>
     </cc:implementation>
 </html>

@@ -42,17 +42,24 @@ public class CustomerController implements CustomerControllerLocal {
      * @throws GeneralException
      */
     @Override
-    public CustomerEntity createNewCustomer(CustomerEntity customer) throws CustomerExistException, GeneralException {
+    public CustomerEntity createNewCustomer(CustomerEntity customer, boolean detach) throws CustomerExistException, GeneralException {
         try {
             customer.setPassword(SecurityHelper.generatePassword(customer.getPassword()));
             ShoppingCartEntity shoppingCart = new ShoppingCartEntity();
             em.persist(customer);
             em.persist(shoppingCart);
-
+            
             shoppingCart.setCustomer(customer);
             customer.setShoppingCart(shoppingCart);
-
             em.flush();
+            if (detach){
+                em.detach(customer);
+                customer.getAddresses().clear();
+                customer.getOrderHistory().clear();
+                customer.getTransactions().clear();
+                customer.setShoppingCart(null);
+            }
+            
             return customer;
         } catch (PersistenceException ex) {
             if (ex.getCause() != null
@@ -79,7 +86,7 @@ public class CustomerController implements CustomerControllerLocal {
         System.err.println(customer.getMobile());
 
         if (customer.getCustomerId() != null) {
-            CustomerEntity updatedCustomer = retrieveCustomerById(customer.getCustomerId());
+            CustomerEntity updatedCustomer = retrieveCustomerById(customer.getCustomerId(),false);
                 updatedCustomer.setDateOfBirth(customer.getDateOfBirth());
                 updatedCustomer.setMobile(customer.getMobile());
                 updatedCustomer.setEmail(customer.getEmail());
@@ -100,9 +107,15 @@ public class CustomerController implements CustomerControllerLocal {
      * @throws CustomerNotFoundException
      */
     @Override
-    public CustomerEntity retrieveCustomerById(Long customerId) {
+    public CustomerEntity retrieveCustomerById(Long customerId, boolean detach) {
         CustomerEntity customer = em.find(CustomerEntity.class, customerId);
-
+        if (detach){
+                em.detach(customer);
+                customer.getAddresses().clear();
+                customer.getOrderHistory().clear();
+                customer.getTransactions().clear();
+                customer.setShoppingCart(null);
+            }
         return customer;
     }
 
@@ -174,11 +187,18 @@ public class CustomerController implements CustomerControllerLocal {
     }
 
     @Override
-    public CustomerEntity customerLogin(String username, String password) throws InvalidLoginCredentialException {
+    public CustomerEntity customerLogin(String username, String password, boolean detach) throws InvalidLoginCredentialException {
 
         try {
             CustomerEntity customer = retrieveCustomerByUsername(username);
             if (SecurityHelper.verifyPassword(password, customer.getPassword())) {
+                if (detach){
+                em.detach(customer);
+                customer.getAddresses().clear();
+                customer.getOrderHistory().clear();
+                customer.getTransactions().clear();
+                customer.setShoppingCart(null);
+                }
                 return customer;
             } else {
                 System.err.println("****Customer Login wrong pass");
@@ -201,7 +221,7 @@ public class CustomerController implements CustomerControllerLocal {
     @Override
     public Boolean changePassword(Long customerId, String oldPassword, String newPassword) throws PasswordChangeException {
 
-        CustomerEntity customer = retrieveCustomerById(customerId);
+        CustomerEntity customer = retrieveCustomerById(customerId,false);
         if (SecurityHelper.verifyPassword(oldPassword, customer.getPassword())) {
             customer.setPassword(SecurityHelper.generatePassword(newPassword));
             System.err.println("****Customer pass changed");

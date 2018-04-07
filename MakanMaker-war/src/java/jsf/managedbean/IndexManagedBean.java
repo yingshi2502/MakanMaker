@@ -33,6 +33,8 @@ public class IndexManagedBean implements Serializable
     
     private String username;
     private String password;
+    private String managerUsername;
+    private String managerPassword;
     
     private String searchKeywords;
     
@@ -48,7 +50,7 @@ public class IndexManagedBean implements Serializable
 
         try
         {
-            CustomerEntity currentCustomerEntity = customerControllerLocal.customerLogin(username, password);
+            CustomerEntity currentCustomerEntity = customerControllerLocal.customerLogin(username, password,false);
             System.err.println("****Customer Login no exception thrown ");
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
@@ -60,20 +62,26 @@ public class IndexManagedBean implements Serializable
         catch(InvalidLoginCredentialException ex)
         {
             System.err.println("**** error"+ex.getMessage());
-            FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Invalid login credential: " + ex.getMessage(), "Please try again"));
+            FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Invalid login credential.",ex.getMessage()));
         }
     }
     
     public void staffLogin(ActionEvent event) throws IOException{
+        
+        System.err.println("****Manager Login "+managerUsername+" "+managerPassword);
+
         try{
-            ManagerEntity currentManagerEntity = staffController.staffLogin(username, password);
+            ManagerEntity currentManagerEntity = staffController.staffLogin(managerUsername, managerPassword);
+            System.err.println("****Manager Login no exception thrown ");
+
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLoginManager", true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentManagerEntity", currentManagerEntity);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");     
+            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+            context.redirect(context.getApplicationContextPath() + "/managerPages/viewUpdateAllMealKitsManager.xhtml");
         }catch(InvalidLoginCredentialException ex){
             System.err.println("****"+ex.getMessage());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential.", ex.getMessage()));
         }
     }
     
@@ -123,6 +131,34 @@ public class IndexManagedBean implements Serializable
      */
     public void setSearchKeywords(String searchKeywords) {
         this.searchKeywords = searchKeywords;
+    }
+
+    /**
+     * @return the managerUsername
+     */
+    public String getManagerUsername() {
+        return managerUsername;
+    }
+
+    /**
+     * @param managerUsername the managerUsername to set
+     */
+    public void setManagerUsername(String managerUsername) {
+        this.managerUsername = managerUsername;
+    }
+
+    /**
+     * @return the managerPassword
+     */
+    public String getManagerPassword() {
+        return managerPassword;
+    }
+
+    /**
+     * @param managerPassword the managerPassword to set
+     */
+    public void setManagerPassword(String managerPassword) {
+        this.managerPassword = managerPassword;
     }
 
 }

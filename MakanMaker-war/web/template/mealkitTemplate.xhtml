@@ -36,8 +36,9 @@
             }    
         </style>
         <p:layout fullPage="true">
-
             <p:layoutUnit position="north" >
+                <p:commandButton icon="fa fa-reorder" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
+
                 <br></br>
                 <p:panel rendered="#{sessionScope['isLogin']}">          
                     <ez:headerComponent />
@@ -45,7 +46,6 @@
                 <p:panel rendered="#{!sessionScope['isLogin']}">          
                     <ez:LoginComponent />
                 </p:panel>               
-                <ez:menuBarComponent />
             </p:layoutUnit>
 
             <p:layoutUnit size="220" position="west">
@@ -65,9 +65,9 @@
                         </p:submenu>
 
                     </p:menu>
-                    
-                   
-                    
+
+
+
 
                 </h:form>
             </p:layoutUnit>
@@ -83,7 +83,16 @@
             </p:layoutUnit>
 
         </p:layout>
-
+        <p:sidebar widgetVar="sidebar2" baseZIndex="10000" style=" width: 150px" >
+            <h1 style="font-weight:normal">Main Menu</h1>
+            <p:menu style="width: 120px">
+                <p:menuitem value="Home" outcome="/index.xhtml" />
+                <p:menuitem value="About Us" outcome="/aboutUs.xhtml" />
+                <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" />
+                <p:menuitem value="Contact Us" outcome="/contactUs.xhtml" />
+                <p:menuitem value="Our Clients" url="/ourClients.xhtml" />
+            </p:menu>
+        </p:sidebar>
     </h:body>
 
 </html>

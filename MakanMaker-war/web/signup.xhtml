@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/defaultTemplate.xhtml"
+                template="./template/homePagesTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
@@ -9,16 +9,18 @@
         <title>Sign Up</title>
     </ui:define>
     <ui:define name="content" id="content">
-        <p:outputLabel value="Create your Makan Maker Account" style="font-size: 25px;font-family: 'Georgia', fantasy,serif "/>
-        <p:outputLabel style="margin-left: 100px" >Already have an account? Login <p:link value="here" outcome="login_customer" /></p:outputLabel> 
-        <br /><br />
-        <p:panel id='signUpPanel' header="Details" style="border-color: blue; height: 20px; border-width: 1px; width:700px">
-            <h:form id="signUpForm" style="margin-right: 30px" >
+        <p:panel style="margin-left: 100px;border-color: blue;">
+            <p:outputLabel value="Create your Makan Maker Account" style="margin-top: 300px;font-size: 25px;font-family: 'Georgia', fantasy,serif "/>
+            <p:outputLabel style="margin-left: 70px" >Already have an account? Login <p:link value="here" outcome="login_customer" /></p:outputLabel> 
+        </p:panel>
+        <p:panel id='signUpPanel' header="Details" style="margin-left: 100px;border-color: blue; height: 20px; border-width: 1px; width:700px">
+            
+            <h:form id="signUpForm" style="margin-top: 30px;margin-right: 30px" >
                 
                 <p:messages id="messages" closable="true" />
                 <p:growl id="growl" showDetail="true" sticky="true" />
                 
-                <p:ajaxStatus oncomplete="setTimeout(function() { $('.ui-messages').fadeOut(); }, 5000)" />
+                <p:ajaxStatus oncomplete="setTimeout(function() { $('.ui-messages').fadeOut(); }, 4000)" />
                 
                 <p:panelGrid columns="2" style="table-layout: auto; width: 700px" >
                     <p:outputLabel for="username" value="Username" style="width:200px;height:30px;font-size: 16px"/>

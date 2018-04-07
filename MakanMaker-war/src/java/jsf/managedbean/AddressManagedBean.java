@@ -63,7 +63,7 @@ public class AddressManagedBean implements Serializable{
         
         setCustomerId(currCustomer.getCustomerId());
         try {
-            setAddresses(addressControllerLocal.retrieveAddressByCustomerId(getCustomerId()));
+            setAddresses(addressControllerLocal.retrieveAddressByCustomerId(getCustomerId(),false));
             setNoAddress(false);
         } catch (EmptyListException ex) {
             setNoAddress(true);
@@ -84,8 +84,8 @@ public class AddressManagedBean implements Serializable{
     {
         try
         {
-            AddressEntity ae = addressControllerLocal.createNewAddress(newAddress, customerId);
-            setAddresses(addressControllerLocal.retrieveAddressByCustomerId(getCustomerId()));
+            AddressEntity ae = addressControllerLocal.createNewAddress(newAddress, customerId,false);
+            setAddresses(addressControllerLocal.retrieveAddressByCustomerId(getCustomerId(),false));
             setNewAddress(new AddressEntity());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New address created successfully", null));
         } catch (GeneralException ex) {
@@ -112,7 +112,7 @@ public class AddressManagedBean implements Serializable{
             
             
             addressControllerLocal.deleteAddress(addressToDelete.getAddressId());
-            addresses = addressControllerLocal.retrieveAddressByCustomerId(customerId);
+            addresses = addressControllerLocal.retrieveAddressByCustomerId(customerId,false);
 //
            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product deleted successfully", null));
 //        

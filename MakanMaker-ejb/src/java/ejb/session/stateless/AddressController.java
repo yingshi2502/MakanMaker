@@ -35,16 +35,16 @@ public class AddressController implements AddressControllerLocal {
     private CustomerControllerLocal customerControllerLocal;
 
     @Override
-    public AddressEntity createNewAddress(AddressEntity address, Long customerId) throws GeneralException {
+    public AddressEntity createNewAddress(AddressEntity address, Long customerId, boolean detach) throws GeneralException {
         try {
-            CustomerEntity customer = customerControllerLocal.retrieveCustomerById(customerId);
+            CustomerEntity customer = customerControllerLocal.retrieveCustomerById(customerId,false);
             em.persist(address);
 
             customer.getAddresses().add(address);
             address.setCustomer(customer);
             em.flush();
             em.refresh(address);
-            
+
             Long changeBilling = -1l;
             if (address.getIsDefaultBilling()) {
                 changeBilling = address.getAddressId();
@@ -56,6 +56,13 @@ public class AddressController implements AddressControllerLocal {
             }
             setDefaultAddress(changeShipping, changeBilling, customerId);
 
+            if (detach){
+                em.detach(address);
+                      
+                address.getOrders().clear();
+                address.setCustomer(null);
+            }
+            
             return address;
         } catch (PersistenceException ex) {
             throw new GeneralException("An unexpected Error has occurred when creating new address");
@@ -64,7 +71,7 @@ public class AddressController implements AddressControllerLocal {
 
     @Override   //default Shipping
     public AddressEntity getDefaultAddressById(Long customerId) throws EmptyListException {
-        List<AddressEntity> addresses = retrieveAddressByCustomerId(customerId);
+        List<AddressEntity> addresses = retrieveAddressByCustomerId(customerId,false);
         for (AddressEntity a : addresses) {
             if (a.getIsDefaultShipping()) {
                 return a;
@@ -81,7 +88,7 @@ public class AddressController implements AddressControllerLocal {
         address.setPhoneNumber(addressToUpdate.getPhoneNumber());
         address.setPostalCode(addressToUpdate.getPostalCode());
         address.setStreetAddress(addressToUpdate.getStreetAddress());
-        
+
         Long changeBilling = -1l;
         if (addressToUpdate.getIsDefaultBilling()) {
             changeBilling = address.getAddressId();
@@ -91,14 +98,14 @@ public class AddressController implements AddressControllerLocal {
             changeShipping = address.getAddressId();
         }
         setDefaultAddress(changeShipping, changeBilling, address.getCustomer().getCustomerId());
-        
+
     }
 
     private void setDefaultAddress(Long defaultShippingId, Long defaultBillingId, Long customerId) {  //merge? managed state?
         try {
-            List<AddressEntity> addresses = retrieveAddressByCustomerId(customerId);
-            System.err.println("#****"+defaultBillingId + defaultShippingId);
-            if (defaultShippingId.compareTo(0l)>0) {
+            List<AddressEntity> addresses = retrieveAddressByCustomerId(customerId, false);
+            System.err.println("#****" + defaultBillingId + defaultShippingId);
+            if (defaultShippingId.compareTo(0l) > 0) {
                 for (AddressEntity a : addresses) {
                     if (a.getIsDefaultShipping() && !Objects.equals(a.getAddressId(), defaultShippingId)) {
                         a.setIsDefaultShipping(false);
@@ -108,7 +115,7 @@ public class AddressController implements AddressControllerLocal {
                     }
                 }
             }
-            if (defaultBillingId.compareTo(0l)>0) {
+            if (defaultBillingId.compareTo(0l) > 0) {
                 for (AddressEntity a : addresses) {
                     if (a.getIsDefaultBilling() && !Objects.equals(a.getAddressId(), defaultBillingId)) {
                         a.setIsDefaultBilling(false);
@@ -128,11 +135,11 @@ public class AddressController implements AddressControllerLocal {
         try {
             AddressEntity address = em.find(AddressEntity.class, addressId);
             address.setIsDeleted(Boolean.TRUE);
-            System.err.println("****"+address.getAddressId()+"asdfa"+address.getCustomer().getCustomerId());
-            List<AddressEntity> addresses = retrieveAddressByCustomerId(address.getCustomer().getCustomerId());
-            
+            System.err.println("****" + address.getAddressId() + "asdfa" + address.getCustomer().getCustomerId());
+            List<AddressEntity> addresses = retrieveAddressByCustomerId(address.getCustomer().getCustomerId(),false);
+
             AddressEntity chosenDefault = addresses.get(0);
-            
+
             Long changeBilling = -1l;
             if (address.getIsDefaultBilling()) {
                 changeBilling = chosenDefault.getAddressId();
@@ -151,12 +158,20 @@ public class AddressController implements AddressControllerLocal {
     }
 
     @Override
-    public List<AddressEntity> retrieveAddressByCustomerId(Long customerId) throws EmptyListException {
+    public List<AddressEntity> retrieveAddressByCustomerId(Long customerId, boolean detach) throws EmptyListException {
         Query query = em.createQuery("SELECT a FROM AddressEntity a WHERE a.customer.customerId=:customerId AND a.isDeleted=FALSE");
         query.setParameter("customerId", customerId);
-        
+
         List<AddressEntity> addresses = query.getResultList();
-        if (addresses==null){
+        if (detach){
+            for (AddressEntity a: addresses){
+                em.detach(a);
+                a.getOrders().clear();
+                a.setCustomer(null);
+            }
+        }
+        
+        if (addresses == null) {
             throw new EmptyListException("No Address has been created!");
         }
         if (addresses.isEmpty()) {
@@ -165,6 +180,20 @@ public class AddressController implements AddressControllerLocal {
             return addresses;
         }
 
+    }
+
+    @Override
+    public AddressEntity retrieveAddressById(Long id, boolean detach) {
+        AddressEntity add = em.find(AddressEntity.class, id);
+        if (add == null) {
+            return null;
+        }
+        if (detach) {
+            em.detach(add);
+            add.setCustomer(null);
+            add.getOrders().clear();
+        }
+        return add;
     }
 
 }

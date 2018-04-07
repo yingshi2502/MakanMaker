@@ -48,7 +48,7 @@ public class SignUpManagedBean {
         }else{
             try {
                 newCustomer.setPassword(password);
-                customerControllerLocal.createNewCustomer(newCustomer);
+                customerControllerLocal.createNewCustomer(newCustomer,false);
                 newCustomer = new CustomerEntity();
                 FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
                 FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid details","Two password input mismatch!"));
