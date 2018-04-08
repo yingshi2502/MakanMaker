@@ -31,5 +31,7 @@ public interface MealKitControllerLocal {
     public List<MealKitEntity> retrieveAllMealKits();
 
     public List<MealKitEntity> searchMealKits(String keywords);
+
+    public List<MealKitEntity> retrieveAvailableMealKits();
     
 }

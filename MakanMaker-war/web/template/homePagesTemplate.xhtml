@@ -44,13 +44,17 @@
 
         <p:layout fullPage="true">
             <p:layoutUnit position="north">
-                <p:panel rendered="#{sessionScope['isLogin']}">      
+                <p:panel rendered="#{sessionScope['isLoginManager']}">          
+                    <ez:managerHeaderComponent />
+                </p:panel>
+                <p:panel rendered="#{sessionScope['isLogin']}">          
                     <ez:headerComponent />
                 </p:panel>
-                <p:panel rendered="#{!sessionScope['isLogin']}">          
+                <p:panel rendered="#{!sessionScope['isLogin'] and !sessionScope['isLoginManager']}">          
                     <ez:LoginComponent />
-                </p:panel>
-                   <ez:menuBarComponent />
+                </p:panel>   
+<!--                <p:commandButton id="oriButton" widgetVar="oriButton" icon="fa fa-reorder" style="font-size: 20px; width: 40px; height: 40px" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />-->
+                <ez:menuBarComponent />
             </p:layoutUnit>
             <p:layoutUnit position="center" size="800" >
                 <ui:insert name="content">Content</ui:insert>
@@ -61,29 +65,7 @@
 
         </p:layout>
         
-        <div id="panell" style="width:220px;">
-            <p:sidebar id="sidebar2" widgetVar="sidebar2" baseZIndex="10000" style="width: 200px">
-                <h1 style="font-size: 18px; font-weight: bold;margin-top: 20px">Main Menu</h1>
-                <br />
-                <p:menu style="width: 170px; font-size: 15px; margin-top: 10px; ">
-                    <p:menuitem value="Home" outcome="/index.xhtml"/>
-                    <p:menuitem value="About Us" outcome="/aboutUs.xhtml" style="margin-top:10px"/>
-                    <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" style="margin-top:10px"/>
-                    <p:menuitem value="Contact Us" outcome="/contactUs.xhtml" style="margin-top:10px"/>
-                    <p:menuitem value="Our Clients" url="/ourClients.xhtml" style="margin-top:10px"/>
-                    <p:menuitem value="Manager Portal" url="/login_manager.xhtml" style="margin-top:10px" />
-                </p:menu>
-                <!--            <pe:javascript event="mouseleave" execute="alert('Datatable page event called')" />  -->
-<!--onmouseout="PF('sidebar2').hide()"-->
-            </p:sidebar>
-        </div>
-
-        <p:stack icon="/images/dock/stack.png" openSpeed="250" closeSpeed="250">
-            <p:menuitem value="Contact" icon="/images/dock/email.png" url="/contactUs.xhtml"/>
-            <p:menuitem value="MealKits" icon="/images/dock/mealKit.png" url="/mealkit/viewAllMealkits.xhtml"/>
-            <p:menuitem value="Orders" icon="/images/home3.png" url="/userProfile/myOrders.xhtml" rendered="#{sessionScope['isLogin']}"/>
-            <p:menuitem value="Cart" icon="/images/dock/shoppingCart.png" url="#" rendered="#{sessionScope['isLogin']}"/>
-        </p:stack>
+        <ez:stackSideBarComponent />
     </h:body>
 
 </html>

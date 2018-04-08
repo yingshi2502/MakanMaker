@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="header">
-        <title>Manager Portal : View/Update Meal Kitss </title>
+        <title>Manager Portal : View/Update Meal Kits </title>
         <script>
             function scrollToAnchor() {
                 jQuery('html, body').animate({
@@ -17,7 +17,12 @@
         </script>
         <style>
             .bg{
-                font-weight: lighter;padding: 6px 6px; display: inline-block; border-radius: 10px; background-color: #eff0f5; max-width: 150px;
+                font-weight: lighter;
+                padding: 6px 6px; 
+                display: inline-block; 
+                border-radius: 10px; 
+                background-color: #eff0f5; 
+                max-width: 150px;
             }
         </style>
     </ui:define>
@@ -27,7 +32,7 @@
         <p:growl id="growl" showSummary="true" redisplay="false" life="800"/> 
         <h:form id="mealKitForm">
             <p:panel>
-                <p:dataTable id="dataTableMealKits" tableStyle="table-layout: auto;"  widgetVar="dataTableMealKits" sortBy="#{mealKit.isAvailable}" value="#{viewUpdateAllMealKitsManagerManagedBean.mealKits}" var="mealKit" rowKey="#{mealKit.mealKitId}" rowIndexVar="row">
+                <p:dataTable id="dataTableMealKits" tableStyle="table-layout: auto;"  widgetVar="dataTableMealKits" sortBy="#{mealKit.isAvailable}" value="#{viewUpdateAllMealKitsManagerManagedBean.mealKits}" var="mealKit" >
 
                     <f:facet name="header">
                         <p:outputPanel>
@@ -40,7 +45,7 @@
                         <h:outputText value="#{mealKit.mealKitId}"  style="font-weight: lighter"/>
                     </p:column>
 
-                    <p:column headerText="Name" style="font-weight: bold" filterBy="#{mealKit.name}" filterMatchMode="contains">
+                    <p:column headerText="Name" style="font-weight: bold; text-align: center" filterBy="#{mealKit.name}" filterMatchMode="contains">
                         <h:outputText value="#{mealKit.name}" style="font-weight: lighter"/>
                     </p:column>
 
@@ -61,7 +66,7 @@
 
                     </p:column>
 
-                    <p:column filterBy="#{mealKit.isAvailable}" headerText="Availability" style="font-weight: bold;" filterMatchMode="equals" filterStyle="width:100px">
+                    <p:column filterBy="#{mealKit.isAvailable}" headerText="Availability" style="font-weight: bold;text-align: center" filterMatchMode="equals" filterStyle="width:100px">
                         <f:facet name="filter">
                             <p:selectOneButton onchange="PF('dataTableMealKits').filter()">
                                 <f:converter converterId="javax.faces.Boolean" />
@@ -73,16 +78,12 @@
                         <h:outputText value="#{mealKit.isAvailable ? 'Available': 'Deleted'}"  style="font-weight: lighter"/>
                     </p:column>
 
-                    <p:column style="width:120px;font-weight: bold" headerText="Actions">
+                    <p:column style="width:80px;font-weight: bold" headerText="Actions">
                         <p:commandButton icon="fa fa-eye" update="formViewMealKit" oncomplete="PF('viewMealKitDialog').show()" >
                             <f:setPropertyActionListener value="#{mealKit}" target="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView}" />
                         </p:commandButton>&nbsp;
                         <p:commandButton icon="fa fa-edit" update="formUpdateMealKit" oncomplete="PF('updateMealKitDialog').show();" >
                             <f:setPropertyActionListener value="#{mealKit}" target="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate}" />
-                        </p:commandButton>&nbsp;
-                        <p:commandButton icon="ui-icon-trash" actionListener="#{addressManagedBean.deleteAddress}" update="@form mealKitForm">
-                            <f:attribute name="addressToDelete" value="#{address}" />
-                            <p:confirm header="Confirmation" message="Are you sure to delete this meal kit?" icon="ui-icon-alert" />
                         </p:commandButton>
                     </p:column>
 
@@ -169,11 +170,14 @@
                     </p:row>
                     
                     <p:row>
-                        <p:column> <p:outputLabel value="Recipe: " style="font-weight: bold" /> </p:column>
-                        <p:column colspan="3"> 
-                            <p:dataList value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.recipe}" var="recipe"  type="ordered" emptyMessage="No receipe recorded yet." style="padding: 4px 4px 2px 2px">
-                                #{recipe.toString()}
-                            </p:dataList>
+                        <p:column> 
+                            <p:outputLabel value="Recipe: " style="font-weight: bold;" /> <br />
+                            <p:outputLabel value="Use ';' to separate " style="font-weight: lighter; color: #AFAFAF" /> 
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:inputTextarea value='#{viewUpdateAllMealKitsManagerManagedBean.recipeForUpdate}'
+                                style="width: 400px"
+                                />
                         </p:column>
                     </p:row>
 

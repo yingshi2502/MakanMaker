@@ -65,6 +65,7 @@ public class createMealKitManagedBean implements Serializable{
     public createMealKitManagedBean() 
     {
         newMealKit = new MealKitEntity();
+        newMealKit.setIsAvailable(true);
         tagNames = new ArrayList<>();
         newMealKitSelectedTagNames = new ArrayList<>();
         mealKits = new ArrayList<>();
@@ -106,11 +107,12 @@ public class createMealKitManagedBean implements Serializable{
         tagNames = new ArrayList<>();
     }
     
-    public void saveNewMealKit(ActionEvent event)
+    public void saveNewMealKit(ActionEvent event) throws IOException
     {   
         System.err.println("************createMealKitManagedBean.saveNewMealKit(): Start saving new meal kit");
     
         try {
+            newMealKit.setRecipe(Arrays.asList(inputStringRecipe.split(";")));
             newMealKit = mealKitControllerLocal.createNewMealKit(getNewMealKit());
             Long newMealKitEntityId = newMealKit.getMealKitId();
             
@@ -131,9 +133,10 @@ public class createMealKitManagedBean implements Serializable{
             newMealKit.setPrice(0.00);
             
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New meal kit " + newMealKitEntityId + " created successfully", null));
-            
+            FacesContext.getCurrentInstance().getExternalContext().redirect("#{requestContect}/managerPages/viewUpdateAllMealKitsManager.xhtml");     
+
         } catch (MealKitExistException | GeneralException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "An unexpected error occured: " + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "An unexpected error occured.",ex.getMessage()));
         }
     }
     
@@ -157,7 +160,7 @@ public class createMealKitManagedBean implements Serializable{
     }
     
     public void addNewMealKitMessage() {
-        String summary = getNewMealKit().isIsAvailable() ? "Set to Available" : "Set to Unavailable";
+        String summary = getNewMealKit().isIsAvailable() ? "Set to Unavailable" : "Set to Available";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
     }
     
@@ -174,10 +177,7 @@ public class createMealKitManagedBean implements Serializable{
         try
         {
             String newFilePath = System.getProperty("user.dir").replaceAll("config", "docroot") + System.getProperty("file.separator") + event.getFile().getFileName();
-            newMealKit.setImagePath(newFilePath);
-            
-            System.err.println("********** createMealKitManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());
-            System.err.println("********** createMealKitManagedBean.handleFileUpload(): newFilePath: " + newFilePath);
+            newMealKit.setImagePath("http://localhost:8080/"+event.getFile().getFileName());
 
             File file = new File(newFilePath);
             FileOutputStream fileOutputStream = new FileOutputStream(file);

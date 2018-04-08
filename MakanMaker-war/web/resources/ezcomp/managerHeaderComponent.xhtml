@@ -9,18 +9,20 @@
 
     <cc:interface>
     </cc:interface>
-
     <cc:implementation>
+
         <p:link outcome="/index" style="position: absolute; left: 50px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
+        
         <h:form style="text-align: right">
-            
+            <p:commandButton id="oriButton" widgetVar="oriButton" icon="fa fa-reorder"  style="position: absolute; left: 0px;font-size: 20px; width: 40px; height: 40px" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
+
             <p:menubar style="position: absolute; right: 10px; background-color: lightblue; height: 25px;width: 880px" >
                 <f:facet name="options">
                     <div style="margin-right: 250px">
                         <ezcomp:searchBar />
                     </div>
                 </f:facet>
-                <p:submenu  style="position: absolute; right: 25px; width: 150px" label="Welcome! #{sessionScope['currentEntity'].fullName}">
+                <p:submenu  style="position: absolute; right: 25px; width: 200px" label="Welcome! #{sessionScope['currentManagerEntity'].userName}">
                     <p:menuitem value="Create Meal Kits" icon="fa fa-plus" url="/managerPages/createMealKitManager.xhtml" />
                     <p:menuitem value="View All Meal Kits" icon="fa fa-fw fa-edit" url="/managerPages/viewUpdateAllMealKitsManager.xhtml" />
                     <p:separator />
@@ -29,7 +31,6 @@
                     <p:separator />
                     <p:menuitem value="Log out" icon="fa fa-sign-out" actionListener="#{profileManagedBean.logout}"/>
                 </p:submenu>
-
             </p:menubar>
 
         </h:form>

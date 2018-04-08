@@ -42,7 +42,7 @@
                             <p:outputLabel for="description" value="Description: " />
                         </p:column>
                         <p:column>
-                            <p:inputTextarea id="description" style="width: 240px" value="#{createMealKitManagedBean.newMealKit.description}" rows="5" cols="33" required="true" requiredMessage="Description is required" placeholder="e.g. Fragrant coconut rice with sambal ikan bilis"/>
+                            <p:inputTextarea id="description" style="width: 400px" value="#{createMealKitManagedBean.newMealKit.description}" rows="5" cols="33" required="true" requiredMessage="Description is required" placeholder="e.g. Fragrant coconut rice with sambal ikan bilis"/>
                             
                             <p:message for="description" />
                         </p:column>
@@ -90,9 +90,9 @@
                             <p:outputLabel for="fileUploading" value="Upload Image: " />
                         </p:column>
                         <p:column>
-                            <p:panel id="fileUploadPanel" header="File Upload" style="width: 440px" >
+                            <p:panel id="fileUploadPanel" header="File Upload" style="width: 600px" >
                                 <p:message for="fileUploading" />
-                                <p:fileUpload id="fileUploading" value="#{createMealKitManagedBean.uploadedImage}" disabled="#{createMealKitManagedBean.uploadedOne}" fileUploadListener="#{createMealKitManagedBean.handleFileUpload}" update="growl fileUploadPanel" />
+                                <p:fileUpload id="fileUploading" style="width: 600px" value="#{createMealKitManagedBean.uploadedImage}" disabled="#{createMealKitManagedBean.uploadedOne}" fileUploadListener="#{createMealKitManagedBean.handleFileUpload}" update="growl fileUploadPanel" />
                             </p:panel>
                         </p:column>
                     </p:row>
@@ -102,7 +102,7 @@
                             <p:outputLabel for="isAvailable" value="Set as Available?: " />
                         </p:column>
                         <p:column>
-                            <p:selectBooleanButton id="isAvailable" value="#{createMealKitManagedBean.newMealKit.isAvailable}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:100px" valueChangeListener="#{createMealKitManagedBean.addNewMealKitMessage()}" >
+                            <p:selectBooleanButton id="isAvailable" value="#{createMealKitManagedBean.newMealKit.isAvailable}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:100px" valueChangeListener="#{createMealKitManagedBean.addNewMealKitMessage}" >
                                 <p:ajax update="growl" />
                             </p:selectBooleanButton>
                         </p:column>
@@ -113,9 +113,13 @@
                             <p:outputLabel for="ingredients" value="Ingredients: " />
                         </p:column>
                         <p:column>
-                            <p:inputTextarea id="ingredients" style="width: 240px"  value="#{createMealKitManagedBean.inputStringIngredients}" required="true" requiredMessage="Ingredients are required" placeholder="e.g. 100ml of coconut milk; 100g of rice; 100g fine green beans, cut in half (please separate each line with semicolons)" >
+                            <p:chips id="ingredients" value="#{createMealKitManagedBean.newMealKit.ingredients}" >
+                                <p:ajax event="itemSelect" update="ingredients" />
+                                <p:ajax event="itemUnselect" update="ingredients"/>
+                            </p:chips>
+<!--                            <p:inputTextarea id="ingredients" style="width: 600px" cols="300" rows="5" value="#{createMealKitManagedBean.inputStringIngredients}" required="true" requiredMessage="Ingredients are required" placeholder="" >
                                 <p:ajax update="#{createMealKitManagedBean.handleIngredientsText()}" />
-                            </p:inputTextarea>
+                            </p:inputTextarea>-->
 
                             <p:message for="ingredients" />
                         </p:column>
@@ -126,8 +130,8 @@
                             <p:outputLabel for="recipe" value="Recipe: " />
                         </p:column>
                         <p:column>
-                            <p:inputTextarea id="recipe" style="width: 240px"  value="#{createMealKitManagedBean.inputStringRecipe}" required="true" requiredMessage="Recipe is required" placeholder="Please number each step and separate each line with semicolons. For e.g. 1. Put the rice in a medium heavy-based saucepan and add 520ml water. Quickly bring to the boil, stir once and cover with a tight-fitting lid.; 2. Reduce the heat to low and cook for 10 mins. Uncover, fluff up with a fork and spread over a tray. Set aside to cool." >
-                                <p:ajax update="#{createMealKitManagedBean.handleRecipeText()}"/>
+                            <p:inputTextarea id="recipe" style="width: 600px" cols="300" rows="5" value="#{createMealKitManagedBean.inputStringRecipe}" required="true" requiredMessage="Recipe is required" placeholder="Please number each step and separate each line with ';'. " >
+<!--                                <p:ajax update="#{createMealKitManagedBean.handleRecipeText()}"/>-->
                             </p:inputTextarea>
 
                             <p:message for="recipe" />

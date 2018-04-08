@@ -49,7 +49,7 @@ public class mealKitManagedBean implements Serializable{
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String keywords = request.getParameter("keywords");
         if (keywords == null){
-            setMealKits(mealKitControllerLocal.retrieveAllMealKits());
+            setMealKits(mealKitControllerLocal.retrieveAvailableMealKits());
         }else{
             System.err.println("***Keywords retrieved from HTTP: "+keywords);
             setMealKits(mealKitControllerLocal.searchMealKits(keywords));

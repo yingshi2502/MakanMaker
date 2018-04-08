@@ -108,4 +108,15 @@ public class MealKitController implements MealKitControllerLocal {
         }
         return mealKits;
     }
+    
+    @Override
+    public List<MealKitEntity> retrieveAvailableMealKits() {
+        Query query = em.createQuery("SELECT mk FROM MealKitEntity mk WHERE mk.isAvailable = TRUE");
+        List<MealKitEntity> mealKits = query.getResultList();
+        for (MealKitEntity mk : mealKits) {
+            mk.getReviews().size();
+            mk.getTags().size();
+        }
+        return mealKits;
+    }
 }

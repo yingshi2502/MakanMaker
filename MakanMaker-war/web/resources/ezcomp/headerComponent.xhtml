@@ -11,11 +11,10 @@
     </cc:interface>
 
     <cc:implementation>
-        <p:commandButton id="oriButton" widgetVar="oriButton" icon="fa fa-reorder" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
 
         <p:link outcome="/index" style="position: absolute; left: 50px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
         <h:form style="text-align: right">
-            
+        <p:commandButton id="oriButton" widgetVar="oriButton" icon="fa fa-reorder"  style="font-size: 20px; width: 40px; height: 40px" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
             <p:menubar style="position: absolute; right: 10px; background-color: lightblue; height: 25px;width: 880px" >
                 <f:facet name="options">
                     <div style="margin-right: 250px">

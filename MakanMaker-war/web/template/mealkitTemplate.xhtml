@@ -37,13 +37,16 @@
         </style>
         <p:layout fullPage="true">
             <p:layoutUnit position="north" >
-                <p:commandButton icon="fa fa-reorder" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
-
-                <br></br>
+<!--                <p:commandButton icon="fa fa-reorder" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />-->
+<!--
+                <br></br>-->
+                <p:panel rendered="#{sessionScope['isLoginManager']}">          
+                    <ez:managerHeaderComponent />
+                </p:panel>
                 <p:panel rendered="#{sessionScope['isLogin']}">          
                     <ez:headerComponent />
                 </p:panel>
-                <p:panel rendered="#{!sessionScope['isLogin']}">          
+                <p:panel rendered="#{!sessionScope['isLogin'] and !sessionScope['isLoginManager']}">          
                     <ez:LoginComponent />
                 </p:panel>               
             </p:layoutUnit>
@@ -66,9 +69,6 @@
 
                     </p:menu>
 
-
-
-
                 </h:form>
             </p:layoutUnit>
 
@@ -83,16 +83,8 @@
             </p:layoutUnit>
 
         </p:layout>
-        <p:sidebar widgetVar="sidebar2" baseZIndex="10000" style=" width: 150px" >
-            <h1 style="font-weight:normal">Main Menu</h1>
-            <p:menu style="width: 120px">
-                <p:menuitem value="Home" outcome="/index.xhtml" />
-                <p:menuitem value="About Us" outcome="/aboutUs.xhtml" />
-                <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" />
-                <p:menuitem value="Contact Us" outcome="/contactUs.xhtml" />
-                <p:menuitem value="Our Clients" url="/ourClients.xhtml" />
-            </p:menu>
-        </p:sidebar>
+        
+        <ez:stackSideBarComponent />
     </h:body>
 
 </html>

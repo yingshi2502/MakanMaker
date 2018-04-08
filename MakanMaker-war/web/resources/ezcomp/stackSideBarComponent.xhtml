@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--shown when didn't login-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
+    
+    <cc:interface>
+    </cc:interface>
+    <cc:implementation>
+        <style>
+        .bg{
+            margin-top:10px;
+            border-radius: 10px; 
+            background-color: #dcfcba;
+        }
+    </style>
+        <h:form>
+            <div id="panell" style="width:220px;">
+                <p:sidebar id="sidebar2" widgetVar="sidebar2" baseZIndex="10000" style="width: 200px; border-radius: 20px; " >
+                    <h1 style="font-size: 24px; font-weight: bold;margin-top: 20px; color: darkblue">Main Menu</h1>
+                    <br />
+                    <p:menu style="width: 170px; font-size: 15px; margin-top: 10px;">
+                        <p:menuitem value="Home" outcome="/index.xhtml" styleClass="bg"/>
+                        <p:menuitem value="About Us" outcome="/aboutUs.xhtml" styleClass="bg"/>
+                        <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" styleClass="bg"/>
+                        <p:menuitem value="Contact Us" outcome="/contactUs.xhtml" styleClass="bg"/>
+                        <p:menuitem value="Our Clients" url="/ourClients.xhtml" styleClass="bg"/>
+                        <p:menuitem value="Manager Portal" url="/login_manager.xhtml" styleClass="bg" />
+                    </p:menu>
+                    <img src="http://pic.qiantucdn.com/58pic/26/25/19/94f58PICgwa_1024.jpg!qt324" width="180px" style="border-radius: 20px;position: absolute; bottom: 15px; padding: 4px 2px 4px 2px"/>
+                </p:sidebar>
+            </div>
+        </h:form>
+
+        <h:form>
+            <p:stack icon="/images/dock/stack.png" openSpeed="250" closeSpeed="250">
+                <p:menuitem value="Logout" icon="/images/dock/logout.png" actionListener="#{profileManagedBean.logout}" rendered="#{sessionScope['isLogin'] or sessionScope['isLoginManager']}"/>
+                <p:menuitem value="Login" icon="/images/dock/login.png" url='/login_customer.xhtml' rendered="#{!sessionScope['isLogin'] and !sessionScope['isLoginManager']}"/>
+                <p:menuitem value="Contact" icon="/images/dock/email.png" url="/contactUs.xhtml" rendered = "#{sessionScope['isLogin']}"/>
+                <p:menuitem value="List" icon="/images/dock/mealKit.png" url="/managerPages/viewUpdateAllMealKitsManager.xhtml" rendered="#{sessionScope['isLoginManager']}"/>
+                <p:menuitem value="Create" icon="/images/dock/create.png" url="/managerPages/createMealKitManager.xhtml" rendered="#{sessionScope['isLoginManager']}"/>
+                <p:menuitem value="Orders" icon="/images/home3.png" url="/userProfile/myOrders.xhtml" rendered="#{sessionScope['isLogin']}"/>
+                <p:menuitem value="Cart" icon="/images/dock/shoppingCart.png" url="#" rendered="#{sessionScope['isLogin']}"/>
+            </p:stack>
+        </h:form>
+
+    </cc:implementation>
+</html>
