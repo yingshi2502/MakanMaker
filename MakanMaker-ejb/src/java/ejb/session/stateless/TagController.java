@@ -118,4 +118,10 @@ public class TagController implements TagControllerLocal {
         TagEntity tag = (TagEntity) query.getSingleResult();
         return tag.getTagId();
     }
+     
+    @Override
+     public void clearAllTags(Long mealKitId){
+         MealKitEntity mk = em.find(MealKitEntity.class,mealKitId);
+         mk.getTags().clear();
+     }
 }

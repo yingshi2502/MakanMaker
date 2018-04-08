@@ -29,6 +29,8 @@ public interface TagControllerLocal {
 
     public Long retrieveTagIdByTagName(String tagName);
 
+    public void clearAllTags(Long mealKitId);
+
 
     
 }

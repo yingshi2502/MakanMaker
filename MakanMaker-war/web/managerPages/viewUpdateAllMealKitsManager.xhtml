@@ -112,11 +112,11 @@
                     <p:row>
                         <p:column> <p:outputLabel value="Price: $" style="font-weight: bold" />  </p:column>
                         <p:column> 
-                            <h:inputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.price}" styleClass="bg"/> 
+                            <h:inputText value="#{viewUpdateAllMealKitsManagerManagedBean.updatePrice}" styleClass="bg"/> 
                         </p:column>
                         <p:column> <p:outputLabel value="Nutrition: " style="font-weight: bold" /> </p:column>
                         <p:column> 
-                            <h:inputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.nutrition}" styleClass="bg" >
+                            <h:inputText value="#{viewUpdateAllMealKitsManagerManagedBean.updateNu}" styleClass="bg" >
                                 <f:validateRegex pattern="[0-9]+" />
                             </h:inputText>
                         </p:column>
@@ -142,7 +142,7 @@
                         <p:column colspan="3"> 
                             <p:selectCheckboxMenu id="multiple" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.tags}" label="Tags" multiple="true" converter="tagConverter"
                               filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
-                                <f:selectItems value="#{viewUpdateAllMealKitsManagerManagedBean.tags}" />
+                                <f:selectItems value="#{viewUpdateAllMealKitsManagerManagedBean.selectItems}"/>
                             </p:selectCheckboxMenu>
                         </p:column>
                     </p:row>
@@ -165,9 +165,6 @@
                             <p:inputTextarea value='#{viewUpdateAllMealKitsManagerManagedBean.ingredientsForUpdate}'
                                 style="width: 400px"
                                 />
-<!--                            <p:dataList value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.ingredients}" var="ingredient"  type="ordered" emptyMessage="No ingredients recorded yet." style="padding: 4px 4px 2px 2px">
-                                #{ingredient.toString()}
-                            </p:dataList>-->
                         </p:column>
                     </p:row>
                     
@@ -187,13 +184,14 @@
                             <p:selectBooleanButton id="isAvailable" 
                                                    value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.isAvailable}" 
                                                    onLabel="Yes" offLabel="No" onIcon="ui-icon-check" 
-                                                   offIcon="ui-icon-close" style="width:100px" 
+                                                   offIcon="ui-icon-close" style="width:100px" >
                                 <p:ajax update="growl" />
                             </p:selectBooleanButton>
                         </p:column>
-
+                        <p:column>
+                            <p:commandButton update="@form mealKitForm" actionListener="#{viewUpdateAllMealKitsManagerManagedBean.updateMealKit}" value="Save"/>
+                        </p:column>
                     </p:row>
-
                     
                 </p:panelGrid>
             </p:dialog>
