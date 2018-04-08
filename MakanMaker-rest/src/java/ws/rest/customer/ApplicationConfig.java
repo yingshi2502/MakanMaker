@@ -29,6 +29,7 @@ public class ApplicationConfig extends Application {
         resources.add(ws.rest.customer.CustomerResource.class);
         resources.add(ws.rest.customer.LoginResource.class);
         resources.add(ws.rest.customer.SignupResource.class);
+        resources.add(ws.rest.review.ReviewResource.class);
     }
 
 }

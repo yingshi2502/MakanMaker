@@ -104,6 +104,7 @@ public class MealKitController implements MealKitControllerLocal {
         List<MealKitEntity> mealKits = query.getResultList();
         for (MealKitEntity mk : mealKits) {
             mk.getReviews().size();
+            mk.getTags().size();
         }
         return mealKits;
     }

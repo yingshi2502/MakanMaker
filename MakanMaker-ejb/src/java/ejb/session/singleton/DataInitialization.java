@@ -18,8 +18,6 @@ import entity.TagEntity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -31,7 +29,6 @@ import util.enumeration.OrderStatusEnum;
 import util.enumeration.TagCategoryEnum;
 import util.exception.CustomerExistException;
 import util.exception.GeneralException;
-import util.exception.OrderExistException;
 import util.helperClass.SecurityHelper;
 
 /**
@@ -67,10 +64,6 @@ public class DataInitialization {
             initialize();
         }
         
-        
-//        ManagerEntity manager = new ManagerEntity("manager", "password");
-//        manager.setPassword(SecurityHelper.generatePassword(manager.getPassword()));
-//        em.persist(manager);
     }
 
     private void initialize(){

@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
@@ -40,50 +41,54 @@ public class viewUpdateAllMealKitsManagerManagedBean implements Serializable {
 
     @EJB
     private MealKitControllerLocal mealKitControllerLocal;
-    
+    private String ingredientsForUpdate;
     private MealKitEntity selectedMealKitToUpdate;
     private String inputStringIngredients;
     private String inputStringRecipe;
-    
+    private List<MealKitEntity> filteredMealKits;
     private List<MealKitEntity> mealKits;
     private List<MealKitEntity> droppedMealKits;
     private List<SelectItem> selectItemsTagObject;
     private List<SelectItem> selectItemsTagName;
     private List<String> updatedMealKitSelectedTagNames;
-    private List<String> tagNames;
-
-
+//    private List<String> tagNames;
+    private List<TagEntity> tags;
+    private MealKitEntity selectedMealKitToView;
+    
     public viewUpdateAllMealKitsManagerManagedBean() {
         
         selectedMealKitToUpdate = new MealKitEntity();
         inputStringIngredients = "";
         inputStringRecipe = "";
+        selectedMealKitToView = new MealKitEntity();
+        
         
         mealKits = new ArrayList<>();
         droppedMealKits = new ArrayList<>();
         selectItemsTagObject = new ArrayList<>();
         selectItemsTagName = new ArrayList<>();
         updatedMealKitSelectedTagNames = new ArrayList<>();
-        tagNames = new ArrayList<>();
+        tags = new ArrayList<>();
+//        tagNames = new ArrayList<>();
     }
     
     @PostConstruct
     public void postConstruct()
     {
         mealKits = mealKitControllerLocal.retrieveAllMealKits();
-        List<TagEntity> tags = tagControllerLocal.retrieveAllTags();
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("viewUpdateAllMealKitsManagerManagedBean.tags", tags);
+        tags = tagControllerLocal.retrieveAllTags();
+//        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("viewUpdateAllMealKitsManagerManagedBean.tags", tags);
         setInputStringIngredients("");
         setInputStringRecipe("");
         selectedMealKitToUpdate.setPrice(0.00);
-
-        for(TagEntity tag:tags)
-        {
-            getSelectItemsTagObject().add(new SelectItem(tag, tag.getName()));
-            getSelectItemsTagName().add(new SelectItem(tag.getTagCategory().toString(), tag.getTagCategory().toString()));
-        }
+        selectedMealKitToView.setPrice(0.);
+//        for(TagEntity tag:tags)
+//        {
+//            getSelectItemsTagObject().add(new SelectItem(tag, tag.getName()));
+//            getSelectItemsTagName().add(new SelectItem(tag.getTagCategory().toString(), tag.getTagCategory().toString()));
+//        }
         
-        retrieveAllTagNames();
+//        retrieveAllTagNames();
     }
     
     public void updateMealKit(ActionEvent event)
@@ -116,12 +121,12 @@ public class viewUpdateAllMealKitsManagerManagedBean implements Serializable {
         }
     }
     
-    public void onMKDrop(DragDropEvent ddEvent) {
-        MealKitEntity mk = ((MealKitEntity) ddEvent.getData());
-  
-        droppedMealKits.add(mk);
-        mealKits.remove(mk);
-    }
+//    public void onMKDrop(DragDropEvent ddEvent) {
+//        MealKitEntity mk = ((MealKitEntity) ddEvent.getData());
+//  
+//        droppedMealKits.add(mk);
+//        mealKits.remove(mk);
+//    }
 
     @PreDestroy
     public void preDestroy()
@@ -129,9 +134,53 @@ public class viewUpdateAllMealKitsManagerManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("viewUpdateAllMealKitsManagerManagedBean.tags", null);
         setInputStringIngredients("");
         setInputStringRecipe("");
-        tagNames = new ArrayList<>();
     }
     
+    private String convertTagsToString(List<TagEntity> tags){
+        String s = "";
+        for (TagEntity t: tags){
+            s+= t.getName()+", ";
+        }
+//        s = s.substring(0, s.length()-2);
+        return s;
+    }
+    
+    
+    public boolean filterByTags(Object value, Object filter, Locale locale) {
+
+        String filterText = (filter == null) ? null : filter.toString().trim();
+        if (filterText == null || filterText.isEmpty()) {
+            return true;
+        }
+        if (value == null) {
+            return false;
+        }
+
+        String selectedTag = filter.toString();
+//        System.err.println("***"+selectedTag + " "+filter);
+        
+        List<TagEntity> selectedMKTags = (List<TagEntity>) value;
+//        System.err.println("**** tags size"+selectedMKTags.size());
+        
+        String s = convertTagsToString(selectedMKTags);
+//        System.err.println("****tags "+s);
+//        System.err.println("**** result"+ s.contains(selectedTag));
+        return s.contains(selectedTag);
+    }
+    
+    
+    public String getIngredientsForUpdate(){
+        String longString = "";
+        if (selectedMealKitToUpdate.getIngredients()==null) return "empty";
+        for(String s: selectedMealKitToUpdate.getIngredients()){
+            longString += s+";";
+        }
+        return longString;
+    }
+    
+    public void setIngredientsForUpdate(String s){
+        selectedMealKitToUpdate.setIngredients(Arrays.asList(getIngredientsForUpdate().split(";")));
+    }
     
     
     public void updateMealKitMessage() {
@@ -141,21 +190,21 @@ public class viewUpdateAllMealKitsManagerManagedBean implements Serializable {
     
     public void handleIngredientsText(){
         selectedMealKitToUpdate.setIngredients(Arrays.asList(getInputStringIngredients().split(";")));
-        System.err.println("************viewUpdateAllMealKitsManagerManagedBean.handleIngredientsText(): Ingredients set");
+//        System.err.println("************viewUpdateAllMealKitsManagerManagedBean.handleIngredientsText(): Ingredients set");
     }
     
     public void handleRecipeText(){
         selectedMealKitToUpdate.setIngredients(Arrays.asList(getInputStringRecipe().split(";")));
-        System.err.println("************viewUpdateAllMealKitsManagerManagedBean.handleRecipeText(): Recipe set");
+//        System.err.println("************viewUpdateAllMealKitsManagerManagedBean.handleRecipeText(): Recipe set");
     }
     
-    public List<String> retrieveAllTagNames() {
-        List<TagEntity> tags = tagControllerLocal.retrieveAllTags();
-        for (TagEntity tag: tags) {
-            getTagNames().add(tag.getName());
-        }
-        return getTagNames();
-    }
+//    public List<String> retrieveAllTagNames() {
+//        List<TagEntity> tags = tagControllerLocal.retrieveAllTags();
+//        for (TagEntity tag: tags) {
+//            getTagNames().add(tag.getName());
+//        }
+//        return getTagNames();
+//    }
     
     /**
      * @return the mealKits
@@ -175,7 +224,7 @@ public class viewUpdateAllMealKitsManagerManagedBean implements Serializable {
      * @return the selectedMealKitToUpdate
      */
     public MealKitEntity getSelectedMealKitToUpdate() {
-        System.err.println("*********.getSelectedMealKitToUpdate() was accessed");
+//        System.err.println("*********.getSelectedMealKitToUpdate() was accessed");
         return selectedMealKitToUpdate;
     }
 
@@ -254,19 +303,19 @@ public class viewUpdateAllMealKitsManagerManagedBean implements Serializable {
     }
     
 
-    /**
-     * @return the tagNames
-     */
-    public List<String> getTagNames() {
-        return tagNames;
-    }
-
-    /**
-     * @param tagNames the tagNames to set
-     */
-    public void setTagNames(List<String> tagNames) {
-        this.tagNames = tagNames;
-    }
+//    /**
+//     * @return the tagNames
+//     */
+//    public List<String> getTagNames() {
+//        return tagNames;
+//    }
+//
+//    /**
+//     * @param tagNames the tagNames to set
+//     */
+//    public void setTagNames(List<String> tagNames) {
+//        this.tagNames = tagNames;
+//    }
 
     /**
      * @return the updatedMealKitSelectedTagNames
@@ -280,6 +329,48 @@ public class viewUpdateAllMealKitsManagerManagedBean implements Serializable {
      */
     public void setUpdatedMealKitSelectedTagNames(List<String> updatedMealKitSelectedTagNames) {
         this.updatedMealKitSelectedTagNames = updatedMealKitSelectedTagNames;
+    }
+
+    /**
+     * @return the selectedMealKitToView
+     */
+    public MealKitEntity getSelectedMealKitToView() {
+        return selectedMealKitToView;
+    }
+
+    /**
+     * @param selectedMealKitToView the selectedMealKitToView to set
+     */
+    public void setSelectedMealKitToView(MealKitEntity selectedMealKitToView) {
+        this.selectedMealKitToView = selectedMealKitToView;
+    }
+
+    /**
+     * @return the tags
+     */
+    public List<TagEntity> getTags() {
+        return tags;
+    }
+
+    /**
+     * @param tags the tags to set
+     */
+    public void setTags(List<TagEntity> tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * @return the filteredMealKits
+     */
+    public List<MealKitEntity> getFilteredMealKits() {
+        return filteredMealKits;
+    }
+
+    /**
+     * @param filteredMealKits the filteredMealKits to set
+     */
+    public void setFilteredMealKits(List<MealKitEntity> filteredMealKits) {
+        this.filteredMealKits = filteredMealKits;
     }
 
     
