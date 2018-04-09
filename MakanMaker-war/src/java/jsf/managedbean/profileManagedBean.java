@@ -66,12 +66,21 @@ public class profileManagedBean {
     @PostConstruct
     public void postConstruct() {
         currentCustomer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
-
+        
         try {
             defaultAddress = addressControllerLocal.getDefaultAddressById(currentCustomer.getCustomerId());
         } catch (EmptyListException ex) {
             defaultAddress = null;
             setNoAddress(true);
+        }catch(NullPointerException ex){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please Login", null));
+            try {
+                ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/MakanMaker-war/index.xhtml");
+            } catch (IOException ex1) {
+                Logger.getLogger(WishListManagedBean.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
         try {
             recentOrders = orderControllerLocal.retrieveOrderByCustomerId(currentCustomer.getCustomerId());
@@ -116,6 +125,13 @@ public class profileManagedBean {
     }
     
     public void logout(ActionEvent event) throws IOException {
+        ((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).invalidate();
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("#{request.contextPath}/index.xhtml"); //got problem maybe
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        context.redirect(context.getApplicationContextPath() + "/index.xhtml");
+    }
+    
+    public void logoutManager(ActionEvent event) throws IOException{
         ((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).invalidate();
         //FacesContext.getCurrentInstance().getExternalContext().redirect("#{request.contextPath}/index.xhtml"); //got problem maybe
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();

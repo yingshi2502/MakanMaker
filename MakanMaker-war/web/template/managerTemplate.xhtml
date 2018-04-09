@@ -28,9 +28,9 @@
                 <p:commandButton id="oriButton" widgetVar="oriButton" icon="fa fa-reorder" style="font-size: 20px; width: 40px; height: 40px" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
             </p:layoutUnit>
             
-            <p:layoutUnit size="250" position="west">
+            <p:layoutUnit size="250" position="west" style="margin-left: 20px">
                 
-                <h4>Hello!</h4>
+                <h4>Hello! #{sessionScope['currentManagerEntity'].userName}</h4>
                 <br/>
                 <h:form>
                     <p:menu toggleable="true" style="width:250px;">
@@ -60,7 +60,9 @@
             </p:layoutUnit>
         </p:layout>
 
-        <h:form id="panell" style="width:220px;">
+        <ez:stackSideBarComponent />
+        
+<!--        <h:form id="panell" style="width:220px;">
             <p:sidebar id="sidebar2" widgetVar="sidebar2" baseZIndex="10000" style="width: 200px">
                 <h1 style="font-size: 18px; font-weight: bold;margin-top: 20px">Main Menu</h1>
                 <br />
@@ -73,7 +75,7 @@
                     <p:menuitem value="Manager Portal" url="/login_manager.xhtml" style="margin-top:10px" />
                 </p:menu>
             </p:sidebar>
-        </h:form>
+        </h:form>-->
         
     </h:body>
 

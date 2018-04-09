@@ -1,20 +1,25 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="../template/userProfileTemplate.xhtml"
+                template="../template/userProfileTemplate.xhtml"               
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="header" id="header">
-        <title>My Orders</title>
+    <ui:define name="header">
+        <title>Shopping Cart</title>
     </ui:define>
-    <ui:define name="content" id="content">
-        <h2 style="margin-left: 30px">My Orders</h2>
-        <p:dataTable style="margin-left: 30px; margin-right: 30px" var="order" value="#{myOrderManagedBean.orders}" tableStyle="table-layout: auto">
-            <p:column>
+    <ui:define name="content">
+        <h:form id="scForm">
+            <p:dataTable var="item" value="#{shoppingCartManagedBean.items}" id="mealkits" style="table-layout: auto">
+
+                <f:facet name="header">
+                    Shopping Cart
+                </f:facet>
+
+                <p:column>
                 <p:panelGrid>
-                    <p:row >
+<!--                    <p:row >
                         <p:column style="width:200px">
                             <h:outputText value="Order" />
                             <h:link value=" ##{order.orderNumber}" outcome="orderPage.xhtml?id=#{order.orderId}"/><br />
@@ -29,30 +34,33 @@
                             <div style="border-bottom: 1px solid #AFAFAF;">
                             </div>  
                         </p:column>
-                    </p:row>
+                    </p:row>-->
                     <p:row>
                         <p:column>
-                            <img scr="#{order.mealKit.imagePath}" height="100px" width="100px" />
+                            <img scr="#{item.mk.imagePath}" height="100px" width="100px" />
                         </p:column>
                         <p:column >
-                            <p:link value="#{order.mealKit.name}" outcome="/mealkit/viewMealKitDetails.xhtml?id=#{order.mealKit.mealKitId}"   style="font: 14px;color: #0081c2"/>
+                            <p:link value="#{item.mk.name}" outcome="/mealkit/viewMealKitDetails.xhtml?id=#{order.mealKit.mealKitId}"   style="font: 14px;color: #0081c2"/>
                         </p:column>
 
                         <p:column>
-                            <h:outputText value="Qty: #{order.quantity}" />
+                            <h:outputText value="Qty: #{item.quantity}" />
                         </p:column>
-                        <p:column>
+<!--                        <p:column>
                             <h:outputText value="#{myOrderManagedBean.getLcOrderStatus(order.orderStatus)}" style="font-size: 12px;padding: 4px 12px; display: inline-block; border-radius: 24px; background-color: #eff0f5; max-width: 150px;" />
                         </p:column>
                         <p:column>
                             <h:outputText value="#{myOrderManagedBean.getDeliveryDate(order.deliveryDate)}" />
-                        </p:column>
+                        </p:column>-->
 
                     </p:row>
                 </p:panelGrid>
             </p:column>
 
-        </p:dataTable>
+            </p:dataTable>
+        </h:form>
     </ui:define>
+
 </ui:composition>
+
 

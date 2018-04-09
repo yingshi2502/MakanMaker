@@ -5,10 +5,13 @@
  */
 package ejb.session.stateless;
 
+import entity.CustomerEntity;
 import entity.MealKitEntity;
 import entity.ShoppingCartEntity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,9 +23,13 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class ShoppingCartController implements ShoppingCartControllerLocal {
 
+    @EJB
+    private CustomerControllerLocal customerController;
+
     @PersistenceContext(unitName = "MakanMaker-ejbPU")
     private EntityManager em;
 
+    
     @Override
     public double calculatePriceByCartId(Long shoppingCartId){
         ShoppingCartEntity shoppingCart = em.find(ShoppingCartEntity.class, shoppingCartId);
@@ -42,6 +49,26 @@ public class ShoppingCartController implements ShoppingCartControllerLocal {
         shoppingCart.getMealKits().add(mealKitId);
         shoppingCart.getQuantity().add(qty);
         return shoppingCart;
+    }
+    
+    
+    @Override
+    public boolean checkItemExistence(Long customerId, Long mealKitId){
+        ShoppingCartEntity cart = customerController.retrieveShoppingCartByCustomerId(customerId);
+        
+        return cart.getMealKits().contains(mealKitId);
+    }
+    
+    @Override
+    public List<MealKitEntity> retrieveMealKitsByCustomerId(Long shoppingCartId) {
+        ShoppingCartEntity shoppingCart = em.find(ShoppingCartEntity.class, shoppingCartId);
+        List<MealKitEntity> mealKits = new ArrayList<>(); 
+        System.err.println("*****"+shoppingCart.getMealKits().size());
+        for (Long mkId : shoppingCart.getMealKits()) {
+            System.err.println("**** inside loop"+mkId);
+            mealKits.add(em.find(MealKitEntity.class, mkId));
+        }
+        return mealKits;
     }
     
 }

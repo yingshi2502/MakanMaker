@@ -26,7 +26,6 @@
                     <p:ajax event="eventSelect" listener="#{paymentManagedBean.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
                     <p:ajax event="eventMove" listener="#{paymentManagedBean.onEventMove}" update="messages" />
                     <p:ajax event="eventResize" listener="#{paymentManagedBean.onEventResize}" update="messages" />
-
                 </p:schedule>
             </h:panelGrid>
             <p:button value="Select Payment Method" href="payment.xhtml"/>

@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
-    
+
     <h:head>
         <ui:insert name="header">Header</ui:insert>      
         <h:outputStylesheet library="css" name="default.css" />
@@ -28,40 +28,42 @@
         <p:layout fullPage="true">
             <p:layoutUnit position="north">
                 <ez:headerComponent />      
-                <p:link outcome="/index" style="position: absolute; left: 50px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
-                Makan Maker
+                <p:link outcome="/index" style="position: absolute; left: 50px;top:0px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
+                Ma
             </p:layoutUnit>
             <p:layoutUnit size="245" position="west">
-                <h4>Hello! #{sessionScope['currentCustomerEntity'].fullName}</h4>
+                <br />
+                <h3 style="margin-left: 10px">Hello! #{sessionScope['currentCustomerEntity'].fullName}</h3>
                 <br/>
-                <h:form>
+                <h:form style="margin-left: 10px">
                     <p:menu style="width:220px;">
-                            <p:menuitem value="Manage My Account" outcome="manageMyAccount" icon="fa fa-smile-o" style="font-size: 16px"/>
-                            <p:menuitem value="My Profile" outcome="myProfile" icon="fa fa-user"/>
-                            <p:menuitem value="Address Book" outcome="myAddressBook" icon="fa fa-home" />
-                            <p:menuitem value="My Payment Options" outcome="myPaymentOptions" icon="fa fa-money" />
-                            <p:submenu>
+                        <p:menuitem value="Manage My Account" outcome="manageMyAccount" icon="fa fa-smile-o" style="font-size: 16px"/>
+                        <p:menuitem value="My Profile" outcome="myProfile" icon="fa fa-user"/>
+                        <p:menuitem value="Address Book" outcome="myAddressBook" icon="fa fa-home" />
+                        <p:menuitem value="My Payment Options" outcome="myPaymentOptions" icon="fa fa-money" />
+                        <p:submenu>
+                            <p:menuitem value="Shopping Cart" outcome="viewShoppingCart" icon="fa fa-shopping-cart" style="font-size: 16px"/>
                             <p:menuitem value="My Orders" outcome="myOrders" icon="fa fa-reorder" style="font-size: 16px"/>
-                            </p:submenu>
-                            <p:submenu>
+                        </p:submenu>
+                        <p:submenu>
                             <p:menuitem value="My Wishlist" outcome ="myWishList" icon="fa fa-heart" style="font-size: 16px"/>
-                            </p:submenu>
+                        </p:submenu>
                     </p:menu>
-                    
+
                 </h:form>
             </p:layoutUnit>
-            
+
             <p:layoutUnit position="center" >
-                
+
                 <ui:insert name="content">Content</ui:insert>
-                
+
             </p:layoutUnit>
-            
-           <p:layoutUnit position="south" size="30"  >
+
+            <p:layoutUnit position="south" size="30"  >
                 <p:outputLabel style="font-size: 10px; font-weight: bold" value="&copy; 2018 Makan Maker. All Rights Reserved." />
             </p:layoutUnit>
         </p:layout>
         <ez:stackSideBarComponent />
     </h:body>
-    
+
 </html>

@@ -15,6 +15,7 @@ import entity.CustomerEntity;
 import entity.MealKitEntity;
 import entity.OrderEntity;
 import entity.ShoppingCartEntity;
+import entity.TransactionEntity;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -85,6 +87,7 @@ public class PaymentManagedBean implements Serializable{
     private Date date1;
     private OrderEntity order;
     //connect with order here...
+    private TransactionEntity transaction;
     
     public PaymentManagedBean() {
         allAddresses = new ArrayList<>();
@@ -111,7 +114,7 @@ public class PaymentManagedBean implements Serializable{
         System.err.println("Customer "+currentCustomer.getFullName());
         shoppingCart = customerControllerLocal.retrieveShoppingCartByCustomerId(currentCustomer.getCustomerId());
         //to be deleted after shopping cart code up.
-        shoppingCart = shoppingCartController.addItem(1l, 2, shoppingCart.getShoppingCartId());
+        //shoppingCart = shoppingCartController.addItem(1l, 2, shoppingCart.getShoppingCartId());
         
         System.err.println("Shopping cart belongs to "+shoppingCart.getCustomer().getFullName());
         try {
@@ -174,7 +177,7 @@ public class PaymentManagedBean implements Serializable{
         return selectedAddress;
     }
 
-    public void setSelectedAddress() {
+    public void setSelectedAddress(ActionEvent event) {
         //this.selectedAddress = (AddressEntity) event.getComponent().getAttributes().get("")
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Address added successfully (Product ID: " + selectedAddress.getPostalCode() + ")", null));
         this.setShippingFees();
@@ -359,13 +362,14 @@ public class PaymentManagedBean implements Serializable{
     }
     //for payment
     
-    public void confirmPayment(ActionEvent event){
+    public void confirmPayment() throws IOException{
 //        order = orderControllerLocal.createNewOrder(order, order.getCustomer().getCustomerId(), order.getMealKit().getMealKitId(), order.getAddress().getAddressId());
 //        TransactionEntity transactionEntity = orderControllerLocal.payForOrder(order, paymentType);
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("payConfirmed.xhtml");
     }
     
     private PaymentTypeEnum paymentType;
-    public void tabChange(TabChangeEvent event){
+    /*public void tabChange(TabChangeEvent event){
         String tabId = event.getTab().getId();
         switch(tabId){
             case "0":
@@ -380,6 +384,15 @@ public class PaymentManagedBean implements Serializable{
             default:
                 break;
         }
+    }*/
+
+    public TransactionEntity getTransaction() {
+        return transaction;
     }
+
+    public void setTransaction(TransactionEntity transaction) {
+        this.transaction = transaction;
+    }
+    
     
 }

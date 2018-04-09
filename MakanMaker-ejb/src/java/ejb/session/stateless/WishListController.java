@@ -64,4 +64,9 @@ public class WishListController implements WishListControllerLocal {
         shoppingCart.getMealKits().add(mealKitId);
         shoppingCart.getQuantity().add(1);
     }
+    
+    @Override
+    public boolean checkItemExistence(Long customerId, Long mealKitId){
+        return ((CustomerEntity) em.find(CustomerEntity.class, customerId)).getWishList().contains(mealKitId);
+    }
 }

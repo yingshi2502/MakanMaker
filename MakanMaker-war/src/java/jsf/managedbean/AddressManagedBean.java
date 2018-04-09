@@ -18,6 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
@@ -52,21 +53,24 @@ public class AddressManagedBean implements Serializable{
     public void postConstruct(){
         CustomerEntity currCustomer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
         
-        if (currCustomer==null){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Login!", null));
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/index.xhtml");
-            } catch (IOException ex) {
-                Logger.getLogger(AddressManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         
-        setCustomerId(currCustomer.getCustomerId());
+        
+        
         try {
+            setCustomerId(currCustomer.getCustomerId());
             setAddresses(addressControllerLocal.retrieveAddressByCustomerId(getCustomerId(),false));
             setNoAddress(false);
         } catch (EmptyListException ex) {
             setNoAddress(true);
+        } catch (NullPointerException ex){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please Login", null));
+            try {
+                ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/MakanMaker-war/index.xhtml");
+            } catch (IOException ex1) {
+                Logger.getLogger(WishListManagedBean.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
     }
     

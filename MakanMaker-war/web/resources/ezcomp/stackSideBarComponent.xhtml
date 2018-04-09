@@ -29,7 +29,9 @@
                         <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" styleClass="bg"/>
                         <p:menuitem value="Contact Us" outcome="/contactUs.xhtml" styleClass="bg"/>
                         <p:menuitem value="Our Clients" url="/ourClients.xhtml" styleClass="bg"/>
-                        <p:menuitem value="Manager Portal" url="/login_manager.xhtml" styleClass="bg" />
+                        <p:menuitem value="Manager Portal" url="/login_manager.xhtml" rendered="#{!sessionScope['isLoginManager']}" styleClass="bg" />
+                        <p:menuitem value="Manager Portal" url="/managerPages/viewUpdateAllMealKitsManager.xhtml" rendered="#{sessionScope['isLoginManager']}" styleClass="bg" />
+
                     </p:menu>
                     <img src="http://pic.qiantucdn.com/58pic/26/25/19/94f58PICgwa_1024.jpg!qt324" width="180px" style="border-radius: 20px;position: absolute; bottom: 15px; padding: 4px 2px 4px 2px"/>
                 </p:sidebar>
@@ -44,7 +46,7 @@
                 <p:menuitem value="List" icon="/images/dock/mealKit.png" url="/managerPages/viewUpdateAllMealKitsManager.xhtml" rendered="#{sessionScope['isLoginManager']}"/>
                 <p:menuitem value="Create" icon="/images/dock/create.png" url="/managerPages/createMealKitManager.xhtml" rendered="#{sessionScope['isLoginManager']}"/>
                 <p:menuitem value="Orders" icon="/images/home3.png" url="/userProfile/myOrders.xhtml" rendered="#{sessionScope['isLogin']}"/>
-                <p:menuitem value="Cart" icon="/images/dock/shoppingCart.png" url="#" rendered="#{sessionScope['isLogin']}"/>
+                <p:menuitem value="Cart" icon="/images/dock/shoppingCart.png" url="/userProfile/viewShoppingCart.xhtml" rendered="#{sessionScope['isLogin']}"/>
             </p:stack>
         </h:form>
 

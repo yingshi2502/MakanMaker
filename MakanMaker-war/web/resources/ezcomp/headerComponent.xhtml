@@ -12,9 +12,10 @@
 
     <cc:implementation>
 
-        <p:link outcome="/index" style="position: absolute; left: 50px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
+        <p:link outcome="/index" style="position: absolute; left: 50px; top:0px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
+        <h2 style="position: absolute;left: 100px">Makan Maker</h2>
         <h:form style="text-align: right">
-        <p:commandButton id="oriButton" widgetVar="oriButton" icon="fa fa-reorder"  style="font-size: 20px; width: 40px; height: 40px" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
+        <p:commandButton id="oriButton" widgetVar="oriButton" icon="fa fa-reorder"  style="position: absolute; left: 0px;font-size: 20px; width: 40px; height: 40px" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
             <p:menubar style="position: absolute; right: 10px; background-color: lightblue; height: 25px;width: 880px" >
                 <f:facet name="options">
                     <div style="margin-right: 250px">
@@ -28,7 +29,7 @@
                     <p:separator />
                     <p:menuitem value="Log out" icon="fa fa-sign-out" actionListener="#{profileManagedBean.logout}"/>
                 </p:submenu>
-                <p:menuitem style="position: absolute; right: 5px;" icon='fa fa-shopping-cart'/>
+                <p:menuitem style="position: absolute; right: 5px;" icon='fa fa-shopping-cart' url="/userProfile/viewShoppingCart.xhtml"/>
 
             </p:menubar>
 

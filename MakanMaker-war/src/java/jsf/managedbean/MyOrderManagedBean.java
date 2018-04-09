@@ -13,6 +13,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import entity.OrderEntity;
 import entity.ReviewEntity;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import util.exception.EmptyListException;
 import util.enumeration.OrderStatusEnum;
@@ -52,6 +55,13 @@ public class MyOrderManagedBean implements Serializable{
             setOrders(orderControllerLocal.retrieveOrderByCustomerId(currCustomer.getCustomerId()));
         } catch (EmptyListException ex) {
             setNoOrder(true);
+        }catch (NullPointerException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please Login", null));
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/MakanMaker-war/index.xhtml");
+            } catch (IOException ex1) {
+                Logger.getLogger(WishListManagedBean.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
     }
 

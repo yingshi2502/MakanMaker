@@ -10,17 +10,18 @@
     <h:head>
         <title>Makan Maker</title>      
         <h:outputStylesheet library="css" name="default.css" />
+        <ui:insert name='header'></ui:insert>
     </h:head>
 
     <h:body>
         <style>
-            .menu .ui-selectonemenu-label { 
-                background: pink;
-                padding-left: 10px
-            }
-            .panel .ui-selectonemenu-list { 
-                background: pink;
-            }
+            /*            .menu .ui-selectonemenu-label { 
+                            background: pink;
+                            padding-left: 10px
+                        }
+                        .panel .ui-selectonemenu-list { 
+                            background: pink;
+                        }*/
             .ui-widget{
                 border:none;
             }
@@ -34,12 +35,37 @@
                 position:relative !important;  
 
             }    
+            .sideBarButton {
+                display: inline-block;
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                cursor: pointer;
+                padding: 10px 20px;
+                border: none;
+                -webkit-border-radius: 27px;
+                border-radius: 27px;
+                font: normal 24px/normal "Lucida Console", Monaco, monospace;
+                color: rgba(255,255,255,0.9);
+                -o-text-overflow: clip;
+                text-overflow: clip;
+                background: #02d1d8;
+                -webkit-box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) ;
+                box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) ;
+                text-shadow: 0px 0px 0 rgba(15,73,168,0.66) ;
+                -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+                -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+                -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+                transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+                width: 100px;
+                height: 70px;
+            }
         </style>
         <p:layout fullPage="true">
             <p:layoutUnit position="north" >
-<!--                <p:commandButton icon="fa fa-reorder" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />-->
-<!--
-                <br></br>-->
+                <!--                <p:commandButton icon="fa fa-reorder" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />-->
+                <!--
+                                <br></br>-->
                 <p:panel rendered="#{sessionScope['isLoginManager']}">          
                     <ez:managerHeaderComponent />
                 </p:panel>
@@ -52,13 +78,18 @@
             </p:layoutUnit>
 
             <p:layoutUnit size="220" position="west">
-                <h4>Hello! #{sessionScope['currentCustomerEntity'].userName}</h4>
+                <h4 style="margin-left: 30px">Hello! #{sessionScope['currentCustomerEntity'].userName}</h4>
                 <h:form>
-
-                    <p:menu style="width:200px;">
+                    <p:panel style="margin-left: 30px">
+                        <p:commandButton styleClass="sideBarButton" style="font-size: 16px" value="Chef's Favourite" oncomplete="PF('chefDialog').show()" />
+                        <br /> <br />
+                        <p:commandButton styleClass="sideBarButton" style="font-size: 16px" value="Today's Special" oncomplete="PF('todayDialog').show()" />
+                    </p:panel>
+                    
+<!--                    <p:menu style="width:200px;">
                         <p:submenu label="Categories">
-                            <p:menuitem value="Chef's Favourite" icon="fa fa-smile-o"/>
-                            <p:menuitem value="Local Delights"  icon="fa fa-user"/>
+                            <p:menuitem value="Chef's Favourite" icon="fa fa-smile-o" oncomplete="PF('chefDialog').show()"/>
+                            <p:menuitem value="Today's Special"  icon="fa fa-user" oncomplete="PF('todayDialog').show()"/>
                             <p:menuitem value="Western Delicacies"  icon="fa fa-home" />
                         </p:submenu>
 
@@ -67,12 +98,12 @@
                             <p:menuitem value="Vegetables" icon="fa fa-eraser"/>
                         </p:submenu>
 
-                    </p:menu>
+                    </p:menu>-->
 
                 </h:form>
             </p:layoutUnit>
 
-            <p:layoutUnit position="center" >
+            <p:layoutUnit position="center" style="margin-right: 30px">
 
                 <ui:insert name="content">Content</ui:insert>
 
@@ -83,7 +114,7 @@
             </p:layoutUnit>
 
         </p:layout>
-        
+
         <ez:stackSideBarComponent />
     </h:body>
 

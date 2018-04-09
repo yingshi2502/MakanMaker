@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!--session attributes: manager/customer, then direct to different bean methods of mb-->
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/defaultTemplate.xhtml"
+                template="./template/homePagesTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
@@ -14,9 +14,10 @@
         <ez:LoginComponent />
     </ui:define>
     <ui:define name="content" id="content">
-        <p:panel style="margin-left: 100px; margin-top: 60px;border: captiontext solid 2px; width: 500px">
+        
+        <p:panelGrid columns="2">
 
-
+           <p:panel style="margin-left: 100px; margin-top: 60px;border: captiontext solid 2px; width: 500px">
             <h2 style="margin-left:10px">Management Portal :: Login</h2>
             <!--        <p:growl id="growl" showDetail="true" sticky="true" />         -->
             <h:form id="contentLoginForm" style="margin-left: 20px">
@@ -32,9 +33,12 @@
                     <!--                    <p:messages for="password"/>-->
                     <p:commandButton value="Login" actionListener="#{indexBean.staffLogin}" update = "growl" icon="ui-icon-key" style="width:160px;height: 35px; font-size: 18px"/> 
                 </p:panelGrid>
-
             </h:form>
         </p:panel>
+            <img src="http://img0.pconline.com.cn/pconline/1412/03/5821717_201305211131572621_thumb.jpg" style="margin-top: 100px"/>
+        </p:panelGrid>
+        
+        
     </ui:define>
 
 

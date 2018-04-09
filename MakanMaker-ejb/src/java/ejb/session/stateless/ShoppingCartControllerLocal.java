@@ -5,7 +5,9 @@
  */
 package ejb.session.stateless;
 
+import entity.MealKitEntity;
 import entity.ShoppingCartEntity;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -18,5 +20,9 @@ public interface ShoppingCartControllerLocal {
     public double calculatePriceByCartId(Long shoppingCartId);
 
     public ShoppingCartEntity addItem(Long mealKitId, Integer qty, Long cartId);
+
+    public boolean checkItemExistence(Long customerId, Long mealKitId);
+
+    public List<MealKitEntity> retrieveMealKitsByCustomerId(Long shoppingCartId);
     
 }

@@ -13,11 +13,11 @@
         <h:form id="wishlist">
             <p:dataTable id="wishlistTable" style="margin-left: 30px; margin-right: 30px;" var="mealkit" value="#{wishListManagedBean.wishListMealKits}" tableStyle="table-layout: auto">
                 <p:column>
-                    <img scr="#{request.contextPath}/images/mealkit#{mealKit.mealKitId}.png" height="100px" width="100px"/>
+                    <img src="#{mealkit.imagePath}" height="120" />
                 </p:column>
 
                 <p:column >
-                    <h:link value="#{mealkit.name}" />
+                    <h:link value="#{mealkit.name}" outcome="/mealkit/viewMealKitDetails.xhtml?id=#{mealkit.mealKitId}"/>
                 </p:column>
 
                 <p:column>

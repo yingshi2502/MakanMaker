@@ -5,7 +5,48 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-
+    <ui:define name="header">
+        <style>
+            .bg{
+                font-weight: lighter;
+                padding: 6px 6px; 
+                display: inline-block; 
+                border-radius: 10px; 
+                background-color: skyblue; 
+                max-width: 150px;
+            }
+            .enjoy-css {
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                border: none;
+                font: normal 18px/1 Georgia, serif;
+                color: black;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                text-shadow: 4px 0 9px rgba(86,170,255,0.9) ;
+                -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+            }
+            .enjoy-css-green {
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                border: none;
+                font: normal 18px/1 Georgia, serif;
+                color: black;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                text-shadow: 4px 0 9px mediumorchid;
+                -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+            }
+        </style>
+    </ui:define>
     <ui:define name="content">
         <h:form id="mkForm">
             <p:dataGrid var="mealKit" value="#{mealKitManagedBean.mealKits}" columns="3" layout="grid"
@@ -14,8 +55,7 @@
                         rowsPerPageTemplate="3,6,12" style="table-layout: auto"
                         >
                 <f:facet name="header">
-                    <p:outputLabel value="Meal Kits" style="font-size: 22px;font-weight: bold"/>&nbsp;&nbsp;&nbsp;
-                    <!--                    <p:outputLabel value="Browse the tags " style="color: chocolate; font-weight: bold"/>&nbsp;-->
+                    <p:outputLabel value="Meal Kits" style="font-size: 22px;font-weight: bold"/> &nbsp;
                     <p:selectManyButton styleClass="menu" value="#{mealKitManagedBean.selectedTags}">
                         <f:selectItems  value="#{mealKitManagedBean.tags}" var="tag" itemLabel="#{tag.name}" 
                                         itemValue="#{tag.name}" >
@@ -25,21 +65,74 @@
                 </f:facet>
 
                 <p:panel header="#{mealKit.name}" >
-                    <h:panelGrid columns="1" style="width:100%; text-align: center">
-                        <img src="#{mealKit.imagePath}" height="180px" width="320px" align="middle"></img>
-
-                        <h:link  value="#{mealKit.description}" outcome="viewMealKitDetails.xhtml?id=#{mealKit.mealKitId}">      
+                    <h:panelGrid columns="1" style="text-align: center">
+                        <img src="#{mealKit.imagePath}" height="180px" width="300px"></img>
+                        <h:link style="font-weight: lighter; font-size: 14px" value="#{mealKit.description}" outcome="viewMealKitDetails.xhtml?id=#{mealKit.mealKitId}">      
                             <f:attribute  name="mealKitId" value="#{mealKit.mealKitId}" />
                         </h:link>
                     </h:panelGrid>
                 </p:panel>
 
             </p:dataGrid>
-
-
-
-
-
+        </h:form>
+        
+        
+        <h:form id="chefForm">
+            <p:dialog header="Chef's Favourite" widgetVar="chefDialog" id="chefDialog" closable="true" showEffect="fade">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column colspan="2"><p:outputLabel value='#{mealKitManagedBean.chefMealKit.name}' style="font-size: 16px; color: cornflowerblue; font-weight: bold"/></p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                           <img src="#{mealKitManagedBean.chefMealKit.imagePath}" /> 
+                        </p:column>
+                    </p:row>   
+                   
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:outputLabel value="#{mealKitManagedBean.chefMealKit.description}" styleClass="enjoy-css" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                        Difficulty: <p:outputLabel value="#{mealKitManagedBean.chefMealKit.difficulty}" styleClass="bg"/>
+                        </p:column>
+                        <p:column>
+                            <p:link outcome="viewMealKitDetails.xhtml?id=#{mealKitManagedBean.chefMealKit.mealKitId}"><img style="margin-right: 5px" src="https://i.pinimg.com/originals/35/ee/11/35ee1115e8182fe861ed926dac54e185.jpg" width="60px" height="60px"/></p:link>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        
+        <h:form id="todayForm">
+            <p:dialog header="Today's Special" widgetVar="todayDialog" id="todayDialog" closable="true" showEffect="fade">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column colspan="2"><p:outputLabel value='#{mealKitManagedBean.todayMealKit.name}' style="font-size: 16px; color: darkviolet; font-weight: bold"/></p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                           <img src="#{mealKitManagedBean.todayMealKit.imagePath}" /> 
+                        </p:column>
+                    </p:row>   
+                   
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:outputLabel value="#{mealKitManagedBean.todayMealKit.description}" styleClass="enjoy-css-green" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            Difficulty: <p:outputLabel value="#{mealKitManagedBean.todayMealKit.difficulty}" styleClass="bg" />
+                        </p:column>
+                        <p:column>
+                            <p:link outcome="viewMealKitDetails.xhtml?id=#{mealKitManagedBean.todayMealKit.mealKitId}"><img style="margin-right: 5px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4hDxvLTybVrrzy6uKpdV4SRBRgL6SaZat2V3f4cmZYx0Ajqsm" width="60px" height="60px"/></p:link>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:dialog>
         </h:form>
     </ui:define>
 

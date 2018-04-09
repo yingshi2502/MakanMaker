@@ -23,5 +23,8 @@ public interface WishListControllerLocal {
     public void deleteFromWishList(Long customerId, Long mealKitId);
 
     public void addWishListItemToShoppingCart(Long customerId, Long mealKitId);
+
+    public boolean checkItemExistence(Long customerId, Long mealKitId);
+
     
 }
