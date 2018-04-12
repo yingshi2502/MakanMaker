@@ -50,6 +50,7 @@ public class profileManagedBean {
     private CustomerEntity currentCustomer;
     private CustomerEntity customerToUpdate;
     private AddressEntity defaultAddress;
+    
     private boolean noAddress;
     private boolean noOrder;
     private List<OrderEntity> recentOrders;

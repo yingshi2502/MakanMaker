@@ -96,14 +96,14 @@
                     <p:outputLabel />
 
                     <p:outputLabel value="Subtotal" style="font-size: 14px"/>
-                    <p:outputLabel value="SGD #{orderDetailManagedBean.subtotal}" style="font-size: 14px;text-align: right;"/>
+                    <p:outputLabel value="SGD #{orderDetailManagedBean.currOrder.totalAmount}" style="font-size: 14px;text-align: right;"/>
 
                     <p:outputLabel value="Shipping Fee" style="font-size: 14px"/>
                     <p:outputLabel value="SGD #{orderDetailManagedBean.currOrder.shippingFee}" style="font-size: 14px;text-align: right;"/>
                     <p:outputLabel /><hr />
 
                     <p:outputLabel value="Total" style="font-size: 15px"/>
-                    <p:outputLabel value="SGD #{orderDetailManagedBean.currOrder.totalAmount}" style="font-size: 15px;text-align: right;"/>
+                    <p:outputLabel value="SGD #{orderDetailManagedBean.currOrder.totalAmount + orderDetailManagedBean.currOrder.shippingFee}" style="font-size: 15px;text-align: right;"/>
                 </p:panelGrid>
 
             </p:column>

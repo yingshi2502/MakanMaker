@@ -13,11 +13,13 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import entity.OrderEntity;
 import entity.ReviewEntity;
+import entity.TagEntity;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -42,10 +44,15 @@ public class MyOrderManagedBean implements Serializable{
     private List<OrderEntity> orders;
     private boolean noOrder;
     private ReviewEntity newReview;
-
+    private List<String> statusNames;
+    private List<OrderEntity> filteredOrders;
+    
     public MyOrderManagedBean() {
         orders = new ArrayList<>();
         newReview = new ReviewEntity();
+        
+        statusNames = new ArrayList<>();
+        
     }
 
     @PostConstruct
@@ -63,6 +70,23 @@ public class MyOrderManagedBean implements Serializable{
                 Logger.getLogger(WishListManagedBean.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
+        makeStatusName();
+    }
+    
+    public boolean filterByStatus(Object value, Object filter, Locale locale) {
+
+        String filterText = (filter == null) ? null : filter.toString().trim();
+        if (filterText == null || filterText.isEmpty()) {
+            return true;
+        }
+        if (value == null) {
+            return false;
+        }
+
+        String selected = filter.toString();
+
+        String orderStatus = ((OrderStatusEnum) value).name();
+        return selected.compareToIgnoreCase(orderStatus) == 0;
     }
 
     public String getDeliveryDate(Date date){
@@ -80,10 +104,21 @@ public class MyOrderManagedBean implements Serializable{
                 return "Delivered";
             case "RECEIVED":
                 return "Reveived";
+            case "UNPAID" :
+                return "Unpaid";
             default:
                 return "Refunded";
 
         }
+    }
+    
+    private void makeStatusName() {
+        statusNames.add("Preparing");
+        statusNames.add("Deliverying");
+        statusNames.add("Delivered");
+        statusNames.add("Reveived");
+        statusNames.add("Refunded");
+        statusNames.add("Unpaid");
     }
 
     /**
@@ -127,6 +162,34 @@ public class MyOrderManagedBean implements Serializable{
      */
     public void setNewReview(ReviewEntity newReview) {
         this.newReview = newReview;
+    }
+
+    /**
+     * @return the statusNames
+     */
+    public List<String> getStatusNames() {
+        return statusNames;
+    }
+
+    /**
+     * @param statusNames the statusNames to set
+     */
+    public void setStatusNames(List<String> statusNames) {
+        this.statusNames = statusNames;
+    }
+
+    /**
+     * @return the filteredOrders
+     */
+    public List<OrderEntity> getFilteredOrders() {
+        return filteredOrders;
+    }
+
+    /**
+     * @param filteredOrders the filteredOrders to set
+     */
+    public void setFilteredOrders(List<OrderEntity> filteredOrders) {
+        this.filteredOrders = filteredOrders;
     }
 
 }

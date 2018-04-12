@@ -73,10 +73,10 @@
                     </p:dataTable>                            
 
                     <br></br>
-                    <p:commandButton id="addToCart" value="Add to Cart" icon="fa fa-shopping-cart" update="addToCart" actionListener="#{viewMealKitDetailsManagedBean.addToShoppingCart}" disabled="#{viewMealKitDetailsManagedBean.addedToCart}"/>
+                    <p:commandButton id="addToCart" value="Add to Cart" icon="fa fa-shopping-cart" update="@form mainDetailForm" actionListener="#{viewMealKitDetailsManagedBean.addToShoppingCart}" disabled="#{viewMealKitDetailsManagedBean.addedToCart}"/>
                     <p:tooltip for="addToCart" value="It's already in your shopping cart" showEffect="slide" hideEffect="slide" style="background-color:#FFFFCC;border:1px dotted #000000;" rendered="#{viewMealKitDetailsManagedBean.addedToCart}"/>
                     &nbsp;&nbsp;
-                    <p:commandButton id="addToWishlist" value="Add to Wishlist" icon="fa fa-star" update="addToWishlist" actionListener="#{viewMealKitDetailsManagedBean.addToWishlist}" disabled="#{viewMealKitDetailsManagedBean.addedToWishlist}"/>
+                    <p:commandButton id="addToWishlist" value="Add to Wishlist" icon="fa fa-star" update="@form mainDetailForm" actionListener="#{viewMealKitDetailsManagedBean.addToWishlist}" disabled="#{viewMealKitDetailsManagedBean.addedToWishlist}"/>
                     <p:tooltip for="addToWishlist" value="It's already in your wishlist" showEffect="slide" hideEffect="slide" style="background-color:#FFFFCC;border:1px dotted #000000;" rendered="#{viewMealKitDetailsManagedBean.addedToWishlist}"/>
 
                 </p:column> 

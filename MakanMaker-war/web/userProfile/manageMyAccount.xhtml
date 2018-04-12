@@ -36,20 +36,20 @@
                             <h:outputText style="font-size: 20px" value="| " />
                             <p:link value="EDIT" outcome="myAddressBook"/>  
                         </h:panelGrid>
-                        <p:panelGrid rendered="#{profileManagedBean.noAddress}" columns='2' >
+                        <p:panelGrid rendered="#{!profileManagedBean.noAddress}" columns='2' >
                             <h:panelGrid columns="1" style="text-align: center; ">
                                 <div>
                                     <h:outputText style="font-size:12px; font: lighter;color: #AFAFAF" value="DEFAULT SHIPPING ADDRESS" />
                                     <h:outputText style="font-size:14px;" value="#{profileManagedBean.defaultAddress.fullName}" />
-                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.addressLine1}" />
-                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.addressLine2}" />
-                                    <h:outputText style="font-size:12px" value=" #{profileManagedBean.defaultAddress.country} #{profileManagedBean.defaultAddress.postalCode}" />
+                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.floorUnit}" />
+                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.streetAddress}" />
+                                    <h:outputText style="font-size:12px" value="Singapore [#{profileManagedBean.defaultAddress.postalCode}]" />
                                     <h:outputText style="font-size:12px" value='#{profileManagedBean.defaultAddress.phoneNumber}' />
                                 </div>
                             </h:panelGrid>
                             <h:panelGrid columns="1" style="text-align: center">
                                 <div>
-                                    <h:outputText style="font-size:12px; font: lighter;color: #AFAFAF" value="DEFAULT SHIPPING ADDRESS" />
+                                    <h:outputText style="font-size:12px; font: lighter;color: #AFAFAF" value="DEFAULT BILLING ADDRESS" />
                                     <h:outputText style="font-size:14px;" value="Receiver's Name" />
                                     <h:outputText style="font-size:12px;" value="Address Line 1" />
                                     <h:outputText style="font-size:12px;" value="Address Line 2" />
@@ -58,7 +58,7 @@
                                 </div>
                             </h:panelGrid>
                         </p:panelGrid>
-                        <p:panelGrid rendered="#{!profileManagedBean.noAddress}" >
+                        <p:panelGrid rendered="#{profileManagedBean.noAddress}" >
                             No Address Added Yet
                         </p:panelGrid>
                     </h:panelGrid>
