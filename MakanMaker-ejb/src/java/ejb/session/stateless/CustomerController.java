@@ -137,12 +137,17 @@ public class CustomerController implements CustomerControllerLocal {
     }
     
     @Override
-    public ShoppingCartEntity retrieveShoppingCartByCustomerId(Long customerId) {
+    public ShoppingCartEntity retrieveShoppingCartByCustomerId(Long customerId, boolean detach) {
         CustomerEntity customer = em.find(CustomerEntity.class, customerId);
-
+        
         if (customer != null) {
             customer.getShoppingCart().getCustomer();
-            return customer.getShoppingCart();
+            ShoppingCartEntity cart = customer.getShoppingCart();
+            if (detach){
+                em.detach(cart);
+                cart.setCustomer(null);
+            }
+            return cart;
         } else {
             return null;
         }

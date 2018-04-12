@@ -78,12 +78,12 @@ public class SelectScheduleManagedBean implements Serializable{
         setAddressToShip((AddressEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("selectedAddressEntity"));
         
         System.err.println("Customer "+currentCustomer.getFullName());
-        shoppingCart = customerController.retrieveShoppingCartByCustomerId(currentCustomer.getCustomerId());
+        shoppingCart = customerController.retrieveShoppingCartByCustomerId(currentCustomer.getCustomerId(),false);
         
         //to be deleted after shopping cart code up.
         //System.err.println("shopping cart "+shoppingCart.sho);
         //shoppingCart = shoppingCartController.addItem(1l, 2, shoppingCart.getShoppingCartId());
-        mealKits = shoppingCartController.retrieveMealKitsByCustomerId(shoppingCart.getShoppingCartId());
+        mealKits = shoppingCartController.retrieveMealKitsByCustomerId(shoppingCart.getShoppingCartId(),false);
         System.err.println("****address "+addressToShip.getPostalCode());
         int i=0;
         List<Integer> qs = shoppingCart.getQuantity();

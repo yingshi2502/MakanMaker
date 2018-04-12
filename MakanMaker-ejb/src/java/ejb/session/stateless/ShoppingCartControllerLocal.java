@@ -23,7 +23,7 @@ public interface ShoppingCartControllerLocal {
 
     public boolean checkItemExistence(Long customerId, Long mealKitId);
 
-    public List<MealKitEntity> retrieveMealKitsByCustomerId(Long shoppingCartId);
+    public List<MealKitEntity> retrieveMealKitsByCustomerId(Long shoppingCartId, boolean detach);
 
     public void clearShoppingCart(Long customerId);
 

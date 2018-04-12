@@ -53,33 +53,39 @@ public class ShoppingCartController implements ShoppingCartControllerLocal {
     
     @Override
     public void updateQty(Long customerId, Long mealKitId, Integer newQty){
-        ShoppingCartEntity cart = customerController.retrieveShoppingCartByCustomerId(customerId);
+        ShoppingCartEntity cart = customerController.retrieveShoppingCartByCustomerId(customerId,false);
         int i = cart.getMealKits().indexOf(mealKitId);
         cart.getQuantity().set(i, newQty);
     }
     
     @Override
     public boolean checkItemExistence(Long customerId, Long mealKitId){
-        ShoppingCartEntity cart = customerController.retrieveShoppingCartByCustomerId(customerId);
-        
+        ShoppingCartEntity cart = customerController.retrieveShoppingCartByCustomerId(customerId,false);
         return cart.getMealKits().contains(mealKitId);
     }
     
     @Override
-    public List<MealKitEntity> retrieveMealKitsByCustomerId(Long shoppingCartId) {
+    public List<MealKitEntity> retrieveMealKitsByCustomerId(Long shoppingCartId, boolean detach) {
         ShoppingCartEntity shoppingCart = em.find(ShoppingCartEntity.class, shoppingCartId);
         List<MealKitEntity> mealKits = new ArrayList<>(); 
         System.err.println("*****"+shoppingCart.getMealKits().size());
         for (Long mkId : shoppingCart.getMealKits()) {
             System.err.println("**** inside loop"+mkId);
-            mealKits.add(em.find(MealKitEntity.class, mkId));
+            MealKitEntity mk = em.find(MealKitEntity.class, mkId);
+            if (detach){
+                em.detach(mk);
+                mk.setOrders(null);
+                mk.setReviews(null);
+                mk.setTags(null);
+            }
+            mealKits.add(mk);
         }
         return mealKits;
     }
     
     @Override
     public void deleteIten(Long customerId, Long mealKitId){
-        ShoppingCartEntity cart = customerController.retrieveShoppingCartByCustomerId(customerId);
+        ShoppingCartEntity cart = customerController.retrieveShoppingCartByCustomerId(customerId,false);
         int i = cart.getMealKits().indexOf(mealKitId);
         cart.getMealKits().remove(i);
         cart.getQuantity().remove(i);
@@ -92,7 +98,7 @@ public class ShoppingCartController implements ShoppingCartControllerLocal {
     @Override
     public void clearShoppingCart(Long customerId){
         System.err.println("*****Clear Shopping Cart");
-        ShoppingCartEntity spc = customerController.retrieveShoppingCartByCustomerId(customerId);
+        ShoppingCartEntity spc = customerController.retrieveShoppingCartByCustomerId(customerId,false);
         spc.getMealKits().clear();
         spc.getQuantity().clear();
     }

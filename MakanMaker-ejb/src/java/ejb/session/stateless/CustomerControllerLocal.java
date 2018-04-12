@@ -40,6 +40,6 @@ public interface CustomerControllerLocal {
 
     public List<OrderEntity> retrieveOrderHistoryByCustomerId(Long customerId);
 
-    public ShoppingCartEntity retrieveShoppingCartByCustomerId(Long customerId);
+    public ShoppingCartEntity retrieveShoppingCartByCustomerId(Long customerId, boolean detach);
     
 }

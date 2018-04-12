@@ -89,7 +89,7 @@ public class DataInitialization {
     
     
     private void createOrder(){
-        String code = "akasdgflasbfj";
+        String code = "";
 //        OrderEntity order = new OrderEntity(Double.NaN, deliveryDate, purchasingDate, OrderStatusEnum.PREPARING, code, code, Double.MIN_VALUE)
         Date now = new Date();        
         Date date = new Date(now.getYear(), now.getMonth(), now.getDate()+1, 23, 59, 59);

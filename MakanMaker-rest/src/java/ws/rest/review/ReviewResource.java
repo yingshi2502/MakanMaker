@@ -6,6 +6,9 @@
 package ws.rest.review;
 
 import ejb.session.stateless.ReviewControllerLocal;
+import entity.ReviewEntity;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
@@ -13,6 +16,7 @@ import javax.naming.NamingException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,6 +25,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import rest.datamodel.customer.MsgResponse;
+import rest.datamodel.customer.RetrieveReviewsResponse;
+import util.exception.EmptyListException;
 
 /**
  * REST Web Service
@@ -68,6 +74,26 @@ public class ReviewResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rsp).build();
         }
 
+    }
+    
+    @Path("retrieve")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveReviews(@QueryParam("mealKitId") String mkId){
+        RetrieveReviewsResponse rsp;
+        List<ReviewEntity> reviews = new ArrayList<>();
+        try {
+            reviews = reviewController.retrieveReviewByMealKitId(Long.parseLong(mkId),true);
+            rsp = new RetrieveReviewsResponse(reviews, "Retrieve Succeed", true);
+            return Response.status(Response.Status.OK).entity(rsp).build();
+        }catch(NumberFormatException ex){
+            rsp = new RetrieveReviewsResponse(null, "Request format wrong", false);
+            return Response.status(Response.Status.BAD_REQUEST).entity(rsp).build();
+        } 
+        catch (EmptyListException ex) {
+            return Response.status(Response.Status.OK).entity(new RetrieveReviewsResponse(reviews, "No Reviews Added yet", true)).build();
+        }
     }
 
     private ReviewControllerLocal lookupReviewControllerLocal() {
