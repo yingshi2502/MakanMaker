@@ -130,14 +130,6 @@ public class profileManagedBean {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         context.redirect(context.getApplicationContextPath() + "/index.xhtml");
     }
-    
-    public void logoutManager(ActionEvent event) throws IOException{
-        ((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).invalidate();
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("#{request.contextPath}/index.xhtml"); //got problem maybe
-        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        context.redirect(context.getApplicationContextPath() + "/index.xhtml");
-    }
-
     /**
      * @return the currentCustomer
      */

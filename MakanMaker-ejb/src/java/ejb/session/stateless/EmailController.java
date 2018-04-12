@@ -35,6 +35,14 @@ public class EmailController implements EmailControllerLocal {
         Boolean result = emailManager.emailPlaceOrder(order, fromEmailAddress, toEmailAddress);
         return new AsyncResult<>(result);
     }
+    
+    @Asynchronous
+    @Override
+    public Future<Boolean> emailSummary(double totalAmount, String fromEmailAddress, String toEmailAddress) throws InterruptedException {
+        System.err.println("***Going to send emailWonNotification Async");
+        Boolean result = emailManager.emailSummary(totalAmount, fromEmailAddress, toEmailAddress);
+        return new AsyncResult<>(result);
+    }
 
     /**
      *

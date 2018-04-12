@@ -20,5 +20,7 @@ public interface EmailControllerLocal {
 
     public Future<Boolean> emailSendContactUs(String fromEmailAddress, String subject, String content, String typeOfQuestion,boolean isMMAcct) throws InterruptedException;
 
+    public Future<Boolean> emailSummary(double totalAmount, String fromEmailAddress, String toEmailAddress) throws InterruptedException;
+
     
 }

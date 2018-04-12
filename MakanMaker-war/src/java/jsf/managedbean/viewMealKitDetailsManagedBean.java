@@ -121,8 +121,11 @@ public class viewMealKitDetailsManagedBean implements Serializable {
         }else{
             if (quantityOfServing == 0){
             FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please select a quantity.", null));
+            }else{
+                shoppingCartController.addItem(mealKitId, quantityOfServing, currCustomer.getShoppingCart().getShoppingCartId());
+                FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Added to shopping Cart!", null));
+
             }
-            shoppingCartController.addItem(mealKitId, quantityOfServing, currCustomer.getShoppingCart().getShoppingCartId());
         }
         
     }
@@ -132,6 +135,8 @@ public class viewMealKitDetailsManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR, "You haven't logged in ", null));
         }else{
             wishListControllerLocal.addToWishList(currCustomer.getCustomerId(), mealKitId);
+            FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Added to Wish list!", null));
+
        } 
     }
     

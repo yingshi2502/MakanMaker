@@ -6,6 +6,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,11 +54,14 @@ public class AddressEntity implements Serializable {
     @JoinColumn(nullable = false)
     private CustomerEntity customer;
     
+    private double shippingFee;
+    
     @OneToMany(mappedBy = "address")
     private List<OrderEntity> orders;
     
     public AddressEntity(){
         this.isDeleted = false;
+        setShippingFee();
     }
 
     public AddressEntity(String postalCode, String streetAddress, String floorUnit, Boolean isDefaultShipping, Boolean isDefaultBilling, String phoneNumber, String fullName) {
@@ -69,8 +73,18 @@ public class AddressEntity implements Serializable {
         this.phoneNumber = phoneNumber;
         this.fullName = fullName;
         this.isDeleted = false;
+       setShippingFee();
+
     }
 
+    private void setShippingFee(){
+        Random r = new Random();
+        int fD = r.nextInt(10);
+        int fR = r.nextInt(10);
+        double f = fD + fR * 0.1;
+        setShippingFee(f);
+    }
+    
     public Boolean getIsDefaultBilling() {
         return isDefaultBilling;
     }
@@ -246,6 +260,20 @@ public class AddressEntity implements Serializable {
      */
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    /**
+     * @return the shippingFee
+     */
+    public double getShippingFee() {
+        return shippingFee;
+    }
+
+    /**
+     * @param shippingFee the shippingFee to set
+     */
+    public void setShippingFee(double shippingFee) {
+        this.shippingFee = shippingFee;
     }
     
 }

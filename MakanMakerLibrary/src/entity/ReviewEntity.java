@@ -43,6 +43,7 @@ public class ReviewEntity implements Serializable {
     
     public ReviewEntity(){
         reviewTime = new Date();
+        rating = 0;
     }
 
     public ReviewEntity(String reviewer, Integer rating, String review) {

@@ -11,54 +11,45 @@
         <link rel="shortcut icon" href="#{resource['images/icon.png']}"/>   
         <ui:insert name="header"></ui:insert>
         <h:outputStylesheet library="css" name="default.css" />
-    </h:head>
-
-    <h:body>
         <style>
             .ui-widget{
                 border:none;
             }
-/*            .ui-panelgrid tr, .ui-panelgrid td{
-                border:none !important;
-                padding-left: 40px !important;
-                padding-right: 40px !important;
-            }
-
-            .ui-panelgrid {
-                position:relative !important;
-
-                .footer{
-                    width:100%;
-                    height:30px;
-                    padding:30px;
-                    bottom:0px;
-                    position:absolute;
-                }    
-            }*/
+            
             body {
                 overflow:hidden;
             }
-
+            
+        
         </style>
+    </h:head>
+
+    <h:body>
+
+
         <script type="text/javascript">
-           
+
         </script>
 
         <p:layout fullPage="true">
             <p:layoutUnit position="north">
+                <p:outputLabel value="Makan Maker" styleClass="menuTitle" style="position: absolute; left: 150px;font-size: 35px"/>
                 <p:panel rendered="#{sessionScope['isLoginManager']}">          
                     <ez:managerHeaderComponent />
+                    <br /><br />
                 </p:panel>
                 <p:panel rendered="#{sessionScope['isLogin']}">          
                     <ez:headerComponent />
+                    <br /><br />
                 </p:panel>
                 <p:panel rendered="#{!sessionScope['isLogin'] and !sessionScope['isLoginManager']}">          
                     <ez:LoginComponent />
                 </p:panel>   
-<!--                <p:commandButton id="oriButton" widgetVar="oriButton" icon="fa fa-reorder" style="font-size: 20px; width: 40px; height: 40px" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />-->
+                <!--                <p:commandButton id="oriButton" widgetVar="oriButton" icon="fa fa-reorder" style="font-size: 20px; width: 40px; height: 40px" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />-->
                 <ez:menuBarComponent />
             </p:layoutUnit>
             <p:layoutUnit position="center" size="800" >
+                <br />
                 <ui:insert name="content">Content</ui:insert>
             </p:layoutUnit>
             <p:layoutUnit position="south" size="30"  >
@@ -66,7 +57,7 @@
             </p:layoutUnit>
 
         </p:layout>
-        
+
         <ez:stackSideBarComponent />
     </h:body>
 

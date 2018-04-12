@@ -21,7 +21,7 @@
             <h2 style="margin-left:10px">Management Portal :: Login</h2>
             <!--        <p:growl id="growl" showDetail="true" sticky="true" />         -->
             <h:form id="contentLoginForm" style="margin-left: 20px">
-                <p:growl id="growl" showDetail="true" sticky="true" />
+                <p:growl id="growl" showDetail="true" showSummary="true" sticky="true" />
                 <p:panelGrid columns="3">
                     <p:outputLabel for="username" value="Username" style="width:200px;height:30px;font-size: 16px" />
                     <p:inputText id="username" value="#{indexBean.managerUsername}" required="true"
@@ -35,7 +35,7 @@
                 </p:panelGrid>
             </h:form>
         </p:panel>
-            <img src="http://img0.pconline.com.cn/pconline/1412/03/5821717_201305211131572621_thumb.jpg" style="margin-top: 100px"/>
+            <img src="#{request.contextPath}/images/managerLogin.jpeg" style="margin-top: 100px; border-radius: 20px"/>
         </p:panelGrid>
         
         

@@ -22,6 +22,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -114,14 +115,17 @@ public class OrderDetailManagedBean implements Serializable {
         newReview = new ReviewEntity();
         
         FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Review Submitted", null));
-
+        
     }
     
     
-    public void submitRefund(ActionEvent event){
+    public void submitRefund(ActionEvent event) throws IOException{
         if (CheckedRefundPolicy){
             orderControllerLocal.refundOrder(currOrder.getOrderId(), refundDescription,getPaymentMethodEnum(refundPaymentMethod));
             canRefund = false;
+            FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "The return is submitted", "Thank you!"));
+            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+            context.redirect(context.getApplicationContextPath() + "/userProfile/orderPage.xhtml?id="+orderId);
         }else{
             FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please accept the refund policy", null));
         }

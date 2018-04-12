@@ -13,59 +13,53 @@
     </ui:define>
     <ui:define name="content" id="content">
         <h3 style="margin-left: 30px">Your Orders</h3>
-        <p:outputLabel value="Total" style="font-size: 15px"/>
-        <p:outputLabel value="#{paymentManagedBean.totalPrice}" style="font-size: 15px;text-align: right;"/>
+        <p:outputLabel value="Total: #{paymentConfirmManagedBean.totalPrice}" style="font-size: 15px"/>
+        <p:outputLabel value="SubTotal: #{paymentConfirmManagedBean.subTotal}" style="font-size: 15px"/>
+        <p:outputLabel value="Total Shipping: #{paymentConfirmManagedBean.deliveryAdd.shippingFee}" style="font-size: 15px"/>
+        
         <br/>
+        
         <h:form id="formConfirmation">
             
-            <p:messages id="messages" redisplay="false" closable="true" />
+            <p:growl id = "growl" showDetail="true" showSummary="true" sticky="true"/>
             
-            <p:dataTable id="dataTableAllOrders" widgetVar="dataTableAllOrders" value="#{paymentManagedBean.currOrders}" var="orderEntity" rowKey="#{orderEntity.orderId}">
+            <p:dataTable id="dataTableAllOrders" widgetVar="dataTableAllOrders" value="#{paymentConfirmManagedBean.orders}" var="order" tableStyle="table-layout: auto">
                 
                 <p:column headerText="Meal Kit">
-                    <h:outputText value="#{orderEntity.mealKit.name}" />
+                    <h:outputText value="#{order.mealKit.name}" />
                 </p:column>
                 <p:column headerText="Quantity">
-                    <h:outputText value="#{orderEntity.quantity}" />
+                    <h:outputText value="#{order.quantity}" />
                 </p:column>
                 <p:column headerText="Cost">
-                    <h:outputText value="#{orderEntity.totalAmount}">
+                    <h:outputText value="#{order.totalAmount}">
                         <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Delivery Date">
-                    <h:outputText value="#{orderEntity.deliveryDate}" />
+                    <h:outputText value="#{order.deliveryDate}" />
                 </p:column>
                 <p:column headerText="Status">
-                    <h:outputText value="#{orderEntity.orderStatus}" />
+                    <h:outputText value="#{order.orderStatus}" />
                 </p:column>
-                <p:column headerText="Transaction Number">
-                    <h:outputText value="#{orderEntity.transaction.transactionId}" />
+                <p:column headerText="Order Number">
+                    <p:link outcome="/userProfile/orderPage.xhtml?id=#{order.orderId}"><h:outputText value="#{order.orderNumber}" /></p:link>
                 </p:column>
-                
+                <p:column headerText="Transaction Code">
+                    <h:outputText value="#{order.transaction.transactionCode}" />
+                </p:column>
             </p:dataTable>
             
+            <p:button value="Continue Shopping" href="/mealkit/viewAllMealkits.xhtml"/>
         </h:form>
         
     </ui:define>
-    <ui:define name="orderSummary">
-        <a href="index.xhtml"><u>Cancel order?</u></a>
-        <br/>
-        <br/>
-        <a href="userProfile/myProfile.xhtml"><u>My account</u></a>
-        <br/>
-        <br/>
-        <a href="index.xhtml"><u>Contact us</u></a>
-        <br/>
-        <br/>
-        <p:button value="Continue Shopping" href="index.xhtml"/>
-    </ui:define>
     <ui:define name="stepsTracker">
         <p:steps activeIndex="3" styleClass="custom" readonly="true">
-            <p:menuitem value="Select Address" url="select_address.xhtml"/>
-            <p:menuitem value="Select Delivery Schedule" url="select_address.xhtml"/>
-            <p:menuitem value="Select Payment" url="payment.xhtml"/>
-            <p:menuitem value="Confirmation" url="payConfirmed.xhtml"/>
+            <p:menuitem value="Select Address" />
+            <p:menuitem value="Select Delivery Schedule" />
+            <p:menuitem value="Select Payment" />
+            <p:menuitem value="Confirmation" />
         </p:steps>
     </ui:define>
 

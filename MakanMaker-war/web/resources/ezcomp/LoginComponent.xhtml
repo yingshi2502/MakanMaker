@@ -17,13 +17,26 @@
                     <p:commandButton id="oriButton" style="position: absolute; left: 10px;font-size: 20px; width: 40px; height: 40px" widgetVar="oriButton" icon="fa fa-reorder" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
                     <p:link outcome="/index" style="position: absolute; left: 50px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
                     <ezcomp:searchBar />
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <p:button value="Login" outcome="/login_customer" icon="fa fa-sign-in" />&nbsp;&nbsp;&nbsp;&nbsp;    
-                    <p:button value="Sign Up" outcome="/signup" icon="fa fa-user-plus" />  
-                 
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <p:button styleClass="buttonLogin" value="Login" outcome="/login_customer" icon="fa fa-sign-in" />&nbsp;&nbsp;&nbsp;&nbsp;    
+                    <p:button styleClass="buttonLogin" value="Sign Up" outcome="/signup" icon="fa fa-user-plus" />  
                 </h:form>
             </h:panelGroup>
         </div>
-
+        <style>
+            .buttonLogin {
+                display: inline-block;
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                cursor: pointer;
+                padding: 3px 3px;
+                border: 1px solid #018dc4;
+                -webkit-border-radius: 3px;
+                border-radius: 3px;
+                font: normal 17px/normal "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+                color: rgba(0,0,0,0.89);
+            }
+        </style>
     </cc:implementation>
 </html>

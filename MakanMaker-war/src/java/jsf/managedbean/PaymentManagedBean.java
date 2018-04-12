@@ -5,130 +5,125 @@
  */
 package jsf.managedbean;
 
-import ejb.session.stateless.AddressControllerLocal;
 import ejb.session.stateless.CustomerControllerLocal;
-import ejb.session.stateless.MealKitControllerLocal;
+import ejb.session.stateless.EmailControllerLocal;
 import ejb.session.stateless.OrderControllerLocal;
 import ejb.session.stateless.ShoppingCartControllerLocal;
 import entity.AddressEntity;
 import entity.CustomerEntity;
-import entity.MealKitEntity;
 import entity.OrderEntity;
 import entity.ShoppingCartEntity;
 import entity.TransactionEntity;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.ExternalContext;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
-import org.primefaces.event.ScheduleEntryMoveEvent;
-import org.primefaces.event.ScheduleEntryResizeEvent;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.TabChangeEvent;
-import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.DefaultScheduleEvent;
-import org.primefaces.model.DefaultScheduleModel;
-import org.primefaces.model.ScheduleEvent;
-import org.primefaces.model.ScheduleModel;
 import util.enumeration.PaymentTypeEnum;
-import util.exception.MealKitNotFoundException;
+import util.exception.OrderNotFoundException;
+import util.helperClass.CreditCardWrapper;
 
-/**
- *
- * @author Summer
- */
+
 @Named(value = "paymentManagedBean")
 @ViewScoped
-public class PaymentManagedBean implements Serializable{
+public class PaymentManagedBean implements Serializable {
+
+    @EJB(name = "EmailControllerLocal")
+    private EmailControllerLocal emailControllerLocal;
 
     @EJB(name = "ShoppingCartControllerLocal")
     private ShoppingCartControllerLocal shoppingCartController;
 
-    @EJB(name = "MealKitControllerLocal")
-    private MealKitControllerLocal mealKitController;
-
-    /**
-     * Creates a new instance of PaymentManagedBean
-     */
     
-    @EJB(name = "CustomerControllerLocal")
-    private CustomerControllerLocal customerControllerLocal;
 
     @EJB(name = "OrderControllerLocal")
     private OrderControllerLocal orderControllerLocal;
 
-    @EJB(name = "AddressControllerLocal")
-    private AddressControllerLocal addressControllerLocal;
-    
-    
 
     private CustomerEntity currentCustomer;
-    private List<AddressEntity> allAddresses;
-    private AddressEntity defaultAddress;
-    private AddressEntity selectedAddress;
-    private List<OrderEntity> currOrders;
-    private ShoppingCartEntity shoppingCart;
-    private double subTotalPrice;
-    private double shippingFees;
-    private double totalPrice;
-    private ScheduleModel eventModel;
-    private ScheduleEvent event;
-    private Date date1;
-    private OrderEntity order;
-    //connect with order here...
-    private TransactionEntity transaction;
+
+    private List<OrderEntity> orders;
+    private List<TransactionEntity> transactions;
     
+    private ShoppingCartEntity shoppingCart;
+    private AddressEntity deliveryAdd;
+    private CreditCardWrapper creditCard;
+
     public PaymentManagedBean() {
-        allAddresses = new ArrayList<>();
-        currOrders = new ArrayList<>();
-        eventModel = new DefaultScheduleModel();
-        event = new DefaultScheduleEvent();
+        orders = new ArrayList<>();
+        creditCard = new CreditCardWrapper();
+        transactions = new ArrayList<>();
+        System.err.println("***** Constructor payment management bean********");
+
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        System.err.println("***** payment management bean********");
+        this.setCurrentCustomer((CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity"));
+        this.setDeliveryAdd((AddressEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("selectedAddressEntity"));
+        this.setOrders((List<OrderEntity>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("newOrders"));
+        System.err.println("***** order size in payment management bean"+orders.size());
+    }
+
+    
+    public void paypal(ActionEvent event){
+        System.err.println("****PAY PAL");
+
+        payForOrder(PaymentTypeEnum.PAYPAL);
     }
     
-    @PostConstruct
-    public void postConstruct(){
-        setAllAddresses();
-        
-        this.setCurrentCustomer((CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity"));
-        
-        if (currentCustomer==null){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Login!", null));
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/index.xhtml");
-            } catch (IOException ex) {
-                Logger.getLogger(AddressManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        System.err.println("Customer "+currentCustomer.getFullName());
-        shoppingCart = customerControllerLocal.retrieveShoppingCartByCustomerId(currentCustomer.getCustomerId());
-        //to be deleted after shopping cart code up.
-        //shoppingCart = shoppingCartController.addItem(1l, 2, shoppingCart.getShoppingCartId());
-        
-        System.err.println("Shopping cart belongs to "+shoppingCart.getCustomer().getFullName());
+    public void creditCard(ActionEvent event){
+        payForOrder(PaymentTypeEnum.CREDITCARD);
+    }
+    
+    public void cash(ActionEvent event){
+        payForOrder(PaymentTypeEnum.CASHONDELIVERY);
+    }
+    
+    private void payForOrder(PaymentTypeEnum pt){
         try {
-            setCurrOrders(shoppingCart);
-            System.err.println(currOrders.size());
-        } catch (MealKitNotFoundException ex) {
+            System.err.println("****just in Pay For Order "+pt);
+            TransactionEntity t;
+            List<OrderEntity> newStatusOrders = new ArrayList<>();
+            for (OrderEntity o: orders){
+                System.err.println("***Pay for order "+pt+" "+o.getOrderId());
+                try {
+                    t = orderControllerLocal.payForOrder(o.getOrderId(), pt);
+                    System.err.println("******transaction"+t.getTransactionCode());
+                    newStatusOrders.add(orderControllerLocal.retrieveOrderById(o.getOrderId()));
+                    getTransactions().add(t);
+                    
+                } catch (OrderNotFoundException ex) {
+                }
+            }
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace("newOrders", null);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("paidOrders", newStatusOrders);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("transactions", getTransactions());
+            System.err.println("****just before clear shopping cart "+currentCustomer.getCustomerId());
+            shoppingCartController.clearShoppingCart(currentCustomer.getCustomerId());
+            emailControllerLocal.emailSummary(shoppingCartController.calculatePriceByCartId(currentCustomer.getShoppingCart().getShoppingCartId()), "MakanMaker@mm.com", currentCustomer.getEmail());
+            redirect();
+        } catch (InterruptedException ex) {
             Logger.getLogger(PaymentManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setSubTotalPrice();
-        this.shippingFees=0;
-        this.setTotalPrice();
-        System.err.println("Price:"+totalPrice);
-        eventModel.addEvent(new DefaultScheduleEvent("MealKit1",today6Pm(),nextDay9Am()));
-        
+    }
+    private void redirect(){
+        try {
+            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+            context.redirect(context.getApplicationContextPath() + "/checkout/payConfirmed.xhtml");
+        } catch (IOException ex) {
+            System.err.println("***** redirect failed");
+            Logger.getLogger(PaymentManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public CustomerEntity getCurrentCustomer() {
@@ -141,258 +136,77 @@ public class PaymentManagedBean implements Serializable{
     public void setCurrentCustomer(CustomerEntity currentCustomer) {
         this.currentCustomer = currentCustomer;
     }
-    
-    //for select address
-    
-    public AddressEntity getDefaultAddress() {
-        return defaultAddress;
+
+    /**
+     * @return the orders
+     */
+    public List<OrderEntity> getOrders() {
+        return orders;
     }
 
     /**
-     * @param defaultAddress the defaultAddress to set
+     * @param orders the orders to set
      */
-    public void setDefaultAddress(AddressEntity defaultAddress) {
-        this.defaultAddress = defaultAddress;
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
     }
 
-    public List<AddressEntity> getAllAddresses() {
-        return allAddresses;
-    }
-
-//    public void setAllAddresses(List<AddressEntity> allAddresses) {
-//        this.allAddresses = allAddresses;
-//    }
-    
-    public void setAllAddresses() {
-        AddressEntity address1 = new AddressEntity("111111", "Siglap", "07-12",Boolean.TRUE, Boolean.FALSE, "","");
-        AddressEntity address2 = new AddressEntity("222222", "NUS", "07-12",Boolean.FALSE, Boolean.FALSE, "","");
-        AddressEntity address3 = new AddressEntity("333333", "NTU", "07-12",Boolean.FALSE, Boolean.FALSE, "","");
-        this.allAddresses.add(address1);
-        this.allAddresses.add(address2);
-        this.allAddresses.add(address3);
-        
-    }
-
-    public AddressEntity getSelectedAddress() {
-        return selectedAddress;
-    }
-
-    public void setSelectedAddress(ActionEvent event) {
-        //this.selectedAddress = (AddressEntity) event.getComponent().getAttributes().get("")
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Address added successfully (Product ID: " + selectedAddress.getPostalCode() + ")", null));
-        this.setShippingFees();
-        System.err.println("address id = "+selectedAddress.getAddressId());
-    }
-    
-    public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Address Selected", ((AddressEntity) event.getObject()).getPostalCode());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
- 
-    public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("Address Unselected", ((AddressEntity) event.getObject()).getPostalCode());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    //for order summary
-    
-    public List<OrderEntity> getCurrOrders() {
-        return currOrders;
-    }
-
-    public void setCurrOrders(ShoppingCartEntity shoppingCart) throws MealKitNotFoundException {
-        
-        int size = shoppingCart.getMealKits().size();
-        double unitPrice;
-        MealKitEntity mealKit;
-        int mealKitQuantity;
-        
-        System.err.println("shoppingCar"+size);
-        for (int i=0; i<size; i++){
-            System.err.println("&&&&&inside"+i);
-            mealKit = mealKitController.retrieveMealKitById(shoppingCart.getMealKits().get(i));
-            mealKitQuantity = shoppingCart.getQuantity().get(i);
-            unitPrice = mealKit.getPrice();
-            OrderEntity newOrder = new OrderEntity();
-            newOrder.setCustomer(currentCustomer);
-            newOrder.setMealKit(mealKit);
-            newOrder.setQuantity(mealKitQuantity);
-            newOrder.setTotalAmount(unitPrice*mealKitQuantity);
-            currOrders.add(newOrder);
-        }
-    }
-    
-    public OrderEntity getOrder() {
-        return order;
-    }
-
-    public void setOrder(OrderEntity order) {
-        this.order = order;
-    }
-    
-
-    public double getSubTotalPrice() {
-        return subTotalPrice;
-    }
-
-    public void setSubTotalPrice() {
-        int size = currOrders.size();
-        double price =0;
-        for (int i=0; i<size; i++){
-            price += currOrders.get(i).getTotalAmount();
-        }
-        this.subTotalPrice = price;
-    }
-
-    public double getShippingFees() {
-        return shippingFees;
-    }
-
-    public void setShippingFees() {
-        this.shippingFees = ((int) (Math.random()*10));
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice() {
-        this.totalPrice = this.shippingFees+this.subTotalPrice;
-    }
-
+    /**
+     * @return the shoppingCart
+     */
     public ShoppingCartEntity getShoppingCart() {
         return shoppingCart;
     }
 
+    /**
+     * @param shoppingCart the shoppingCart to set
+     */
     public void setShoppingCart(ShoppingCartEntity shoppingCart) {
         this.shoppingCart = shoppingCart;
     }
-    
-    // for select schedule
-    
-    public ScheduleModel getEventModel() {
-        return eventModel;
-    }
-    
-    public void setEventModel(ScheduleModel eventModel) {
-        this.eventModel = eventModel;
-    }
-     //test
-    public Calendar today() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
- 
-        return calendar;
-    }
-    //test
-    private Date today6Pm() {
-        Calendar t = (Calendar) today().clone(); 
-        t.set(Calendar.AM_PM, Calendar.PM);
-        t.set(Calendar.HOUR, 6);
-         
-        return t.getTime();
-    }
-     //test
-    private Date nextDay9Am() {
-        Calendar t = (Calendar) today().clone();
-        t.set(Calendar.AM_PM, Calendar.AM);
-        t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
-        t.set(Calendar.HOUR, 9);
-         
-        return t.getTime();
-    }
-     
-    public ScheduleEvent getEvent() {
-        return event;
-    }
- 
-    public void setEvent(ScheduleEvent event) {
-        this.event = event;
-    }
-    
-    public void addEvent(ActionEvent actionEvent) {
-        
-        if(event.getId() == null)
-            eventModel.addEvent(event);
-        else
-            eventModel.updateEvent(event);
-        
-        event = new DefaultScheduleEvent();
-        order.setDeliveryDate(event.getStartDate());
-        
-    }
-     
-    public void onEventSelect(SelectEvent selectEvent) {
-        event = (ScheduleEvent) selectEvent.getObject();
-    }
-     
-    public void onDateSelect(SelectEvent selectEvent) {
-        event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
-    }
-     
-    public void onEventMove(ScheduleEntryMoveEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta());
-         
-        addMessage(message);
-    }
-     
-    public void onEventResize(ScheduleEntryResizeEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
-         
-        addMessage(message);
-    }
-     
-    private void addMessage(FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-    
-    public void onOrderSelected(){
-        //event. = order.getMealKit().getName();
-        ScheduleEvent newEvent = new DefaultScheduleEvent("asdfadsf", event.getStartDate(), event.getEndDate());
-        event = newEvent;
-        System.err.println("a##### on order select AJAX");
+
+
+    /**
+     * @return the deliveryAdd
+     */
+    public AddressEntity getDeliveryAdd() {
+        return deliveryAdd;
     }
 
-    public Date getDate1() {
-        return date1;
+    /**
+     * @param deliveryAdd the deliveryAdd to set
+     */
+    public void setDeliveryAdd(AddressEntity deliveryAdd) {
+        this.deliveryAdd = deliveryAdd;
     }
 
-    public void setDate1(Date date1) {
-        this.date1 = date1;
-    }
-    //for payment
-    
-    public void confirmPayment() throws IOException{
-//        order = orderControllerLocal.createNewOrder(order, order.getCustomer().getCustomerId(), order.getMealKit().getMealKitId(), order.getAddress().getAddressId());
-//        TransactionEntity transactionEntity = orderControllerLocal.payForOrder(order, paymentType);
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("payConfirmed.xhtml");
-    }
-    
-    private PaymentTypeEnum paymentType;
-    /*public void tabChange(TabChangeEvent event){
-        String tabId = event.getTab().getId();
-        switch(tabId){
-            case "0":
-                paymentType = PaymentTypeEnum.PAYPAL;
-                break;
-            case "1":
-                paymentType = PaymentTypeEnum.CREDITCARD;
-                break;
-            case "2":
-                paymentType = PaymentTypeEnum.CASHONDELIVERY;
-                break;
-            default:
-                break;
-        }
-    }*/
-
-    public TransactionEntity getTransaction() {
-        return transaction;
+    /**
+     * @return the creditCard
+     */
+    public CreditCardWrapper getCreditCard() {
+        return creditCard;
     }
 
-    public void setTransaction(TransactionEntity transaction) {
-        this.transaction = transaction;
+    /**
+     * @param creditCard the creditCard to set
+     */
+    public void setCreditCard(CreditCardWrapper creditCard) {
+        this.creditCard = creditCard;
     }
-    
-    
+
+    /**
+     * @return the transactions
+     */
+    public List<TransactionEntity> getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * @param transactions the transactions to set
+     */
+    public void setTransactions(List<TransactionEntity> transactions) {
+        this.transactions = transactions;
+    }
+
+
 }

@@ -14,13 +14,13 @@
     </ui:define>
     <ui:define name="content" id="content">
         <h:form id="form">
-            <p:dataTable id="addressSelect" var="address" value="#{paymentManagedBean.allAddresses}" selection="#{paymentManagedBean.selectedAddress}" rowKey="#{address.postalCode}">
+            <p:dataTable id="addressSelect" var="address" value="#{selectAddressManagedBean.allAddresses}" selection="#{selectAddressManagedBean.selectedAddress}" rowKey="#{address.postalCode}">
                 <f:facet name="header">
                     Select Address
                 </f:facet>
-                <p:ajax event="rowSelect" listener="#{paymentManagedBean.setSelectedAddress}" update=":form:selectedAddress"/>
+<!--                <p:ajax event="rowSelect" listener="#{selectAddressManagedBean.setSelectedAddress}" update="@form form"/>-->
                 <!--somehow the selected address is not updated-->
-                <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                <p:column selectionMode="single" style="width:16px;text-align:center" />
                 <p:column headerText="Street Address">
                     <h:outputText value="#{address.streetAddress}" />
                 </p:column>
@@ -31,14 +31,21 @@
                     <h:outputText value="#{address.postalCode}" />
                 </p:column>
                 <f:facet name="footer">
-                    <p:commandButton icon="ui-icon-plus" value="Select this address" actionListener="#{paymentManagedBean.setSelectedAddress}" onclick="PF('dialogAddressSelected').show()">
+                    <p:commandButton icon="ui-icon-plus" value="Select this address" 
+                                     process="@form form"
+                                     oncomplete="PF('dialogAddressSelected').show()"
+                                     update="@form selectionConfirm"
+                                     >
                     </p:commandButton>
                 </f:facet>
             </p:dataTable>
-            <p:button value="Select Delivery Schedule" href="select_schedule.xhtml" disabled="#{paymentManagedBean.selectedAddress.addressId eq null}"/>
+            <p:commandButton value="Select Delivery Schedule" disabled="#{selectAddressManagedBean.selectedAddress.addressId eq null}" actionListener="#{selectAddressManagedBean.putSelectedAddress}" />
+            
+        </h:form>
+        <h:form id="selectionConfirm">
             <p:dialog id ="dialogAddressSelected" widgetVar="dialogAddressSelected">
-                Order will be delivered to <h:outputLabel id="selectedAddress" value="#{paymentManagedBean.selectedAddress.addressId}"/> :)
-                <!-- show the confirmed address-->
+                Order will be delivered to ID : <h:outputLabel id="selectedAddress" value="#{selectAddressManagedBean.selectedAddress.addressId}"/> :)
+                Shipping Fee: #{selectAddressManagedBean.selectedAddress.shippingFee}
             </p:dialog>
         </h:form>
     </ui:define>
@@ -50,24 +57,6 @@
             <p:menuitem value="Confirmation" url="#"/>
         </p:steps>
     </ui:define>
-    <ui:define name="orderSummary">
-        <p:column id="orderSummary">
-            <p:panelGrid columns="2" style="width: 300px; height: 260px; border: #FFFFCC solid 2px;" >
-                <p:outputLabel value="Total Summary" style="font-size: 15px"/>
-                <p:outputLabel />
 
-                <p:outputLabel value="Subtotal" style="font-size: 12px"/>
-                <p:outputLabel value="#{paymentManagedBean.subTotalPrice}" style="font-size: 12px;text-align: right;"/>
-
-                <p:outputLabel value="Shipping Fee" style="font-size: 12px"/>
-                <p:outputLabel value="#{paymentManagedBean.shippingFees}" style="font-size: 12px;text-align: right;"/>
-                <p:outputLabel /><hr />
-
-                <p:outputLabel value="Total" style="font-size: 15px"/>
-                <p:outputLabel value="#{paymentManagedBean.totalPrice}" style="font-size: 15px;text-align: right;"/>
-            </p:panelGrid>
-
-        </p:column>
-    </ui:define>
 </ui:composition>
 

@@ -8,56 +8,54 @@
 
     <ui:define name="header">
         <title>Shopping Cart</title>
+        <style>
+            /*            .ui-datatable * {
+                            border : 0px !important;
+                        }*/
+            .test .ui-datatable {
+                border : 0px !important;
+            }
+        </style>
     </ui:define>
     <ui:define name="content">
         <h:form id="scForm">
-            <p:dataTable var="item" value="#{shoppingCartManagedBean.items}" id="mealkits" style="table-layout: auto">
-
+            <p:dataTable var="item" value="#{shoppingCartManagedBean.items}" id="mealkits" style="table-layout: auto;" styleClass="test">
                 <f:facet name="header">
                     Shopping Cart
+                    <p:link value="Check Out" outcome="/checkout/orderSummary.xhtml" disabled="#{shoppingCartManagedBean.noItem}"/>
                 </f:facet>
-
                 <p:column>
-                <p:panelGrid>
-<!--                    <p:row >
-                        <p:column style="width:200px">
-                            <h:outputText value="Order" />
-                            <h:link value=" ##{order.orderNumber}" outcome="orderPage.xhtml?id=#{order.orderId}"/><br />
-                            <h:outputText value="Placed on 10 Mar 2018" />
-                        </p:column>
-                        <p:column>
-                            <p:link style="position: absolute;right: 50px" value="Manage" outcome="orderPage.xhtml?id=#{order.orderId}" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column colspan="5">
-                            <div style="border-bottom: 1px solid #AFAFAF;">
-                            </div>  
-                        </p:column>
-                    </p:row>-->
-                    <p:row>
-                        <p:column>
-                            <img scr="#{item.mk.imagePath}" height="100px" width="100px" />
-                        </p:column>
-                        <p:column >
-                            <p:link value="#{item.mk.name}" outcome="/mealkit/viewMealKitDetails.xhtml?id=#{order.mealKit.mealKitId}"   style="font: 14px;color: #0081c2"/>
-                        </p:column>
-
-                        <p:column>
-                            <h:outputText value="Qty: #{item.quantity}" />
-                        </p:column>
-<!--                        <p:column>
-                            <h:outputText value="#{myOrderManagedBean.getLcOrderStatus(order.orderStatus)}" style="font-size: 12px;padding: 4px 12px; display: inline-block; border-radius: 24px; background-color: #eff0f5; max-width: 150px;" />
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="#{myOrderManagedBean.getDeliveryDate(order.deliveryDate)}" />
-                        </p:column>-->
-
-                    </p:row>
-                </p:panelGrid>
-            </p:column>
-
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                <img scr="#{item.mk.imagePath}" height="100px" width="100px" />
+                            </p:column>
+                            <p:column >
+                                <p:link value="#{item.mk.name}" outcome="/mealkit/viewMealKitDetails.xhtml?id=#{item.mk.mealKitId}"   style="font: 14px;color: #0081c2"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="Unit: $ #{item.mk.price}" />
+                            </p:column>
+                            <p:column>
+                                Qty: 
+                                <p:spinner value="#{item.quantity}" size="4" valueChangeListener="#{shoppingCartManagedBean.updateSpinnerQty}">
+                                    <p:ajax event="change" listener="#{shoppingCartManagedBean.changeQtyAjax(item)}" update="@form scForm" />
+                                </p:spinner>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton icon="fa fa-trash-o" actionListener="#{shoppingCartManagedBean.deleteItem}" update="@all scForm">
+                                    <f:attribute name="itemToDelete" value="#{item}" />
+                                    <p:confirm header="Confirmation" message="Are you sure you want to delete this meal kit from shopping cart?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:column>
             </p:dataTable>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
         </h:form>
     </ui:define>
 

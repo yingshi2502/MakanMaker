@@ -17,11 +17,29 @@
             border-radius: 10px; 
             background-color: #dcfcba;
         }
+        .menuTitle{
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+            border: none;
+            margin-top: 20px;
+            font: normal 40px/1 "Trebuchet MS", Helvetica, sans-serif;
+            color: black;
+            text-align: center;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            letter-spacing: 2px;
+            text-shadow: 4px 0 9px rgba(83,252,83,0.7) ;
+        }
     </style>
         <h:form>
             <div id="panell" style="width:220px;">
                 <p:sidebar id="sidebar2" widgetVar="sidebar2" baseZIndex="10000" style="width: 200px; border-radius: 20px; " >
-                    <h1 style="font-size: 24px; font-weight: bold;margin-top: 20px; color: darkblue">Main Menu</h1>
+                    <p:panelGrid columns="2">
+                        <img src="#{request.contextPath}/images/icon.png" height="50px" />
+                        <p:outputLabel styleClass="menuTitle" value="Makan Maker" style="font-size: 24px;margin-top: 20px"/>
+                    
+                    </p:panelGrid>
                     <br />
                     <p:menu style="width: 170px; font-size: 15px; margin-top: 10px;">
                         <p:menuitem value="Home" outcome="/index.xhtml" styleClass="bg"/>
@@ -40,11 +58,12 @@
 
         <h:form>
             <p:stack icon="/images/dock/stack.png" openSpeed="250" closeSpeed="250">
-                <p:menuitem value="Logout" icon="/images/dock/logout.png" actionListener="#{profileManagedBean.logout}" rendered="#{sessionScope['isLogin'] or sessionScope['isLoginManager']}"/>
+                <p:menuitem value="Logout" icon="/images/dock/logout.png" actionListener="#{indexBean.logout}" rendered="#{sessionScope['isLogin'] or sessionScope['isLoginManager']}"/>
                 <p:menuitem value="Login" icon="/images/dock/login.png" url='/login_customer.xhtml' rendered="#{!sessionScope['isLogin'] and !sessionScope['isLoginManager']}"/>
                 <p:menuitem value="Contact" icon="/images/dock/email.png" url="/contactUs.xhtml" rendered = "#{sessionScope['isLogin']}"/>
                 <p:menuitem value="List" icon="/images/dock/mealKit.png" url="/managerPages/viewUpdateAllMealKitsManager.xhtml" rendered="#{sessionScope['isLoginManager']}"/>
                 <p:menuitem value="Create" icon="/images/dock/create.png" url="/managerPages/createMealKitManager.xhtml" rendered="#{sessionScope['isLoginManager']}"/>
+                <p:menuitem value="MealKits" icon="/images/dock/mealKit.png" url="/mealkit/viewAllMealkits.xhtml" rendered="#{sessionScope['isLogin']}"/>
                 <p:menuitem value="Orders" icon="/images/home3.png" url="/userProfile/myOrders.xhtml" rendered="#{sessionScope['isLogin']}"/>
                 <p:menuitem value="Cart" icon="/images/dock/shoppingCart.png" url="/userProfile/viewShoppingCart.xhtml" rendered="#{sessionScope['isLogin']}"/>
             </p:stack>

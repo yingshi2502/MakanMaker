@@ -31,38 +31,33 @@ import util.exception.GeneralException;
  */
 @Named
 @ViewScoped
-public class AddressManagedBean implements Serializable{
+public class AddressManagedBean implements Serializable {
 
     @EJB(name = "AddressControllerLocal")
     private AddressControllerLocal addressControllerLocal;
 
-    
     private List<AddressEntity> addresses;
     private boolean noAddress;
     private AddressEntity newAddress;
     private Long customerId;
     private AddressEntity addressToUpdate;
 
-    
     public AddressManagedBean() {
         addresses = new ArrayList<>();
         newAddress = new AddressEntity();
     }
-    
+
     @PostConstruct
-    public void postConstruct(){
+    public void postConstruct() {
         CustomerEntity currCustomer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
-        
-        
-        
-        
+
         try {
             setCustomerId(currCustomer.getCustomerId());
-            setAddresses(addressControllerLocal.retrieveAddressByCustomerId(getCustomerId(),false));
+            setAddresses(addressControllerLocal.retrieveAddressByCustomerId(getCustomerId(), false));
             setNoAddress(false);
         } catch (EmptyListException ex) {
             setNoAddress(true);
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please Login", null));
             try {
                 ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
@@ -73,53 +68,40 @@ public class AddressManagedBean implements Serializable{
             }
         }
     }
-    
-    
-    public void viewAddressDetails(ActionEvent event) throws IOException
-    {
-        Long productIdToView = (Long)event.getComponent().getAttributes().get("customerId");
+
+    public void viewAddressDetails(ActionEvent event) throws IOException {
+        Long productIdToView = (Long) event.getComponent().getAttributes().get("customerId");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("productIdToView", productIdToView);
         FacesContext.getCurrentInstance().getExternalContext().redirect("viewProductDetails.xhtml");
     }
-    
-    
-    
-    public void createNewAddress(ActionEvent event)
-    {
-        try
-        {
-            AddressEntity ae = addressControllerLocal.createNewAddress(newAddress, customerId,false);
-            setAddresses(addressControllerLocal.retrieveAddressByCustomerId(getCustomerId(),false));
+
+    public void createNewAddress(ActionEvent event) {
+        try {
+            AddressEntity ae = addressControllerLocal.createNewAddress(newAddress, customerId, false);
+            setAddresses(addressControllerLocal.retrieveAddressByCustomerId(getCustomerId(), false));
             setNewAddress(new AddressEntity());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New address created successfully", null));
         } catch (GeneralException ex) {
         } catch (EmptyListException ex) {
         }
     }
-    
-    
-    
-    public void updateAddress(ActionEvent event)
-    {
-            addressControllerLocal.updateAddress(getAddressToUpdate());
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product updated successfully", null));
-        
+    public void updateAddress(ActionEvent event) {
+        addressControllerLocal.updateAddress(getAddressToUpdate());
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product updated successfully", null));
+
     }
-    
-    
-    
-    public void deleteAddress(ActionEvent event)
-    {
+
+    public void deleteAddress(ActionEvent event) {
         try {
-            AddressEntity addressToDelete = (AddressEntity)event.getComponent().getAttributes().get("addressToDelete");
-            
-            
+            AddressEntity addressToDelete = (AddressEntity) event.getComponent().getAttributes().get("addressToDelete");
+
             addressControllerLocal.deleteAddress(addressToDelete.getAddressId());
-            addresses = addressControllerLocal.retrieveAddressByCustomerId(customerId,false);
-//
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product deleted successfully", null));
-//        
+            addresses = addressControllerLocal.retrieveAddressByCustomerId(customerId, false);
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product deleted successfully", null));
+
         } catch (GeneralException ex) {
             Logger.getLogger(AddressManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EmptyListException ex) {

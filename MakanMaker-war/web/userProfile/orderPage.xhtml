@@ -19,7 +19,7 @@
                 <p:panelGrid>
                     <p:outputLabel value="Order ##{orderDetailManagedBean.currOrder.orderNumber}" style="font-size: 15px; font-weight: bold" /><br />
                     <p:outputLabel value="Placed on #{orderDetailManagedBean.purchasingDate}" style="font-size: 10px;"/>
-                    <p:commandButton value="Confirm Receipt" actionListener="#{orderDetailManagedBean.confirmReceipt}" style="position: absolute; top: 80px;right: 40px" >
+                    <p:commandButton value="Confirm Receipt" actionListener="#{orderDetailManagedBean.confirmReceipt}" style="position: absolute; top: 80px;right: 40px" rendered="#{orderDetailManagedBean.currOrderStatusStep ne 3}">
                     <p:confirm header="Confirmation" message="Sure to confirm the receipt?" icon="ui-icon-alert" />
                 </p:commandButton>
                 </p:panelGrid> 
@@ -198,7 +198,7 @@
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:selectBooleanCheckbox value="#{orderDetailManagedBean.checkedRefundPolicy}" >
+                            <p:selectBooleanCheckbox value="#{orderDetailManagedBean.checkedRefundPolicy}" required="true" requiredMessage="Please accept the refund policy" >
                                 <p:ajax event="select" process="formRefundRequest" update="formRefundRequest"/>
                             </p:selectBooleanCheckbox>
                             I have read and accepted the <p:link href="https://nussync.wixsite.com/apr1">Return Policy</p:link> of Makan Maker
@@ -206,7 +206,7 @@
                     </p:row>
                     <p:row>
                         <p:column colspan="3">
-                            <p:commandButton value="Submit" style="width: 70px" update="@form orderDetailForm" actionListener="#{orderDetailManagedBean.submitRefund}" />
+                            <p:commandButton value="Submit" style="width: 70px" update="@all orderDetailForm" actionListener="#{orderDetailManagedBean.submitRefund}" oncomplete="PF('dialogRefundRequest').show();" />
                         </p:column>
                     </p:row>
                 </p:panelGrid>

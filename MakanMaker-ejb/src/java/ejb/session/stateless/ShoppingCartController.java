@@ -51,6 +51,12 @@ public class ShoppingCartController implements ShoppingCartControllerLocal {
         return shoppingCart;
     }
     
+    @Override
+    public void updateQty(Long customerId, Long mealKitId, Integer newQty){
+        ShoppingCartEntity cart = customerController.retrieveShoppingCartByCustomerId(customerId);
+        int i = cart.getMealKits().indexOf(mealKitId);
+        cart.getQuantity().set(i, newQty);
+    }
     
     @Override
     public boolean checkItemExistence(Long customerId, Long mealKitId){
@@ -71,4 +77,23 @@ public class ShoppingCartController implements ShoppingCartControllerLocal {
         return mealKits;
     }
     
+    @Override
+    public void deleteIten(Long customerId, Long mealKitId){
+        ShoppingCartEntity cart = customerController.retrieveShoppingCartByCustomerId(customerId);
+        int i = cart.getMealKits().indexOf(mealKitId);
+        cart.getMealKits().remove(i);
+        cart.getQuantity().remove(i);
+    }
+    
+    /**
+     *
+     * @param customerId
+     */
+    @Override
+    public void clearShoppingCart(Long customerId){
+        System.err.println("*****Clear Shopping Cart");
+        ShoppingCartEntity spc = customerController.retrieveShoppingCartByCustomerId(customerId);
+        spc.getMealKits().clear();
+        spc.getQuantity().clear();
+    }
 }

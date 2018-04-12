@@ -25,7 +25,7 @@
             .ui-widget{
                 border:none;
             }
-            .ui-panelgrid tr, .ui-panelgrid td{
+/*            .ui-panelgrid tr, .ui-panelgrid td{
                 border:none !important;
                 padding-left: 40px !important;
                 padding-right: 40px !important;
@@ -34,7 +34,7 @@
             .ui-panelgrid {
                 position:relative !important;  
 
-            }    
+            }    */
             .sideBarButton {
                 display: inline-block;
                 -webkit-box-sizing: content-box;
@@ -63,9 +63,8 @@
         </style>
         <p:layout fullPage="true">
             <p:layoutUnit position="north" >
-                <!--                <p:commandButton icon="fa fa-reorder" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />-->
-                <!--
-                                <br></br>-->
+                <p:outputLabel value="Makan Maker" styleClass="menuTitle" style="position: absolute; left: 150px;font-size: 35px"/>
+
                 <p:panel rendered="#{sessionScope['isLoginManager']}">          
                     <ez:managerHeaderComponent />
                 </p:panel>
@@ -74,7 +73,8 @@
                 </p:panel>
                 <p:panel rendered="#{!sessionScope['isLogin'] and !sessionScope['isLoginManager']}">          
                     <ez:LoginComponent />
-                </p:panel>               
+                </p:panel>      
+                <br /><br />
             </p:layoutUnit>
 
             <p:layoutUnit size="220" position="west">
@@ -86,26 +86,13 @@
                         <p:commandButton styleClass="sideBarButton" style="font-size: 16px" value="Today's Special" oncomplete="PF('todayDialog').show()" />
                     </p:panel>
                     
-<!--                    <p:menu style="width:200px;">
-                        <p:submenu label="Categories">
-                            <p:menuitem value="Chef's Favourite" icon="fa fa-smile-o" oncomplete="PF('chefDialog').show()"/>
-                            <p:menuitem value="Today's Special"  icon="fa fa-user" oncomplete="PF('todayDialog').show()"/>
-                            <p:menuitem value="Western Delicacies"  icon="fa fa-home" />
-                        </p:submenu>
-
-                        <p:submenu label="Preferences">
-                            <p:menuitem value="Poultry"  icon="fa fa-reorder" style=""/>
-                            <p:menuitem value="Vegetables" icon="fa fa-eraser"/>
-                        </p:submenu>
-
-                    </p:menu>-->
 
                 </h:form>
             </p:layoutUnit>
 
             <p:layoutUnit position="center" style="margin-right: 30px">
 
-                <ui:insert name="content">Content</ui:insert>
+                <ui:insert name="content"></ui:insert>
 
             </p:layoutUnit>
 

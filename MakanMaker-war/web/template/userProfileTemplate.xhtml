@@ -27,12 +27,16 @@
         </style>
         <p:layout fullPage="true">
             <p:layoutUnit position="north">
+                <p:outputLabel value="Makan Maker" styleClass="menuTitle" style="position: absolute; left: 150px;font-size: 35px"/>
+
                 <ez:headerComponent />      
                 <p:link outcome="/index" style="position: absolute; left: 50px;top:0px"><img src="#{request.contextPath}/images/icon.png" height="40px" /></p:link>
-                Ma
+                <br /><br /><br /><br />
+                <ez:menuBarComponent />
+
             </p:layoutUnit>
             <p:layoutUnit size="245" position="west">
-                <br />
+                
                 <h3 style="margin-left: 10px">Hello! #{sessionScope['currentCustomerEntity'].fullName}</h3>
                 <br/>
                 <h:form style="margin-left: 10px">
@@ -54,7 +58,7 @@
             </p:layoutUnit>
 
             <p:layoutUnit position="center" >
-
+                
                 <ui:insert name="content">Content</ui:insert>
 
             </p:layoutUnit>

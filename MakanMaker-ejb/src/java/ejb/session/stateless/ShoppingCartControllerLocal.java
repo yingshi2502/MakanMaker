@@ -24,5 +24,11 @@ public interface ShoppingCartControllerLocal {
     public boolean checkItemExistence(Long customerId, Long mealKitId);
 
     public List<MealKitEntity> retrieveMealKitsByCustomerId(Long shoppingCartId);
+
+    public void clearShoppingCart(Long customerId);
+
+    public void deleteIten(Long customerId, Long mealKitId);
+
+    public void updateQty(Long customerId, Long mealKitId, Integer newQty);
     
 }

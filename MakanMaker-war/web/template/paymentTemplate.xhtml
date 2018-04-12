@@ -25,34 +25,28 @@
                 <ui:insert name="headCompoment"></ui:insert>
             </p:layoutUnit>
 
-            <p:layoutUnit size="200" position="west">
-
-                <h3>Side Bar</h3>
-                <br/>
+            <p:layoutUnit size="200"  position="west">
+                <ui:insert name="listCart"></ui:insert>
 
             </p:layoutUnit>
 
             <p:layoutUnit position="center" >
                 <p:layout>
                     <p:layoutUnit position="center">
-                        <ui:insert name="content">Content</ui:insert>
+                        <ui:insert name="content"></ui:insert>
                     </p:layoutUnit>
-                    <p:layoutUnit position="south" size="100">
-                        <ui:insert name="stepsTracker">Track steps</ui:insert>
+                    <p:layoutUnit position="south" >
+                        <ui:insert name="stepsTracker"></ui:insert>
                     </p:layoutUnit>
-                    <p:layoutUnit position="east" size="300">
-                        <ui:insert name="orderSummary">Order Summary</ui:insert>
+                    <p:layoutUnit position="east" size="150">
+                        <ui:insert name="orderSummary"></ui:insert>
                     </p:layoutUnit>
                 </p:layout>
             </p:layoutUnit>
 
 
-
-
-            <p:layoutUnit position="south" >
-
-                <h6>&copy; 2018 IS3106. All Rights Reserved.</h6>
-
+            <p:layoutUnit position="south" size="30"  >
+                <p:outputLabel style="font-size: 10px; font-weight: bold" value="&copy; 2018 Makan Maker. All Rights Reserved." />
             </p:layoutUnit>
 
 

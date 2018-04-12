@@ -46,7 +46,9 @@
                     </p:column>
 
                     <p:column headerText="Name" style="font-weight: bold; text-align: center" filterBy="#{mealKit.name}" filterMatchMode="contains">
-                        <h:outputText value="#{mealKit.name}" style="font-weight: lighter"/>
+                        <h:link style="font-weight: lighter; font-size: 14px" value="#{mealKit.name}" outcome="viewMealKitDetails.xhtml?id=#{mealKit.mealKitId}" />      
+                           
+                        
                     </p:column>
 
                     <p:column headerText="Price" filterBy="#{mealKit.price}" style="font-weight: bold" filterMatchMode="contains" filterStyle="width:60px">

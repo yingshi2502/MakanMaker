@@ -14,6 +14,7 @@ import entity.TransactionEntity;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -56,7 +57,7 @@ public class OrderController implements OrderControllerLocal {
     public OrderEntity createNewOrder(OrderEntity order, Long customerId, Long mealKitId, Long addressId) {
         
             SimpleDateFormat sf = new SimpleDateFormat("ssmmhhddMMyy");
-            order.setOrderNumber(""+customerId+sf.format((new Date()))+mealKitId);    
+            order.setOrderNumber(customerId+sf.format((new Date()))+mealKitId+order.getOrderNumber());    
             em.persist(order);
             
             CustomerEntity customer = em.find(CustomerEntity.class, customerId);
@@ -102,24 +103,26 @@ public class OrderController implements OrderControllerLocal {
      * @return
      */
     @Override
-    public TransactionEntity payForOrder(OrderEntity order, PaymentTypeEnum paymentType) {
+    public TransactionEntity payForOrder(Long orderId, PaymentTypeEnum paymentType) {
         TransactionEntity newTransaction = new TransactionEntity();
+        OrderEntity order = em.find(OrderEntity.class, orderId);
+        Random r = new Random();
+        int i=r.nextInt(54);
         newTransaction.setAmount(order.getTotalAmount());
-        
+        newTransaction.setDescription("PAY FOR ORDER id=["+orderId+"]");
         newTransaction.setPaymentType(paymentType);
         newTransaction.setTransactionDateTime(new Date());
         newTransaction.setTransactionType(TransactionTypeEnum.CREDIT);
-        OrderEntity thisOrder = em.find(OrderEntity.class, order.getOrderId());
-        
+        SimpleDateFormat sf = new SimpleDateFormat("yyMMddhhmm");
+        newTransaction.setTransactionCode(orderId+String.valueOf((char)(i + 64))+sf.format(new Date())+order.getCustomer().getPassword().substring(0, 5));
         order.setOrderStatus(OrderStatusEnum.PREPARING);
-        createTimer(thisOrder.getOrderId(), getBeginningOfDay(thisOrder.getDeliveryDate()));
+        createTimer(order.getOrderId(), getBeginningOfDay(order.getDeliveryDate()));
         
         em.persist(newTransaction);
         
         newTransaction.setOrder(order);
         newTransaction.setCustomer(order.getCustomer());
         order.setTransaction(newTransaction);
-        
         
         em.flush();
         return newTransaction;

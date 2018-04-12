@@ -21,6 +21,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -55,7 +56,6 @@ public class createMealKitManagedBean implements Serializable{
     private List<SelectItem> selectItemsTagObject;
     private List<SelectItem> selectItemsTagName;
     private UploadedFile uploadedImage;
-    private String inputStringIngredients; 
     private String inputStringRecipe;
     private boolean uploadedOne;
     
@@ -72,7 +72,6 @@ public class createMealKitManagedBean implements Serializable{
         filteredMealKits = new ArrayList<>();
         selectItemsTagObject = new ArrayList<>();
         selectItemsTagName = new ArrayList<>();
-        inputStringIngredients = "";
         inputStringRecipe = "";
     }
     
@@ -85,7 +84,6 @@ public class createMealKitManagedBean implements Serializable{
         setFilteredMealKits(getMealKits());
         List<TagEntity> tags = tagControllerLocal.retrieveAllTags();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("createMealKitManagedBean.tags", tags);
-        inputStringIngredients = "";
         inputStringRecipe = "";
         newMealKit.setPrice(0.00);
         
@@ -112,7 +110,7 @@ public class createMealKitManagedBean implements Serializable{
         System.err.println("************createMealKitManagedBean.saveNewMealKit(): Start saving new meal kit");
     
         try {
-            newMealKit.setRecipe(Arrays.asList(inputStringRecipe.split(";")));
+            newMealKit.setRecipe(Arrays.asList(inputStringRecipe.trim().split(";")));
             newMealKit = mealKitControllerLocal.createNewMealKit(getNewMealKit());
             Long newMealKitEntityId = newMealKit.getMealKitId();
             
@@ -128,13 +126,13 @@ public class createMealKitManagedBean implements Serializable{
             
             newMealKitSelectedTagNames = new ArrayList<>();
             String str = "";
-            inputStringIngredients = str;
             inputStringRecipe = str;
             newMealKit.setPrice(0.00);
             
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New meal kit " + newMealKitEntityId + " created successfully", null));
-            FacesContext.getCurrentInstance().getExternalContext().redirect("#{requestContect}/managerPages/viewUpdateAllMealKitsManager.xhtml");     
-
+            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+            context.redirect(context.getApplicationContextPath() + "/managerPages/viewUpdateAllMealKitsManager.xhtml");
+            
         } catch (MealKitExistException | GeneralException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "An unexpected error occured.",ex.getMessage()));
         }
@@ -149,15 +147,6 @@ public class createMealKitManagedBean implements Serializable{
         }
     }
     
-    public void handleIngredientsText(){
-        newMealKit.setIngredients(Arrays.asList(getInputStringIngredients().split(";")));
-        System.err.println("************createMealKitManagedBean.handleIngredientsText(): Ingredients set");
-    }
-    
-    public void handleRecipeText(){
-        newMealKit.setIngredients(Arrays.asList(getInputStringRecipe().split(";")));
-        System.err.println("************createMealKitManagedBean.handleRecipeText(): Recipe set");
-    }
     
     public void addNewMealKitMessage() {
         String summary = getNewMealKit().isIsAvailable() ? "Set to Unavailable" : "Set to Available";
@@ -204,7 +193,7 @@ public class createMealKitManagedBean implements Serializable{
             fileOutputStream.close();
             inputStream.close();
             
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully: only one file can be uploaded, thus file upload is disabled", ""));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully!", ""));
         }
         catch(IOException ex)
         {
@@ -365,20 +354,6 @@ public class createMealKitManagedBean implements Serializable{
      */
     public void setUploadedImage(UploadedFile uploadedImage) {
         this.uploadedImage = uploadedImage;
-    }
-
-    /**
-     * @return the inputStringIngredients
-     */
-    public String getInputStringIngredients() {
-        return inputStringIngredients;
-    }
-
-    /**
-     * @param inputStringIngredients the inputStringIngredients to set
-     */
-    public void setInputStringIngredients(String inputStringIngredients) {
-        this.inputStringIngredients = inputStringIngredients;
     }
 
     /**

@@ -9,20 +9,66 @@
     <!-- INTERFACE -->
     <cc:interface>
     </cc:interface>
-        
+
     <!-- IMPLEMENTATION -->
     <cc:implementation>
+        <style>
+            .menuBarBg {
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                padding: 15px;
+                border: none;
+                width: 635px; 
+                text-align: center;
+                -webkit-border-radius: 20px;
+                border-radius: 20px;
+                font: normal 16px/1 "Lucida Console", Monaco, monospace;
+                color: black;
+                font-weight: bold;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                background: url("http://enjoycss.com/bg-img/custom/80950-bj735i.png"); 
+                background-position: 30% 30%;
+                -webkit-background-origin: padding-box;
+                background-origin: padding-box;
+                -webkit-background-clip: border-box;
+                background-clip: border-box;
+                -webkit-background-size: cover;
+                background-size: cover;
+                -webkit-transition: opacity 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                -moz-transition: opacity 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                -o-transition: opacity 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                transition: opacity 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+            }
+
+            .menuItem{
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                padding: 15px;
+                border: none;
+                -webkit-border-radius: 20px;
+                border-radius: 20px;
+                text-align: center;
+                font: normal 15px/1 "Lucida Console", Monaco, monospace;
+                color: black;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                background: rgba(255,255,255,0.75);
+            }
+        </style>
         <div align="center" >
-            <p:panel >  
-               <p:menubar style="text-align: center !important; display: inline-block; font-size:15px;background: antiquewhite">
-                   <p:menuitem value="Home" outcome="/index.xhtml"/>
-                   <p:menuitem value="About Us" style="margin-left: 50px;margin-right: 50px" outcome="/aboutUs.xhtml" />
-                   <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" />
-                   <p:menuitem value="Contact Us" style="margin-left: 50px;margin-right: 50px" outcome="/contactUs.xhtml" />
-                   <p:menuitem value="Our Clients" url="/ourClients.xhtml" />
-               </p:menubar>
-<!--               style = "text-align: center;font-size: 18px; padding-right:90px; padding-left:90px;" -->
-           </p:panel> 
+            <p:panel style="text-align: center; align-items: center">  
+                <p:menubar  styleClass="menuBarBg" style="align-items: center; display: inline-block; ">
+                    <p:menuitem value="Home" outcome="/index.xhtml" styleClass="menuItem"/>
+                    <p:menuitem value="About Us" style="margin-left: 50px;margin-right: 50px" styleClass="menuItem" outcome="/aboutUs.xhtml" />
+                    <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" styleClass="menuItem" />
+                    <p:menuitem value="Contact Us" style="margin-left: 50px;margin-right: 50px" styleClass="menuItem" outcome="/contactUs.xhtml" />
+                    <p:menuitem value="Our Clients" url="/ourClients.xhtml" styleClass="menuItem" />
+                </p:menubar>
+                <!--               style = "text-align: center;font-size: 18px; padding-right:90px; padding-left:90px;" -->
+            </p:panel> 
         </div>
     </cc:implementation>
 </html>
