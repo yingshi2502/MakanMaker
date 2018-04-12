@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/userProfileTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="header" id="header">
+        <title>My Returns</title>
+    </ui:define>
+    <ui:define name="content" id="content">
+        <h2 style="margin-left: 30px">My Orders</h2>
+        <p:dataTable style="margin-left: 30px; margin-right: 30px" var="order" value="#{myOrderManagedBean.orders}" tableStyle="table-layout: auto">
+            <p:column>
+                <p:panelGrid>
+                    <p:row >
+                        <p:column>
+                            <h:outputText value="Order" />
+                            <h:link value="#{order.orderNumber}" outcome="orderPage.xhtml?id=#{order.orderId}"/><br />
+                            <h:outputText value="  Placed on 10 Mar 2018" />
+                        </p:column>
+                        <p:column>
+                            <p:link style="position: absolute;right: 50px" value="Manage" outcome="orderPage.xhtml?id=#{order.orderId}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="5">
+                            <div style="border-bottom: 1px solid #AFAFAF;">
+                            </div>  
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <img scr="#{request.contextPath}/images/mealkit#{order.mealKit.mealKitId}.jpg" height="100px" width="100px" />
+                        </p:column>
+                        <p:column >
+                            <p:link value="#{order.mealKit.name}" outcome="/mealkit/viewMealKitDetails.xhtml?id=#{order.mealKit.mealKitId}"   style="font: 14px;color: #0081c2"/>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="Qty: #{order.quantity}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{myOrderManagedBean.getLcOrderStatus(order.orderStatus)}" style="font-size: 12px;padding: 4px 12px; display: inline-block; border-radius: 24px; background-color: #eff0f5; max-width: 150px;" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{myOrderManagedBean.getDeliveryDate(order.deliveryDate)}" />
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </p:column>
+
+        </p:dataTable>
+    </ui:define>
+</ui:composition>
+
+
+

@@ -6,6 +6,7 @@ package ejb.session.stateless;
 import entity.CustomerEntity;
 import entity.MealKitEntity;
 import entity.OrderEntity;
+import entity.ShoppingCartEntity;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -41,12 +42,24 @@ public class CustomerController implements CustomerControllerLocal {
      * @throws GeneralException
      */
     @Override
-    public CustomerEntity createNewCustomer(CustomerEntity customer) throws CustomerExistException, GeneralException {
+    public CustomerEntity createNewCustomer(CustomerEntity customer, boolean detach) throws CustomerExistException, GeneralException {
         try {
             customer.setPassword(SecurityHelper.generatePassword(customer.getPassword()));
-
+            ShoppingCartEntity shoppingCart = new ShoppingCartEntity();
             em.persist(customer);
+            em.persist(shoppingCart);
+            
+            shoppingCart.setCustomer(customer);
+            customer.setShoppingCart(shoppingCart);
             em.flush();
+            if (detach){
+                em.detach(customer);
+                customer.getAddresses().clear();
+                customer.getOrderHistory().clear();
+                customer.getTransactions().clear();
+                customer.setShoppingCart(null);
+            }
+            
             return customer;
         } catch (PersistenceException ex) {
             if (ex.getCause() != null
@@ -63,21 +76,27 @@ public class CustomerController implements CustomerControllerLocal {
      *
      * @param customer
      * @return
+     * @throws util.exception.CustomerNotFoundException
      * @throws CustomerExistException
      * @throws GeneralException
      */
     @Override
-    public CustomerEntity updateCustomer(CustomerEntity customer) throws CustomerExistException,GeneralException {
-        try {
-            return em.merge(customer);
-        } catch (PersistenceException ex) {
-            if (ex.getCause() != null
-                    && ex.getCause().getCause() != null
-                    && ex.getCause().getCause().getClass().getSimpleName().equals("MySQLIntegrityConstraintViolationException")) {
-                throw new CustomerExistException("Customer with same username/phone number/email already exist");
-            } else {
-                throw new GeneralException("An unexpected error has occurred: " + ex.getMessage());
-            }
+    public CustomerEntity updateCustomer(CustomerEntity customer) throws CustomerNotFoundException {
+        System.err.println("inside UpdatedCustomer");
+        System.err.println(customer.getMobile());
+
+        if (customer.getCustomerId() != null) {
+            CustomerEntity updatedCustomer = retrieveCustomerById(customer.getCustomerId(),false);
+                updatedCustomer.setDateOfBirth(customer.getDateOfBirth());
+                updatedCustomer.setMobile(customer.getMobile());
+                updatedCustomer.setEmail(customer.getEmail());
+                System.err.println("inside set email");
+                updatedCustomer.setFullName(customer.getFullName());
+                updatedCustomer.setGender(customer.getGender());
+            
+            return updatedCustomer;
+        } else {
+            throw new CustomerNotFoundException("Customer ID invalid");
         }
     }
 
@@ -88,16 +107,16 @@ public class CustomerController implements CustomerControllerLocal {
      * @throws CustomerNotFoundException
      */
     @Override
-    public CustomerEntity retrieveCustomerById(Long customerId) throws CustomerNotFoundException {
+    public CustomerEntity retrieveCustomerById(Long customerId, boolean detach) {
         CustomerEntity customer = em.find(CustomerEntity.class, customerId);
-        if (customer != null){
-            //customer.getOrderHistory().size();
-            //customer.getWishList().size();
-            //customer.getCreditCard();
-            return customer;
-        }else{
-            throw new CustomerNotFoundException("Customer ID "+ customerId+" does not exists!");
-        }
+        if (detach){
+                em.detach(customer);
+                customer.getAddresses().clear();
+                customer.getOrderHistory().clear();
+                customer.getTransactions().clear();
+                customer.setShoppingCart(null);
+            }
+        return customer;
     }
 
     /**
@@ -110,37 +129,42 @@ public class CustomerController implements CustomerControllerLocal {
     public CustomerEntity retrieveCustomerByUsername(String username) throws CustomerNotFoundException {
         Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.userName = :username");
         query.setParameter("username", username);
-        
-        try{
-            CustomerEntity customer = (CustomerEntity) query.getSingleResult();
-           // customer.getCreditCard();
-            customer.getOrderHistory().size();
-            customer.getWishList().size();
-            return customer;
-            
-        }catch(NoResultException ex){
-            
+        try {
+            return (CustomerEntity) query.getSingleResult();
+        } catch (NoResultException ex) {
+            throw new CustomerNotFoundException(ex.getMessage());
         }
-        return null;
+    }
+    
+    @Override
+    public ShoppingCartEntity retrieveShoppingCartByCustomerId(Long customerId) {
+        CustomerEntity customer = em.find(CustomerEntity.class, customerId);
+
+        if (customer != null) {
+            customer.getShoppingCart().getCustomer();
+            return customer.getShoppingCart();
+        } else {
+            return null;
+        }
     }
 
     /**
      *
      * @param customerId
      * @return null if customerId was wrong but in real case won't;
-     * 
+     *
      */
     @Override
     public List<MealKitEntity> retrieveWishListByCustomerId(Long customerId) {
         CustomerEntity customer = em.find(CustomerEntity.class, customerId);
-      
-        if (customer!=null){
+
+        if (customer != null) {
             List<MealKitEntity> mealKits = null;
-            for(Long mkId: customer.getWishList()){
+            for (Long mkId : customer.getWishList()) {
                 mealKits.add(em.find(MealKitEntity.class, mkId));
             }
             return mealKits;
-        }else{
+        } else {
             return null;
         }
     }
@@ -153,26 +177,35 @@ public class CustomerController implements CustomerControllerLocal {
     @Override
     public List<OrderEntity> retrieveOrderHistoryByCustomerId(Long customerId) {
         CustomerEntity customer = em.find(CustomerEntity.class, customerId);
-      
-        if (customer!=null){
+
+        if (customer != null) {
             customer.getOrderHistory().size();
             return customer.getOrderHistory();
-        }else{
+        } else {
             return null;
         }
     }
 
     @Override
-    public CustomerEntity customerLogin(String username, String password) throws InvalidLoginCredentialException {
+    public CustomerEntity customerLogin(String username, String password, boolean detach) throws InvalidLoginCredentialException {
+
         try {
             CustomerEntity customer = retrieveCustomerByUsername(username);
-            
-            if (SecurityHelper.verifyPassword(password, customer.getPassword())){
+            if (SecurityHelper.verifyPassword(password, customer.getPassword())) {
+                if (detach){
+                em.detach(customer);
+                customer.getAddresses().clear();
+                customer.getOrderHistory().clear();
+                customer.getTransactions().clear();
+                customer.setShoppingCart(null);
+                }
                 return customer;
-            }else{
+            } else {
+                System.err.println("****Customer Login wrong pass");
                 throw new InvalidLoginCredentialException("Wrong password!");
             }
         } catch (CustomerNotFoundException ex) {
+            System.err.println("****Customer Login no Username");
             throw new InvalidLoginCredentialException("Username does not exist!");
         }
     }
@@ -186,18 +219,17 @@ public class CustomerController implements CustomerControllerLocal {
      * @throws PasswordChangeException
      */
     @Override
-    public Boolean changePassword(Long customerId, String oldPassword, String newPassword ) throws PasswordChangeException {
-        try {
-            CustomerEntity customer = retrieveCustomerById(customerId);
-            if (SecurityHelper.verifyPassword(oldPassword, customer.getPassword())){
-                customer.setPassword(SecurityHelper.generatePassword(newPassword));
-                return true;
-            }else{
-                throw new PasswordChangeException("Password changed failed: Current password is wrong");
-            }
-            
-        } catch (CustomerNotFoundException ex) {
-            return false;
+    public Boolean changePassword(Long customerId, String oldPassword, String newPassword) throws PasswordChangeException {
+
+        CustomerEntity customer = retrieveCustomerById(customerId,false);
+        if (SecurityHelper.verifyPassword(oldPassword, customer.getPassword())) {
+            customer.setPassword(SecurityHelper.generatePassword(newPassword));
+            System.err.println("****Customer pass changed");
+
+            return true;
+        } else {
+            throw new PasswordChangeException("Password changed failed: Current password is wrong");
         }
+
     }
 }

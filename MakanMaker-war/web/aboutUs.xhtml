@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -8,3 +9,33 @@
     </ui:define>
 
 </ui:composition>
+=======
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/homePagesTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+
+    <ui:define name="content">
+
+        <p:graphicImage style="position:relative; left: 40%; height: 200px; width: 200px" url="/images/icon.png" />
+        <h2 style="padding-left:120px;">Who are we?</h2>
+        <p style="padding-left:120px;padding-right: 120px; font-size: 14px">
+            We bring fresh local recipes right to your doorstep specially designed for your cooking convenience. MakanMaker is a Singapore-based home meal kit delivery service, with web version and mobile application available. Users select a recipe they wish to cook from a variety of recipes, ranging from local favourites to foods for right occasions. Users can also indicate their preferences and dietary requirements (such as less oil, vegan, lactose-free) to filter the best recipe for their needs. After selecting a recipe of their choice, they can select the number of servings they wish to cook for, delivery timing, and enter delivery details (such as the mailing address). Payment is made online either through credit card or PayPal. Fresh, seasonal ingredients based on the amount and ingredients in the recipe selected will then be packaged and sent to their address. Users are then able to confirm the delivered status of the order, cook the recipe they selected from these fresh ingredients. After their meal, users are also able to leave their ratings for the recipe and reviews of our service on the site of the recipe page.  
+        </p>
+        <br />
+        <p:panel style="text-align: center">
+        <img style="width: 200px;height:200px" src="#{request.contextPath}/images/dock/waiter.png"/>
+        <img style="margin-left: 100px;margin-right: 100px;width: 200px;height:200px" src="#{request.contextPath}/images/dock/chef.png"/>
+        <img style="width: 200px;height:200px" src="#{request.contextPath}/images/dock/consultant.png"/>
+    
+        </p:panel>
+        </ui:define>
+
+</ui:composition>
+>>>>>>> newStart

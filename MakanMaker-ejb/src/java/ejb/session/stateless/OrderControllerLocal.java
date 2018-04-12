@@ -22,9 +22,9 @@ import util.exception.OrderNotFoundException;
 @Local
 public interface OrderControllerLocal {
 
-    public OrderEntity createNewOrder(OrderEntity order) throws OrderExistException, GeneralException;
+    public OrderEntity createNewOrder(OrderEntity order, Long customerId, Long mealKitId, Long addressId) ;
 
-    public OrderEntity updateOrder(OrderEntity order) throws OrderExistException, GeneralException;
+    public OrderEntity updateOrder(OrderEntity order);
 
     public OrderEntity retrieveOrderById(Long orderId) throws OrderNotFoundException;
 
@@ -34,8 +34,9 @@ public interface OrderControllerLocal {
 
 //    public void refundOrder(OrderEntity order);
 
-    public TransactionEntity refundOrder(OrderEntity order);
 
-    public TransactionEntity payForOrder(OrderEntity order, PaymentTypeEnum paymentType);
+    public TransactionEntity payForOrder(Long orderId, PaymentTypeEnum paymentType);
+
+    public TransactionEntity refundOrder(Long orderId, String description,PaymentTypeEnum paymentType);
     
 }

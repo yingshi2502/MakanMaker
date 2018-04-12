@@ -1,0 +1,285 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/managerTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="header">
+        <title>Manager Portal : View/Update Meal Kits </title>
+        <script>
+            function scrollToAnchor() {
+                jQuery('html, body').animate({
+                    scrollTop: jQuery("#updateMealKitDialog").offset().top
+                }, 2000);
+            }
+        </script>
+        <style>
+            .bg{
+                font-weight: lighter;
+                padding: 6px 6px; 
+                display: inline-block; 
+                border-radius: 10px; 
+                background-color: #eff0f5; 
+                max-width: 150px;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <h2>View and Update Meal Kits</h2>  
+        <p:growl id="growl" showSummary="true" redisplay="false" life="800"/> 
+        <h:form id="mealKitForm">
+            <p:panel>
+                <p:dataTable id="dataTableMealKits" tableStyle="table-layout: auto;"  widgetVar="dataTableMealKits" sortBy="#{mealKit.isAvailable}" value="#{viewUpdateAllMealKitsManagerManagedBean.mealKits}" var="mealKit" >
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Search all fields:" />&nbsp;
+                            <p:inputText id="globalFilter" onkeyup="PF('dataTableMealKits').filter()" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="Id" filterBy="#{mealKit.mealKitId}" style="font-weight: bold" filterMatchMode="contains" filterStyle="width:40px">
+                        <h:outputText value="#{mealKit.mealKitId}"  style="font-weight: lighter"/>
+                    </p:column>
+
+                    <p:column headerText="Name" style="font-weight: bold; text-align: center" filterBy="#{mealKit.name}" filterMatchMode="contains">
+                        <h:link style="font-weight: lighter; font-size: 14px" value="#{mealKit.name}" outcome="viewMealKitDetails.xhtml?id=#{mealKit.mealKitId}" />      
+                           
+                        
+                    </p:column>
+
+                    <p:column headerText="Price" filterBy="#{mealKit.price}" style="font-weight: bold" filterMatchMode="contains" filterStyle="width:60px">
+                        <h:outputText value="$ #{mealKit.price}" style="font-weight: lighter" />
+                    </p:column>
+
+                    <p:column filterBy="#{mealKit.tags}" filterFunction="#{viewUpdateAllMealKitsManagerManagedBean.filterByTags}" headerText="Tag" style="font-weight: bold" filterMatchMode="contains" filterStyle="width:100px">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('dataTableMealKits').filter()" >
+                                <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{viewUpdateAllMealKitsManagerManagedBean.tags}" var="tag" itemValue="#{tag.name}" itemLabel="#{tag.name}"/>
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <ui:repeat var="tag" value="#{mealKit.tags}">
+                            <h:outputText value="#{tag.name}" style="font-weight: lighter;padding: 4px 4px; display: inline-block; border-radius: 24px; background-color: #eff0f5; max-width: 150px;" />&nbsp;
+                        </ui:repeat>
+
+                    </p:column>
+
+                    <p:column filterBy="#{mealKit.isAvailable}" headerText="Availability" style="font-weight: bold;text-align: center" filterMatchMode="equals" filterStyle="width:100px">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('dataTableMealKits').filter()">
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Available" itemValue="true" />
+                                <f:selectItem itemLabel="Deleted" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <h:outputText value="#{mealKit.isAvailable ? 'Available': 'Deleted'}"  style="font-weight: lighter"/>
+                    </p:column>
+
+                    <p:column style="width:80px;font-weight: bold" headerText="Actions">
+                        <p:commandButton icon="fa fa-eye" update="formViewMealKit" oncomplete="PF('viewMealKitDialog').show()" >
+                            <f:setPropertyActionListener value="#{mealKit}" target="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView}" />
+                        </p:commandButton>&nbsp;
+                        <p:commandButton icon="fa fa-edit" update="formUpdateMealKit" oncomplete="PF('updateMealKitDialog').show();" >
+                            <f:setPropertyActionListener value="#{mealKit}" target="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate}" />
+                        </p:commandButton>
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <h:outputText value="Total number of meal kits is #{viewUpdateAllMealKitsManagerManagedBean.mealKits.size()}" />
+                    </f:facet>
+                </p:dataTable>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </p:panel>
+        </h:form>
+
+        <h:form id="formUpdateMealKit">
+            <p:dialog style="padding: 10px" header="Update Meal Kit" widgetVar="updateMealKitDialog" resizable="false" 
+                      showEffect="fade" hideEffect="fade" closable="true" >
+                <p:messages id="messagesViewMKDetails" redisplay="false" />
+                <p:panelGrid id="dataTableView" style="table-layout: auto;" >
+                    <p:row>
+                        <p:column> <p:outputLabel value="Meal Kit ID: " style="font-weight: bold" /> </p:column>
+                        <p:column> <p:outputLabel value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.mealKitId}"/> </p:column>
+                        <p:column> <p:outputLabel value="Name: " style="font-weight: bold" /> </p:column>
+                        <p:column> <h:inputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.name}" styleClass="bg"/> </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> <p:outputLabel value="Price: $" style="font-weight: bold" />  </p:column>
+                        <p:column> 
+                            <h:inputText value="#{viewUpdateAllMealKitsManagerManagedBean.updatePrice}" styleClass="bg"/> 
+                        </p:column>
+                        <p:column> <p:outputLabel value="Nutrition: " style="font-weight: bold" /> </p:column>
+                        <p:column> 
+                            <h:inputText value="#{viewUpdateAllMealKitsManagerManagedBean.updateNu}" styleClass="bg" >
+                                <f:validateRegex pattern="[0-9]+" />
+                            </h:inputText>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column> <p:outputLabel value="Difficulty: " style="font-weight: bold" /> </p:column>
+                        <p:column> 
+                            <p:selectOneMenu id="difficulty" required="true" requiredMessage="Settings for difficulty level is required." value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.difficulty}">
+                                <f:selectItem itemLabel="Easy" itemValue="Easy" />
+                                <f:selectItem itemLabel="Medium" itemValue="Medium" />
+                                <f:selectItem itemLabel="Hard" itemValue="Hard" />
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column> <p:outputLabel value="Time: " style="font-weight: bold" /> </p:column>
+                        <p:column> 
+                            <h:inputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.time}" styleClass="bg"/> 
+                        </p:column>
+                   </p:row>           
+                    
+                    <p:row>
+                        <p:column> <p:outputLabel value="Tags:" style="font-weight: bold" /> </p:column>
+                        <p:column colspan="3"> 
+                            <p:selectCheckboxMenu id="multiple" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.tags}" label="Tags" multiple="true" converter="tagConverter"
+                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                <f:selectItems value="#{viewUpdateAllMealKitsManagerManagedBean.selectItems}"/>
+                            </p:selectCheckboxMenu>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> <p:outputLabel value="Description: " style="font-weight: bold; " /> </p:column>
+                        <p:column colspan="3">  
+                            <p:inputTextarea id="description" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.description}" 
+                                             rows="3" cols="100" required="true" requiredMessage="Description is required" 
+                                             style="width: 400px"/>                            
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> 
+                            <p:outputLabel value="Ingredients: " style="font-weight: bold;" /> <br />
+                            <p:outputLabel value="Use ';' to separate " style="font-weight: lighter; color: #AFAFAF" /> 
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:inputTextarea value='#{viewUpdateAllMealKitsManagerManagedBean.ingredientsForUpdate}'
+                                style="width: 400px"
+                                />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column> 
+                            <p:outputLabel value="Recipe: " style="font-weight: bold;" /> <br />
+                            <p:outputLabel value="Use ';' to separate " style="font-weight: lighter; color: #AFAFAF" /> 
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:inputTextarea value='#{viewUpdateAllMealKitsManagerManagedBean.recipeForUpdate}'
+                                style="width: 400px"
+                                />
+                        </p:column>
+                    </p:row>
+
+                   
+                    <p:row>
+                        <p:column> <p:outputLabel value="Availability: " style="font-weight: bold" /> </p:column>
+                        <p:column> 
+                            <p:selectBooleanButton id="isAvailable" 
+                                                   value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToUpdate.isAvailable}" 
+                                                   onLabel="Yes" offLabel="No" onIcon="ui-icon-check" 
+                                                   offIcon="ui-icon-close" style="width:100px" >
+                                <p:ajax update="growl" />
+                            </p:selectBooleanButton>
+                        </p:column>
+                        <p:column>
+                            <p:commandButton update="@form mealKitForm" actionListener="#{viewUpdateAllMealKitsManagerManagedBean.updateMealKit}" value="Save"/>
+                        </p:column>
+                    </p:row>
+                    
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        
+        <h:form id="formViewMealKit">
+            <p:dialog style="padding: 10px" header="View Meal Kit Details" widgetVar="viewMealKitDialog" resizable="false" 
+                      showEffect="clip" hideEffect="fade" closable="true" >
+                <p:messages id="messagesViewMKDetails" redisplay="false" />
+                <p:panelGrid id="dataTableView" style="table-layout: auto;" >
+                    <p:row>
+                        <p:column> <p:outputLabel value="Meal Kit ID: " style="font-weight: bold" /> </p:column>
+                        <p:column> <p:outputLabel value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.mealKitId}"/> </p:column>
+                        <p:column> <p:outputLabel value="Name: " style="font-weight: bold" /> </p:column>
+                        <p:column> <h:outputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.name}" /> </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> <p:outputLabel value="Price: " style="font-weight: bold" />  </p:column>
+                        <p:column> <h:outputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.price}" /> </p:column>
+                        <p:column> <p:outputLabel value="Nutrition: " style="font-weight: bold" /> </p:column>
+                        <p:column> <h:outputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.nutrition}" /> </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column> <p:outputLabel value="Difficulty: " style="font-weight: bold" /> </p:column>
+                        <p:column> <h:outputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.difficulty}" style="font-weight: lighter;padding: 4px 4px; display: inline-block; border-radius: 24px; background-color: #c2dfef; max-width: 150px;" />&nbsp; </p:column>
+                        <p:column> <p:outputLabel value="Time: " style="font-weight: bold" /> </p:column>
+                        <p:column>  <h:outputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.time}" /> </p:column>
+                   </p:row>           
+                    
+                    <p:row>
+                        <p:column> <p:outputLabel value="Tags:" style="font-weight: bold" /> </p:column>
+                        <p:column colspan="3"> 
+                            <p:outputPanel >
+                                <ui:repeat var="tag" value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.tags}">
+                                    <h:outputText value="#{tag.name}" style="font-weight: lighter;padding: 6px 6px; display: inline-block; border-radius: 24px; background-color: #eff0f5; max-width: 150px;" />&nbsp;
+                                </ui:repeat>
+                            </p:outputPanel> 
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> <p:outputLabel value="Description: " style="font-weight: bold; " /> </p:column>
+                        <p:column colspan="3">  
+                            <p:outputPanel style="border: #AFAFAF solid thin; margin-left: 4px; margin-right: 4px; padding: 4px 4px 2px 2px" >
+                                <h:outputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.description}" />
+                            </p:outputPanel>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> <p:outputLabel value="Ingredients: " style="font-weight: bold; pad" /> </p:column>
+                        <p:column colspan="3">
+                            <p:dataList value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.ingredients}" var="ingredient"  type="ordered" emptyMessage="No ingredients recorded yet." style="padding: 4px 4px 2px 2px">
+                                #{ingredient.toString()}
+                            </p:dataList>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column> <p:outputLabel value="Recipe: " style="font-weight: bold" /> </p:column>
+                        <p:column colspan="3"> 
+                            <p:dataList value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.recipe}" var="recipe"  type="ordered" emptyMessage="No receipe recorded yet." style="padding: 4px 4px 2px 2px">
+                                #{recipe.toString()}
+                            </p:dataList>
+                        </p:column>
+                    </p:row>
+
+                   
+                    <p:row>
+                        <p:column> <p:outputLabel value="Availability: " style="font-weight: bold" /> </p:column>
+                        <p:column> <h:outputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.isAvailable? 'Available' : 'Deleted'}" style="font-weight: lighter;padding: 6px 6px; display: inline-block; border-radius: 24px; background-color: #FFFFCC; max-width: 150px;" /></p:column>
+                        <p:column> <p:outputLabel value="Sales: " style="font-weight: bold" /> </p:column>
+                        <p:column> <h:outputText value="#{viewUpdateAllMealKitsManagerManagedBean.selectedMealKitToView.orders.size()} /pax "  /></p:column>
+                    
+                    </p:row>
+                        
+                    
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        
+    </ui:define>
+</ui:composition>                

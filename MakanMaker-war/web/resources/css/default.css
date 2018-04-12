@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 body {
     background-color: #ffffff;
     font-size: 12px;
@@ -34,3 +35,183 @@ a:link:hover, a:visited:hover  {
   font-weight : bold;
   text-decoration : underline;
 }
+=======
+body {
+    background-color: #ffffff;
+    font-size: 12px;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    color: #000000;  
+    margin: 10px;
+}
+.menuTitle{
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    border: none;
+    margin-top: 20px;
+    font: normal 40px/1 "Trebuchet MS", Helvetica, sans-serif;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    letter-spacing: 2px;
+    text-shadow: 4px 0 9px rgba(83,252,83,0.7) ;
+}
+.searchBarCss {
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    padding: 5px 10px;
+    border: 1px solid #b7b7b7;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    font: normal 16px/normal "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    color: rgba(0,0,0,0.89);
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    background: rgba(83,252,83,0.18);
+    -webkit-box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) inset;
+    box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) inset;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.66) ;
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.order_summary_bg {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    width: 160px;
+    padding: 20px;
+    overflow: hidden;
+    border: none;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+    font: normal 16px/1 "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    color: rgba(2,0,0,1);
+    text-align: center;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    background: -webkit-linear-gradient(-90deg, rgba(83,252,83,0.18) 0, rgba(83,252,83,0.18) 45%, rgba(247,249,249,1) 100%);
+    background: -moz-linear-gradient(180deg, rgba(83,252,83,0.18) 0, rgba(83,252,83,0.18) 45%, rgba(247,249,249,1) 100%);
+    background: linear-gradient(180deg, rgba(83,252,83,0.18) 0, rgba(83,252,83,0.18) 45%, rgba(247,249,249,1) 100%);
+    background-position: 50% 50%;
+    -webkit-background-origin: padding-box;
+    background-origin: padding-box;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-background-size: auto auto;
+    background-size: auto auto;
+    -webkit-box-shadow: 8px 6px 10px 0 rgba(0,0,0,0.21) ;
+    box-shadow: 8px 6px 10px 0 rgba(0,0,0,0.21) ;
+    text-shadow: 0 0 0 rgba(0,0,0,0.2) ;
+}
+
+
+.menu .ui-selectonemenu-label { 
+    background: pink;
+    padding-left: 10px
+}
+
+.buttonLogin {
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    cursor: pointer;
+    padding: 10px 20px;
+    border: 1px solid #018dc4;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    font: normal 17px/normal "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    color: rgba(0,0,0,0.89);
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    background: -webkit-linear-gradient(-90deg, rgba(124,255,185,0.56) 0, rgba(255,255,255,1) 73%, rgba(255,255,255,1) 100%);
+    background: -moz-linear-gradient(180deg, rgba(124,255,185,0.56) 0, rgba(255,255,255,1) 73%, rgba(255,255,255,1) 100%);
+    background: linear-gradient(180deg, rgba(124,255,185,0.56) 0, rgba(255,255,255,1) 73%, rgba(255,255,255,1) 100%);
+    background-position: 50% 50%;
+    -webkit-background-origin: padding-box;
+    background-origin: padding-box;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-background-size: auto auto;
+    background-size: auto auto;
+    -webkit-box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) ;
+    box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) ;
+    text-shadow: 0 0 0 rgba(15,73,168,0.66) ;
+    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.panel .ui-selectonemenu-list { 
+    background: pink;
+}
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;
+}
+.ui-layout-pane {
+    border: 0;
+}
+.ui-layout-unit{
+    border: 0;
+}
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+}
+
+.ui-panelgrid td, .ui-panelgrid tr
+{
+    border-style: none !important;
+    border: none !important
+}
+.profileButton .ui-button .button .ui-widget{
+    background-color: blue !important; 
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+.profileButtonTry .button .ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left  {
+    background-color: blue !important; 
+    border: none;
+    color: white!important;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+h1 {
+    font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    border-bottom: 1px solid #AFAFAF; 
+    font-size:  16px;
+    font-weight: bold;
+    margin: 0px;
+    padding: 0px;
+    color: #D20005;
+}
+
+a:link, a:visited {
+    color: #045491;
+    font-weight : bold;
+    text-decoration: none;
+}
+
+a:link:hover, a:visited:hover  {
+    color: #045491;
+    font-weight : bold;
+    text-decoration : underline;
+}
+>>>>>>> newStart

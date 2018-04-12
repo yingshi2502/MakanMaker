@@ -17,11 +17,19 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+    <context-param>
+        <param-name>alternatedocroot_1</param-name>
+        <param-value>/Users/mac/Music</param-value>
+    </context-param>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>smoothness</param-value>
+    </context-param>
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>

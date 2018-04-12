@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/paymentTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="header" id="header">
+        <title>Confirm Payment</title>
+
+    </ui:define>
+    <ui:define name="content" id="content">
+        <h3 style="margin-left: 30px">Payment Options</h3>
+        <h:form id="tabForm">
+            <p:tabView>
+                <p:tab title="Paypal" id="zero">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <p:graphicImage name="/images/paypal_icon.png" />
+                        <h:outputText value="You will be redirected to Paypal to complete payment" />
+                        <p:commandButton value="PLACE ORDER NOW" update="@form tabForm" actionListener="#{paymentManagedBean.paypal}" oncomplete="PF('dialogPayConfirmed').show()"/>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Credit Card" id="one">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <p:graphicImage name="images/creditCard_icon.png" />
+                        <h:form id="cardInfo" style="margin-right: 30px; ">
+                            <p:messages id="messages" closable="true" />
+                            <p:growl id="growl" showDetail="true" sticky="true" />
+                            <p:ajaxStatus oncomplete="setTimeout(function() { $('.ui-messages').fadeOut(); }, 5000)" />
+                            <p:panelGrid columns="1" style="table-layout: auto; width: 500px" >
+                                <p:outputLabel for="cardNumber" value="Card Number" />
+                                <p:inputText id="cardNumber" /> 
+                                <p:outputLabel for="cardHolderName" value="Name on Card" />
+                                <p:inputText id="cardHolderName" /> 
+                                <p:outputLabel for="expirationDate" value="Expiration Date" />
+                                <p:inputText id="expirationDate"/> 
+                                <p:outputLabel for="cvv" value="CVV" />
+                                <p:inputText id="cvv" /> 
+                                <p:commandButton value="PLACE ORDER NOW" update="@form tabForm" actionListener="#{paymentManagedBean.creditCard}" oncomplete="PF('dialogPayConfirmed').show()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Cash on Delivery" id="two">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <p:graphicImage name="images/cash_icon.png" />
+                        <h:outputText value=""/>
+                        <p:commandButton value="PLACE ORDER NOW" update="@form tabForm" actionListener="#{paymentManagedBean.cash}" oncomplete="PF('dialogPayConfirmed').show()"/>
+                    </h:panelGrid>
+                </p:tab>
+            </p:tabView>
+        </h:form>
+        <p:dialog id ="dialogPayConfirmed" widgetVar="dialogPayConfirmed">
+            Your order has been paid. Enjoy the comfort of MakanMaker at home!
+            <p:button href="payConfirmed.xhtml" value="Confirm"/>
+        </p:dialog>
+    </ui:define>
+    <ui:define name="stepsTracker">
+        <p:steps activeIndex="2" styleClass="custom" readonly="true">
+            <p:menuitem value="Select Address" url="select_address.xhtml"/>
+            <p:menuitem value="Select Delivery Schedule" url="select_address.xhtml"/>
+            <p:menuitem value="Select Payment" url="select_address.xhtml"/>
+            <p:menuitem value="Confirmation" url="#"/>
+        </p:steps>
+    </ui:define>
+
+</ui:composition>
+
+
+
+

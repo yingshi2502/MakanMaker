@@ -1,17 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * need to revise: Address:
+Full Name, Street Address, Phone Number, Floor/Unit Number, PostCode
  */
 package entity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -27,52 +28,71 @@ public class AddressEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long addressId;
     
-    @Column(nullable = false)
-    private String country;
-    @Column(nullable = false)
-    private String region;
     @Column(nullable = false, length=6)
     private String postalCode;
+    
     @Column(nullable = false)
-    private String addressLine1;
+    private String streetAddress;
     @Column(nullable = false)
-    private String addressLine2;
+    private String floorUnit;
+    
     @Column(nullable = false)
-    private Boolean isDefault;
+    private Boolean isDefaultShipping;
+    
+    @Column(nullable = false)
+    private Boolean isDefaultBilling;
+    
     @Column(nullable = false)
     private String phoneNumber;
     @Column(nullable = false)
     private String fullName;
+    
     @Column(nullable = false)
     private Boolean isDeleted; //customer wants to delete the address, don't directly delete but just change the BooleanValue
     
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private CustomerEntity customer;
+    
+    private double shippingFee;
     
     @OneToMany(mappedBy = "address")
     private List<OrderEntity> orders;
     
     public AddressEntity(){
-        
+        this.isDeleted = false;
+        setShippingFee();
     }
 
-    public AddressEntity(String country, String region, String postalCode, String addressLine1, String addressLine2) {
-        this.country = country;
-        this.region = region;
+    public AddressEntity(String postalCode, String streetAddress, String floorUnit, Boolean isDefaultShipping, Boolean isDefaultBilling, String phoneNumber, String fullName) {
         this.postalCode = postalCode;
-        this.addressLine1 = addressLine1;
-        this.addressLine2 = addressLine2;
+        this.streetAddress = streetAddress;
+        this.floorUnit = floorUnit;
+        this.isDefaultShipping = isDefaultShipping;
+        this.isDefaultBilling = isDefaultBilling;
+        this.phoneNumber = phoneNumber;
+        this.fullName = fullName;
+        this.isDeleted = false;
+       setShippingFee();
+
+    }
+
+    private void setShippingFee(){
+        Random r = new Random();
+        int fD = r.nextInt(10);
+        int fR = r.nextInt(10);
+        double f = fD + fR * 0.1;
+        setShippingFee(f);
     }
     
-    public AddressEntity(String country, String region, String postalCode, String addressLine1, String addressLine2, CustomerEntity customer){
-        this();
-        this.country = country;
-        this.region = region;
-        this.postalCode = postalCode;
-        this.addressLine1 = addressLine1;
-        this.addressLine2 = addressLine2;
-        this.customer = customer;
+    public Boolean getIsDefaultBilling() {
+        return isDefaultBilling;
     }
+
+    public void setIsDefaultBilling(Boolean isDefaultBilling) {
+        this.isDefaultBilling = isDefaultBilling;
+    }
+
 
     public Long getAddressId() {
         return addressId;
@@ -114,33 +134,7 @@ public class AddressEntity implements Serializable {
         return serialVersionUID;
     }
 
-    /**
-     * @return the country
-     */
-    public String getCountry() {
-        return country;
-    }
-
-    /**
-     * @param country the country to set
-     */
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    /**
-     * @return the region
-     */
-    public String getRegion() {
-        return region;
-    }
-
-    /**
-     * @param region the region to set
-     */
-    public void setRegion(String region) {
-        this.region = region;
-    }
+    
 
     /**
      * @return the postalCode
@@ -157,31 +151,31 @@ public class AddressEntity implements Serializable {
     }
 
     /**
-     * @return the addressLine1
+     * @return the streetAddress
      */
-    public String getAddressLine1() {
-        return addressLine1;
+    public String getStreetAddress() {
+        return streetAddress;
     }
 
     /**
-     * @param addressLine1 the addressLine1 to set
+     * @param streetAddress the streetAddress to set
      */
-    public void setAddressLine1(String addressLine1) {
-        this.addressLine1 = addressLine1;
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 
     /**
-     * @return the addressLine2
+     * @return the floorUnit
      */
-    public String getAddressLine2() {
-        return addressLine2;
+    public String getFloorUnit() {
+        return floorUnit;
     }
 
     /**
-     * @param addressLine2 the addressLine2 to set
+     * @param floorUnit the floorUnit to set
      */
-    public void setAddressLine2(String addressLine2) {
-        this.addressLine2 = addressLine2;
+    public void setFloorUnit(String floorUnit) {
+        this.floorUnit = floorUnit;
     }
 
     /**
@@ -213,17 +207,17 @@ public class AddressEntity implements Serializable {
     }
 
     /**
-     * @return the isDefault
+     * @return the isDefaultShipping
      */
-    public Boolean getIsDefault() {
-        return isDefault;
+    public Boolean getIsDefaultShipping() {
+        return isDefaultShipping;
     }
 
     /**
-     * @param isDefault the isDefault to set
+     * @param isDefaultShipping the isDefaultShipping to set
      */
-    public void setIsDefault(Boolean isDefault) {
-        this.isDefault = isDefault;
+    public void setIsDefaultShipping(Boolean isDefaultShipping) {
+        this.isDefaultShipping = isDefaultShipping;
     }
 
     /**
@@ -266,6 +260,20 @@ public class AddressEntity implements Serializable {
      */
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    /**
+     * @return the shippingFee
+     */
+    public double getShippingFee() {
+        return shippingFee;
+    }
+
+    /**
+     * @param shippingFee the shippingFee to set
+     */
+    public void setShippingFee(double shippingFee) {
+        this.shippingFee = shippingFee;
     }
     
 }

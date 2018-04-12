@@ -29,5 +29,9 @@ public interface MealKitControllerLocal {
     public void deleteMealKit(MealKitEntity mealKit) throws UndeletableException;
 
     public List<MealKitEntity> retrieveAllMealKits();
+
+    public List<MealKitEntity> searchMealKits(String keywords);
+
+    public List<MealKitEntity> retrieveAvailableMealKits();
     
 }

@@ -21,9 +21,16 @@ public interface TagControllerLocal {
 
     TagEntity createNewTag(TagEntity newTag) throws TagExisitException,GeneralException;
 
-    public List<MealKitEntity> retrieveMealKitsByTags(List<TagEntity> tags);
+    public List<MealKitEntity> retrieveMealKitsByTags(List<String> tags);
 
     public void linkTagAndMealKit(Long tagId, Long mealKitId);
+
+    public List<TagEntity> retrieveAllTags();
+
+    public Long retrieveTagIdByTagName(String tagName);
+
+    public void clearAllTags(Long mealKitId);
+
 
     
 }

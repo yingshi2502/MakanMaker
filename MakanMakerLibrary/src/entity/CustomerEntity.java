@@ -1,12 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * ADD FULLNAME & MOBILE
  */
 package entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -32,6 +32,12 @@ public class CustomerEntity implements Serializable {
     @Column(unique = true, nullable = false)
     private String userName;
     
+    @Column(nullable = false)
+    private String fullName;
+    
+    @Column(nullable = false)
+    private String mobile;
+      
     @Column(unique = true, nullable = false)
     private String email;
     
@@ -40,11 +46,17 @@ public class CustomerEntity implements Serializable {
     
     @OneToMany(mappedBy = "customer")
     private List<OrderEntity> orderHistory;
+    
     @OneToMany(mappedBy = "customer")
     private List<AddressEntity> addresses;
     
     private List<Long> wishList; //// stores MealKitID
 
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateOfBirth;
+    
+    private Integer gender; //0:male, 1:female
+            
     @OneToMany(mappedBy = "customer")
     private List<TransactionEntity> transactions;
     
@@ -60,14 +72,57 @@ public class CustomerEntity implements Serializable {
     }
 
     public CustomerEntity() {
+        wishList = new ArrayList<>();
     }
-    
-    
 
-    public CustomerEntity(String userName, String email, String password) {
+    public CustomerEntity(String userName, String fullName, String mobile, String email, String password, Date dob, Integer gender) {
         this.userName = userName;
+        this.fullName = fullName;
+        this.mobile = mobile;
         this.email = email;
         this.password = password;
+        this.dateOfBirth = dob;
+        this.gender = gender;
+        wishList = new ArrayList<>();
+    }
+
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+    
+    /**
+     * @return the dateOfBirth
+     */
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    /**
+     * @param dateOfBirth the dateOfBirth to set
+     */
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
     }
 
     @Override

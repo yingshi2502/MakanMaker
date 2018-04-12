@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/paymentTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="header" id="header">
+        <title>Select Address</title>
+        <!--to be fixed
+            update the selected address to managed bean as the selectedAddress: server: does not have a writable property 'selectedAddress'
+            update the shipping fees (methods in place. need to check the selectedAddress
+            fix the setSelectedAddress in Managed Beans-->
+    </ui:define>
+    <ui:define name="content" id="content">
+        <h:form id="form">
+            <p:dataTable id="addressSelect" var="address" value="#{selectAddressManagedBean.allAddresses}" selection="#{selectAddressManagedBean.selectedAddress}" rowKey="#{address.postalCode}">
+                <f:facet name="header">
+                    Select Address
+                </f:facet>
+<!--                <p:ajax event="rowSelect" listener="#{selectAddressManagedBean.setSelectedAddress}" update="@form form"/>-->
+                <!--somehow the selected address is not updated-->
+                <p:column selectionMode="single" style="width:16px;text-align:center" />
+                <p:column headerText="Street Address">
+                    <h:outputText value="#{address.streetAddress}" />
+                </p:column>
+                <p:column headerText="Floor Unit">
+                    <h:outputText value="#{address.floorUnit}" />
+                </p:column>
+                <p:column headerText="Postal Code">
+                    <h:outputText value="#{address.postalCode}" />
+                </p:column>
+                <f:facet name="footer">
+                    <p:commandButton icon="ui-icon-plus" value="Select this address" 
+                                     process="@form form"
+                                     oncomplete="PF('dialogAddressSelected').show()"
+                                     update="@form selectionConfirm"
+                                     >
+                    </p:commandButton>
+                </f:facet>
+            </p:dataTable>
+            <p:commandButton value="Select Delivery Schedule" disabled="#{selectAddressManagedBean.selectedAddress.addressId eq null}" actionListener="#{selectAddressManagedBean.putSelectedAddress}" />
+            
+        </h:form>
+        <h:form id="selectionConfirm">
+            <p:dialog id ="dialogAddressSelected" widgetVar="dialogAddressSelected">
+                Order will be delivered to ID : <h:outputLabel id="selectedAddress" value="#{selectAddressManagedBean.selectedAddress.addressId}"/> :)
+                Shipping Fee: #{selectAddressManagedBean.selectedAddress.shippingFee}
+            </p:dialog>
+        </h:form>
+    </ui:define>
+    <ui:define name="stepsTracker">
+        <p:steps activeIndex="0" styleClass="custom" readonly="true">
+            <p:menuitem value="Select Address" url="select_address.xhtml"/>
+            <p:menuitem value="Select Delivery Schedule" url="select_address.xhtml"/>
+            <p:menuitem value="Select Payment" url="payment.xhtml"/>
+            <p:menuitem value="Confirmation" url="#"/>
+        </p:steps>
+    </ui:define>
+
+</ui:composition>
+

@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/paymentTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="header" id="header">
+        <title>Confirmation Page</title>
+        <!--to be fixed:
+        pass in the enum type for transaction as tab changes
+        -->
+    </ui:define>
+    <ui:define name="content" id="content">
+        <h3 style="margin-left: 30px">Your Orders</h3>
+        <p:outputLabel value="Total: #{paymentConfirmManagedBean.totalPrice}" style="font-size: 15px"/>
+        <p:outputLabel value="SubTotal: #{paymentConfirmManagedBean.subTotal}" style="font-size: 15px"/>
+        <p:outputLabel value="Total Shipping: #{paymentConfirmManagedBean.deliveryAdd.shippingFee}" style="font-size: 15px"/>
+        
+        <br/>
+        
+        <h:form id="formConfirmation">
+            
+            <p:growl id = "growl" showDetail="true" showSummary="true" sticky="true"/>
+            
+            <p:dataTable id="dataTableAllOrders" widgetVar="dataTableAllOrders" value="#{paymentConfirmManagedBean.orders}" var="order" tableStyle="table-layout: auto">
+                
+                <p:column headerText="Meal Kit">
+                    <h:outputText value="#{order.mealKit.name}" />
+                </p:column>
+                <p:column headerText="Quantity">
+                    <h:outputText value="#{order.quantity}" />
+                </p:column>
+                <p:column headerText="Cost">
+                    <h:outputText value="#{order.totalAmount}">
+                        <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Delivery Date">
+                    <h:outputText value="#{order.deliveryDate}" />
+                </p:column>
+                <p:column headerText="Status">
+                    <h:outputText value="#{order.orderStatus}" />
+                </p:column>
+                <p:column headerText="Order Number">
+                    <p:link outcome="/userProfile/orderPage.xhtml?id=#{order.orderId}"><h:outputText value="#{order.orderNumber}" /></p:link>
+                </p:column>
+                <p:column headerText="Transaction Code">
+                    <h:outputText value="#{order.transaction.transactionCode}" />
+                </p:column>
+            </p:dataTable>
+            
+            <p:button value="Continue Shopping" href="/mealkit/viewAllMealkits.xhtml"/>
+        </h:form>
+        
+    </ui:define>
+    <ui:define name="stepsTracker">
+        <p:steps activeIndex="3" styleClass="custom" readonly="true">
+            <p:menuitem value="Select Address" />
+            <p:menuitem value="Select Delivery Schedule" />
+            <p:menuitem value="Select Payment" />
+            <p:menuitem value="Confirmation" />
+        </p:steps>
+    </ui:define>
+
+</ui:composition>
+
+
+
+

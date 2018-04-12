@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/homePagesTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <f:metadata>
+        <f:viewParam name="id" value="#{viewMealKitDetailsManagedBean.mealKitId}" />
+    </f:metadata>
+    
+    <ui:define name="header">
+        <style>
+            .bg{
+                font-weight: lighter;
+                padding: 6px 6px; 
+                display: inline-block; 
+                border-radius: 10px; 
+                background-color: lightskyblue; 
+                max-width: 150px;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="mainDetailForm">
+
+            <p:growl id="growl" showDetail="true" showSummary="true" sticky="tru"/>
+            <p:dataTable var="mealKit" style="padding-left: 40px;" value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
+                <p:column>
+                    <h:outputText style="font-weight: bold;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.name}"/>   
+                    <br/>
+                    <h:outputText   value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.description}"/>
+
+                    <p:panel>
+                        <p:outputLabel> Rating </p:outputLabel>
+                        <p:rating value="#{viewMealKitDetailsManagedBean.rating}" disabled="true" />
+                    </p:panel>
+
+                    <p:dataTable value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
+                        <p:column>
+                            <img src="../images/duration.png" height="60px" width="60px" align="middle"></img>
+                            <br/>
+                            <h:outputText style="font-weight: bold; text-align: center;"  value="Time"/>
+                            <br/>
+                            <h:outputText style="text-align: center;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.time}"/> 
+                        </p:column> 
+
+                        <p:column>
+                            <img src="../images/difficulty.png" height="60px" width="60px" align="middle"></img>
+                            <br/>
+                            <h:outputText style="font-weight: bold;"  value="Difficulty"/> 
+                            <br/>
+                            <h:outputText style="text-align: center;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.difficulty}"/>                                                                   
+                        </p:column>
+
+                        <p:column>
+                            <img src="../images/nutrition.png" height="60px" width="60px" align="middle"></img>
+                            <br/>
+                            <h:outputText style="font-weight: bold;"  value="Nutrition"/> 
+                            <br/>
+                            <h:outputText style="text-align: center;"  value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.nutrition} Calories"/>                                       
+                        </p:column>                                 
+
+                    </p:dataTable>
+                    <p:dataTable value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}">
+                        <p:column> 
+                            <h:outputLabel for="quantityOfServings" value="Quantity: " style="font-weight: bold;" />
+                            <p:spinner id="quantityOfServings" value="#{viewMealKitDetailsManagedBean.quantityOfServing}" min="0" />
+                        </p:column>                              
+                    </p:dataTable>                            
+
+                    <br></br>
+                    <p:commandButton id="addToCart" value="Add to Cart" icon="fa fa-shopping-cart" update="addToCart" actionListener="#{viewMealKitDetailsManagedBean.addToShoppingCart}" disabled="#{viewMealKitDetailsManagedBean.addedToCart}"/>
+                    <p:tooltip for="addToCart" value="It's already in your shopping cart" showEffect="slide" hideEffect="slide" style="background-color:#FFFFCC;border:1px dotted #000000;" rendered="#{viewMealKitDetailsManagedBean.addedToCart}"/>
+                    &nbsp;&nbsp;
+                    <p:commandButton id="addToWishlist" value="Add to Wishlist" icon="fa fa-star" update="addToWishlist" actionListener="#{viewMealKitDetailsManagedBean.addToWishlist}" disabled="#{viewMealKitDetailsManagedBean.addedToWishlist}"/>
+                    <p:tooltip for="addToWishlist" value="It's already in your wishlist" showEffect="slide" hideEffect="slide" style="background-color:#FFFFCC;border:1px dotted #000000;" rendered="#{viewMealKitDetailsManagedBean.addedToWishlist}"/>
+
+                </p:column> 
+
+                <p:column >
+                    <img src="#{viewMealKitDetailsManagedBean.mealKitEntityToView.imagePath}" height="330px" width="650px" align="middle"></img>
+                    <br></br>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <br />
+        <p:dataTable style="padding-left: 40px;" value="#{viewMealKitDetailsManagedBean.mealKitEntityToView}" emptyMessage="No reviews added yet">
+            <p:column>
+                <h:outputText style="font-weight: bold; padding-left: 40px;"  value="INGREDIENTS"/> 
+                <p:dataList value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.ingredients}" var="ingredient"  type="ordered" emptyMessage="No ingredients recorded yet." style="padding: 4px 4px 2px 2px">
+                    #{ingredient.toString()}
+                </p:dataList>
+
+            </p:column> 
+
+            <p:column >
+                <br></br>
+                <h:outputText style="font-weight: bold;" value="RECIPE" />
+                <br></br><br></br>
+                <ui:repeat value="#{viewMealKitDetailsManagedBean.mealKitEntityToView.recipe}" var="rec">
+                    <h:outputText style="" value="#{rec}" />
+
+                </ui:repeat>                        
+
+                <h:form>
+                    <p:commandButton value="DOWNLOAD PDF OF RECIPE" icon="fa fa-download" actionListener="#{reportManagedBean.generateReport}" ajax="false"/>
+                </h:form>
+            </p:column>
+        </p:dataTable>   
+        <h:form id="reviewForm" style="margin-top: 20px; width: 600px">
+            <h2 style="margin-top: 70px;margin-left: 40px">Reviews</h2>
+            <p:dataTable id="reviewDataTable" value="#{viewMealKitDetailsManagedBean.reviews}" var="review" style="margin-left: 40px">
+                <p:column>
+                        <p:panelGrid >
+                            <p:row >
+                                <p:column style="width:200px">
+                                    By <p:outputLabel value="#{review.reviewer}" styleClass="bg"/>
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel style="position: absolute;right: 50px" value="#{viewMealKitDetailsManagedBean.getDate(review.reviewTime)}" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="5">
+                                    <div style="border-bottom: 1px solid #AFAFAF;">
+                                    </div>  
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:rating value="#{review.rating}" disabled="true" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputPanel style="margin-right: 10px">
+                                        #{review.review}
+                                    </p:outputPanel> 
+                                </p:column>
+
+                            </p:row>
+                            
+                        </p:panelGrid>
+<!--                    </p:panel>-->
+                    <br />
+                </p:column>
+            </p:dataTable> 
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

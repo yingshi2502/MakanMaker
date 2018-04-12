@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.MealKitEntity;
+import entity.OrderEntity;
 import entity.ReviewEntity;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -36,7 +37,7 @@ public class ReviewController implements ReviewControllerLocal {
      * @return
      */
     @Override
-    public ReviewEntity createNewReiview(String customerUsername, Long mealKitId, String reviewContent, Integer ratings) {
+    public ReviewEntity createNewReiview(String customerUsername, Long orderId,Long mealKitId, String reviewContent, Integer ratings) {
         MealKitEntity targetMealKit = em.find(MealKitEntity.class, mealKitId);
         
         ReviewEntity newReview = new ReviewEntity(customerUsername, ratings, reviewContent);
@@ -44,6 +45,10 @@ public class ReviewController implements ReviewControllerLocal {
         
         newReview.setMealKit(targetMealKit);
         targetMealKit.getReviews().add(newReview);
+        
+        OrderEntity o = em.find(OrderEntity.class, orderId);
+        o.setIsReviewed(true);
+        
         em.flush();
         em.refresh(newReview);
         return newReview;
@@ -57,7 +62,7 @@ public class ReviewController implements ReviewControllerLocal {
      */
     @Override
     public List<ReviewEntity> retrieveReviewByMealKitId(Long mealKitId) throws EmptyListException{
-        Query query = em.createQuery("SELECT r FROM ReviewEntity WHERE r.mealKit.mealKitId =:id");
+        Query query = em.createQuery("SELECT r FROM ReviewEntity r WHERE r.mealKit.mealKitId =:id");
         query.setParameter("id", mealKitId);
         List<ReviewEntity> list = query.getResultList();
         if (list.isEmpty()){

@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+<!--        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+-->        <h:outputStylesheet library="css" name="default.css"/><!--
+        <h:outputStylesheet library="css" name="cssLayout.css"/>-->
+        <ui:insert name="header">Header</ui:insert>   
+        
+            
+    </h:head>
+
+    <h:body>
+        <style>
+            .ui-widget{
+                border: none;
+            }
+        </style>
+        <p:layout fullPage="true">
+            
+            <p:layoutUnit position="north" >
+                <ez:managerHeaderComponent />
+                <p:commandButton id="oriButton" widgetVar="oriButton" icon="fa fa-reorder" style="font-size: 20px; width: 40px; height: 40px" onmouseover="PF('sidebar2').show()" oncomplete="PF('sidebar2').show()" />
+            </p:layoutUnit>
+            
+            <p:layoutUnit size="250" position="west" style="margin-left: 20px">
+                
+                <h4>Hello! #{sessionScope['currentManagerEntity'].userName}</h4>
+                <br/>
+                <h:form>
+                    <p:menu toggleable="true" style="width:200px;">
+                        <p:submenu label="Meal Kit Management" >
+                            <p:menuitem value="Create New Meal Kit" outcome="createMealKitManager" icon="fa fa-plus" style="font-size: 14px"/>
+                            <p:menuitem value="Manage Meal Kits" outcome="viewUpdateAllMealKitsManager" icon="fa fa-edit" style="font-size: 14px"/>
+                            <p:menuitem value="All Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" icon="fa fa-list-ul" style="font-size: 14px"/>
+                        </p:submenu>
+                        <p:submenu label="View Reports">
+                            <p:menuitem value="Sales" icon="" style="font-size: 14px"/>
+                            <p:menuitem value="Finance" icon="" style="font-size: 14px"/>
+                        </p:submenu>
+                        <p:menuitem value="Logout" outcome="/index.xhtml" />
+                    </p:menu>
+                    
+                </h:form>
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="center" >
+                
+                <ui:insert name="content">Content</ui:insert>
+                
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="south" size="30"  >
+                <p:outputLabel style="font-size: 10px; font-weight: bold" value="&copy; 2018 Makan Maker. All Rights Reserved." />
+            </p:layoutUnit>
+        </p:layout>
+
+        <ez:stackSideBarComponent />
+        
+<!--        <h:form id="panell" style="width:220px;">
+            <p:sidebar id="sidebar2" widgetVar="sidebar2" baseZIndex="10000" style="width: 200px">
+                <h1 style="font-size: 18px; font-weight: bold;margin-top: 20px">Main Menu</h1>
+                <br />
+                <p:menu style="width: 170px; font-size: 15px; margin-top: 10px; ">
+                    <p:menuitem value="Home" outcome="/index.xhtml"/>
+                    <p:menuitem value="About Us" outcome="/aboutUs.xhtml" style="margin-top:10px"/>
+                    <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" style="margin-top:10px"/>
+                    <p:menuitem value="Contact Us" outcome="/contactUs.xhtml" style="margin-top:10px"/>
+                    <p:menuitem value="Our Clients" url="/ourClients.xhtml" style="margin-top:10px"/>
+                    <p:menuitem value="Manager Portal" url="/login_manager.xhtml" style="margin-top:10px" />
+                </p:menu>
+            </p:sidebar>
+        </h:form>-->
+        
+    </h:body>
+
+</html>

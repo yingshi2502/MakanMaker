@@ -34,6 +34,8 @@ public class TransactionEntity implements Serializable {
     @OneToOne
     private OrderEntity order;
     
+    private String transactionCode;
+    
     @Enumerated(EnumType.STRING)
     private TransactionTypeEnum transactionType;
     
@@ -43,6 +45,8 @@ public class TransactionEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date transactionDateTime;
 
+    private String description;
+    
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private CustomerEntity customer;
@@ -50,14 +54,14 @@ public class TransactionEntity implements Serializable {
     public TransactionEntity() {
     }
 
-    public TransactionEntity(Double amount, TransactionTypeEnum transactionType, PaymentTypeEnum paymentType, Date transactionDateTime) {
+    public TransactionEntity(Double amount, String transactionCode, TransactionTypeEnum transactionType, PaymentTypeEnum paymentType, Date transactionDateTime, String description) {
         this.amount = amount;
+        this.transactionCode = transactionCode;
         this.transactionType = transactionType;
         this.paymentType = paymentType;
         this.transactionDateTime = transactionDateTime;
+        this.description = description;
     }
-    
-    
     
     public Long getTransactionId() {
         return transactionId;
@@ -176,5 +180,35 @@ public class TransactionEntity implements Serializable {
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
     }
+    
+    
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the transactionCode
+     */
+    public String getTransactionCode() {
+        return transactionCode;
+    }
+
+    /**
+     * @param transactionCode the transactionCode to set
+     */
+    public void setTransactionCode(String transactionCode) {
+        this.transactionCode = transactionCode;
+    }
+
 
 }

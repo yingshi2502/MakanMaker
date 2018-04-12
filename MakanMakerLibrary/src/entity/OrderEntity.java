@@ -41,7 +41,8 @@ public class OrderEntity implements Serializable {
     @Column(nullable = false)
     private Double totalAmount;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private MealKitEntity mealKit;
     
     private Integer quantity;
@@ -58,28 +59,39 @@ public class OrderEntity implements Serializable {
     @Column(nullable = false)
     private OrderStatusEnum orderStatus;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private AddressEntity address;
+    
+    private String orderNumber;
     
     @OneToOne(mappedBy="order")
     private TransactionEntity transaction;
     
     private String extraRequest;
     
-    public OrderEntity(){
-        
-    }
-
-    public OrderEntity(Double totalAmount, Integer quantity, Date deliveryDate, Date purchasingDate, OrderStatusEnum orderStatus, String extraRequest) {
-        this.totalAmount = totalAmount;
-        this.quantity = quantity;
-        this.deliveryDate = deliveryDate;
-        this.purchasingDate = purchasingDate;
-        this.orderStatus = orderStatus;
-        this.extraRequest = extraRequest;
-    }
+    private Double shippingFee;
+   
+    private boolean isReviewed;
     
+    public OrderEntity(){
+        isReviewed = false;
+    }
 
+    public OrderEntity(Double totalAmount, Integer quantity, Date purchasingDate,  Date deliveryDate, OrderStatusEnum orderStatus, String orderNumber,  String extraRequest, Double shippingFee) {
+        this.totalAmount = totalAmount;
+        this.deliveryDate = deliveryDate;
+        this.quantity = quantity;
+        this.orderStatus = orderStatus;
+        this.orderNumber = orderNumber;
+        this.purchasingDate = purchasingDate;
+        this.extraRequest = extraRequest;
+        this.shippingFee = shippingFee;
+        this.isReviewed = false;
+    }
+
+   
+    
     public Long getOrderId() {
         return orderId;
     }
@@ -265,6 +277,62 @@ public class OrderEntity implements Serializable {
      */
     public void setTransaction(TransactionEntity transaction) {
         this.transaction = transaction;
+    }
+
+    /**
+     * @return the shippingFee
+     */
+    public Double getShippingFee() {
+        return shippingFee;
+    }
+
+    /**
+     * @param shippingFee the shippingFee to set
+     */
+    public void setShippingFee(Double shippingFee) {
+        this.shippingFee = shippingFee;
+    }
+
+    /**
+     * @return the isReviewed
+     */
+    public Boolean getIsReviewed() {
+        return isIsReviewed();
+    }
+
+    /**
+     * @param isReviewed the isReviewed to set
+     */
+    public void setIsReviewed(Boolean isReviewed) {
+        this.setIsReviewed((boolean) isReviewed);
+    }
+
+    /**
+     * @return the orderNumber
+     */
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    /**
+     * @param orderNumber the orderNumber to set
+     */
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    /**
+     * @return the isReviewed
+     */
+    public boolean isIsReviewed() {
+        return isReviewed;
+    }
+
+    /**
+     * @param isReviewed the isReviewed to set
+     */
+    public void setIsReviewed(boolean isReviewed) {
+        this.isReviewed = isReviewed;
     }
     
 }

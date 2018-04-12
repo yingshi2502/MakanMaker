@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <style>
+            .menuBarBg {
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                padding: 15px;
+                border: none;
+                width: 635px; 
+                text-align: center;
+                -webkit-border-radius: 20px;
+                border-radius: 20px;
+                font: normal 16px/1 "Lucida Console", Monaco, monospace;
+                color: black;
+                font-weight: bold;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                background: url("http://enjoycss.com/bg-img/custom/80950-bj735i.png"); 
+                background-position: 30% 30%;
+                -webkit-background-origin: padding-box;
+                background-origin: padding-box;
+                -webkit-background-clip: border-box;
+                background-clip: border-box;
+                -webkit-background-size: cover;
+                background-size: cover;
+                -webkit-transition: opacity 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                -moz-transition: opacity 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                -o-transition: opacity 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                transition: opacity 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+            }
+
+            .menuItem{
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                padding: 15px;
+                border: none;
+                -webkit-border-radius: 20px;
+                border-radius: 20px;
+                text-align: center;
+                font: normal 15px/1 "Lucida Console", Monaco, monospace;
+                color: black;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                background: rgba(255,255,255,0.75);
+            }
+        </style>
+        <div align="center" >
+            <p:panel style="text-align: center; align-items: center">  
+                <p:menubar  styleClass="menuBarBg" style="align-items: center; display: inline-block; ">
+                    <p:menuitem value="Home" outcome="/index.xhtml" styleClass="menuItem"/>
+                    <p:menuitem value="About Us" style="margin-left: 50px;margin-right: 50px" styleClass="menuItem" outcome="/aboutUs.xhtml" />
+                    <p:menuitem value="Meal Kits" outcome="/mealkit/viewAllMealkits.xhtml" styleClass="menuItem" />
+                    <p:menuitem value="Contact Us" style="margin-left: 50px;margin-right: 50px" styleClass="menuItem" outcome="/contactUs.xhtml" />
+                    <p:menuitem value="Our Clients" url="/ourClients.xhtml" styleClass="menuItem" />
+                </p:menubar>
+                <!--               style = "text-align: center;font-size: 18px; padding-right:90px; padding-left:90px;" -->
+            </p:panel> 
+        </div>
+    </cc:implementation>
+</html>
