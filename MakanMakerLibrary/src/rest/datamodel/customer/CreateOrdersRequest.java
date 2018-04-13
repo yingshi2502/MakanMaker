@@ -9,6 +9,7 @@ import java.util.List;
  * @author yingshi
  */
 public class CreateOrdersRequest {
+    
     private List<OrderEntity> orders;
     private Long customerId;
     private List<Long> mealKitIds;

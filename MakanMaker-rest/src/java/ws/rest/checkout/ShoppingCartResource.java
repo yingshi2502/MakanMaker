@@ -11,7 +11,6 @@ import ejb.session.stateless.ShoppingCartControllerLocal;
 import entity.MealKitEntity;
 import entity.OrderEntity;
 import entity.ShoppingCartEntity;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,7 +25,6 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -34,6 +32,7 @@ import javax.xml.bind.JAXBElement;
 import rest.datamodel.customer.CreateOrdersRequest;
 import rest.datamodel.customer.MsgResponse;
 import rest.datamodel.customer.ShoppingCartResponse;
+import util.enumeration.OrderStatusEnum;
 import util.helperClass.CartItemWrapper;
 
 /**
@@ -50,7 +49,6 @@ public class ShoppingCartResource {
 
     CustomerControllerLocal customerController = lookupCustomerControllerLocal();
 
-    
     
     
     @Context
@@ -144,7 +142,10 @@ public class ShoppingCartResource {
                 CreateOrdersRequest req = jaxbCreateOrderReq.getValue();
                 int i=0;
                 for (OrderEntity o: req.getOrders()){
-                    orderController.createNewOrder(o, req.getCustomerId(), req.getMealKitIds().get(i), req.getAddressId());
+                    o.setOrderStatus(OrderStatusEnum.PREPARING);
+                    
+                    o = orderController.createNewOrder(o, req.getCustomerId(), req.getMealKitIds().get(i), req.getAddressId(),true);
+                    
                 }
 
                 rsp = new MsgResponse("Create Order Success", true);

@@ -12,6 +12,7 @@ public class ShoppingCartResponse {
     
     private List<CartItemWrapper> items;
     private double subTotal;
+    
     private boolean result;
     private String message;
 

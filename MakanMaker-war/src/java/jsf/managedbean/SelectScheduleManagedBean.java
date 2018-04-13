@@ -135,7 +135,7 @@ public class SelectScheduleManagedBean implements Serializable{
             CartItemWrapper item = (CartItemWrapper)e.getData();
             double totalAmount = item.getQuantity() * item.getMk().getPrice();
             OrderEntity order = new OrderEntity(totalAmount, item.getQuantity(), new Date(), e.getStartDate(), OrderStatusEnum.UNPAID, String.valueOf((char)(i + 64)), item.getExtraRequest(), addressToShip.getShippingFee()/events.size());
-            order = orderController.createNewOrder(order, currentCustomer.getCustomerId(), item.getMk().getMealKitId(), addressToShip.getAddressId());
+            order = orderController.createNewOrder(order, currentCustomer.getCustomerId(), item.getMk().getMealKitId(), addressToShip.getAddressId(),false);
             orders.add(order);
             i++;
         }
