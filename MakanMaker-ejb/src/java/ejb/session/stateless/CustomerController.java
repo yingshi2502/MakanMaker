@@ -52,6 +52,7 @@ public class CustomerController implements CustomerControllerLocal {
             shoppingCart.setCustomer(customer);
             customer.setShoppingCart(shoppingCart);
             em.flush();
+            
             if (detach){
                 em.detach(customer);
                 customer.getAddresses().clear();

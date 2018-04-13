@@ -54,7 +54,7 @@ public class OrderController implements OrderControllerLocal {
     }
 
     @Override
-    public OrderEntity createNewOrder(OrderEntity order, Long customerId, Long mealKitId, Long addressId) {
+    public OrderEntity createNewOrder(OrderEntity order, Long customerId, Long mealKitId, Long addressId, boolean mobile) {
         
             SimpleDateFormat sf = new SimpleDateFormat("ssmmhhddMMyy");
             order.setOrderNumber(customerId+sf.format((new Date()))+mealKitId+order.getOrderNumber());    
@@ -91,6 +91,10 @@ public class OrderController implements OrderControllerLocal {
             
             em.flush();
             em.refresh(order);
+            
+            if (mobile){
+                payForOrder(order.getOrderId(), PaymentTypeEnum.PAYPAL);
+            }
             
             return order;
        

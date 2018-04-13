@@ -96,7 +96,7 @@ public class DataInitialization {
 
         OrderEntity order = new OrderEntity(Double.valueOf(25), 2, new Date(), date, OrderStatusEnum.PREPARING, code, "Add more flavour", Double.valueOf(5));
         
-       orderControllerLocal.createNewOrder(order, 1l, 1l,1l);  
+       orderControllerLocal.createNewOrder(order, 1l, 1l,1l,false);  
     }
     
     private void createAddress(){
