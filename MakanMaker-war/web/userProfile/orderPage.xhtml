@@ -19,7 +19,7 @@
                 <p:panelGrid>
                     <p:outputLabel value="Order ##{orderDetailManagedBean.currOrder.orderNumber}" style="font-size: 15px; font-weight: bold" /><br />
                     <p:outputLabel value="Placed on #{orderDetailManagedBean.purchasingDate}" style="font-size: 10px;"/>
-                    <p:commandButton value="Confirm Receipt" actionListener="#{orderDetailManagedBean.confirmReceipt}" style="position: absolute; top: 80px;right: 40px" rendered="#{orderDetailManagedBean.currOrderStatusStep ne 3}">
+                    <p:commandButton update="@form orderDetailForm" value="Confirm Receipt" actionListener="#{orderDetailManagedBean.confirmReceipt}" style="position: absolute; top: 80px;right: 40px" rendered="#{orderDetailManagedBean.currOrderStatusStep ne 3}">
                     <p:confirm header="Confirmation" message="Sure to confirm the receipt?" icon="ui-icon-alert" />
                 </p:commandButton>
                 </p:panelGrid> 

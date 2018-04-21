@@ -99,6 +99,23 @@ public class OrderController implements OrderControllerLocal {
             return order;
        
     }
+    
+    @Override
+    public void createOrderFromRest(Long customerId, Date delivery, Long mealKitId, Long addressId, String specialRequest, int qty){
+        AddressEntity a = em.find(AddressEntity.class, addressId);
+        MealKitEntity m = em.find(MealKitEntity.class, mealKitId);
+        OrderEntity o = new OrderEntity();
+        o.setDeliveryDate(delivery);
+        o.setOrderStatus(OrderStatusEnum.PREPARING);
+        o.setExtraRequest(specialRequest);
+        o.setPurchasingDate(new Date());
+        o.setShippingFee(a.getShippingFee());
+        double t = m.getPrice() * qty;
+        o.setTotalAmount(t);
+        o.setOrderNumber("MM"+(new Random()).nextInt(10));
+        o = createNewOrder(o, customerId, mealKitId, addressId, true);
+        payForOrder(o.getOrderId(), PaymentTypeEnum.PAYPAL);
+    }
 
     /**
      *

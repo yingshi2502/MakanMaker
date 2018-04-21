@@ -87,7 +87,7 @@ public class viewMealKitDetailsManagedBean implements Serializable {
         }
                 
         try {
-            setMealKitEntityToView(mealKitControllerLocal.retrieveMealKitById(getMealKitId()));
+            setMealKitEntityToView(mealKitControllerLocal.retrieveMealKitById(getMealKitId(),false));
             System.err.println("*****retrieved" + mealKitEntityToView.getName());
 
             reviews = reviewController.retrieveReviewByMealKitId(mealKitId,false);

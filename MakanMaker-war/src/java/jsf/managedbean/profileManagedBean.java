@@ -12,7 +12,9 @@ import entity.AddressEntity;
 import entity.CustomerEntity;
 import entity.OrderEntity;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,6 +72,7 @@ public class profileManagedBean {
         
         try {
             defaultAddress = addressControllerLocal.getDefaultAddressById(currentCustomer.getCustomerId());
+            
         } catch (EmptyListException ex) {
             defaultAddress = null;
             setNoAddress(true);
@@ -84,7 +87,11 @@ public class profileManagedBean {
             }
         }
         try {
-            recentOrders = orderControllerLocal.retrieveOrderByCustomerId(currentCustomer.getCustomerId());
+            List<OrderEntity> os = orderControllerLocal.retrieveOrderByCustomerId(currentCustomer.getCustomerId());
+            
+            for (OrderEntity o: os){
+                recentOrders.add(o);
+            }
         } catch (EmptyListException ex) {
             setNoOrder(true);
         }
@@ -93,7 +100,7 @@ public class profileManagedBean {
     public void updateProfile(ActionEvent event) throws IOException {
         try {
             System.err.println("** update profile");
-            CustomerEntity updated = customerControllerLocal.updateCustomer(currentCustomer);
+            CustomerEntity updated = customerControllerLocal.updateCustomer(currentCustomer,false);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace("currentCustomerEntity", updated);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Update Successful ", null));
             RequestContext.getCurrentInstance().showMessageInDialog(new FacesMessage(FacesMessage.SEVERITY_INFO, "Message", "Updated Successfully!"));
@@ -104,6 +111,16 @@ public class profileManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Update Failed" + ex.getMessage(), null));
         }
 
+    }
+    
+    public String getDeliveryDate(Date date) {
+        SimpleDateFormat ft1 = new SimpleDateFormat("dd-MMM-yyyy");
+        return ft1.format(date);
+    }
+    
+    public String getPurchasingDT(Date date){
+        SimpleDateFormat ft1 = new SimpleDateFormat("dd-MMM-yyyy hh:mm");
+        return ft1.format(date);
     }
 
     public void changePassword(ActionEvent event) throws IOException {

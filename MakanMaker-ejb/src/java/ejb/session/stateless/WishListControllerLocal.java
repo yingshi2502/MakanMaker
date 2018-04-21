@@ -16,7 +16,7 @@ import javax.ejb.Local;
 @Local
 public interface WishListControllerLocal {
 
-    public List<MealKitEntity> getWishListByCustomerId(Long customerId);
+    public List<MealKitEntity> getWishListByCustomerId(Long customerId, boolean detach);
 
     public void addToWishList(Long customerId, Long mealKitId);
 

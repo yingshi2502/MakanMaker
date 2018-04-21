@@ -82,7 +82,7 @@ public class CustomerController implements CustomerControllerLocal {
      * @throws GeneralException
      */
     @Override
-    public CustomerEntity updateCustomer(CustomerEntity customer) throws CustomerNotFoundException {
+    public CustomerEntity updateCustomer(CustomerEntity customer, boolean detach) throws CustomerNotFoundException {
         System.err.println("inside UpdatedCustomer");
         System.err.println(customer.getMobile());
 
@@ -95,6 +95,14 @@ public class CustomerController implements CustomerControllerLocal {
                 updatedCustomer.setFullName(customer.getFullName());
                 updatedCustomer.setGender(customer.getGender());
             
+                
+            if (detach){
+                em.detach(updatedCustomer);
+                updatedCustomer.getAddresses().clear();
+                updatedCustomer.getOrderHistory().clear();
+                updatedCustomer.getTransactions().clear();
+                updatedCustomer.setShoppingCart(null);
+            }
             return updatedCustomer;
         } else {
             throw new CustomerNotFoundException("Customer ID invalid");
@@ -130,6 +138,16 @@ public class CustomerController implements CustomerControllerLocal {
     public CustomerEntity retrieveCustomerByUsername(String username) throws CustomerNotFoundException {
         Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.userName = :username");
         query.setParameter("username", username);
+        try {
+            return (CustomerEntity) query.getSingleResult();
+        } catch (NoResultException ex) {
+            throw new CustomerNotFoundException(ex.getMessage());
+        }
+    }
+    
+    public CustomerEntity retrieveCustomerByEmail(String email) throws CustomerNotFoundException {
+        Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.email = :email");
+        query.setParameter("email", email);
         try {
             return (CustomerEntity) query.getSingleResult();
         } catch (NoResultException ex) {
@@ -194,9 +212,14 @@ public class CustomerController implements CustomerControllerLocal {
 
     @Override
     public CustomerEntity customerLogin(String username, String password, boolean detach) throws InvalidLoginCredentialException {
-
+        CustomerEntity customer;
         try {
-            CustomerEntity customer = retrieveCustomerByUsername(username);
+            if (username.contains("@")){
+                customer = retrieveCustomerByEmail(username);
+            }else{
+                customer = retrieveCustomerByUsername(username);
+            }
+            
             if (SecurityHelper.verifyPassword(password, customer.getPassword())) {
                 if (detach){
                 em.detach(customer);

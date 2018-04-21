@@ -143,6 +143,11 @@ public class SelectScheduleManagedBean implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("newOrders", orders);
     }
     
+    private Date todayDate = new Date();
+    
+    public Date getTodayDate(){
+        return todayDate;
+    }
     
     private Calendar today() {
         Calendar calendar = Calendar.getInstance();

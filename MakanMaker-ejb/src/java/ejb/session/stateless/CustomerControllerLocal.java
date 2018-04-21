@@ -30,7 +30,7 @@ public interface CustomerControllerLocal {
 
     CustomerEntity createNewCustomer(CustomerEntity customer, boolean detach) throws CustomerExistException,GeneralException;
 
-    public CustomerEntity updateCustomer(CustomerEntity customer) throws CustomerNotFoundException;
+    public CustomerEntity updateCustomer(CustomerEntity customer, boolean detach) throws CustomerNotFoundException;
 
     public CustomerEntity retrieveCustomerById(Long customerId, boolean detach);
 
@@ -41,5 +41,7 @@ public interface CustomerControllerLocal {
     public List<OrderEntity> retrieveOrderHistoryByCustomerId(Long customerId);
 
     public ShoppingCartEntity retrieveShoppingCartByCustomerId(Long customerId, boolean detach);
+
+    public CustomerEntity retrieveCustomerByEmail(String email) throws CustomerNotFoundException;
     
 }

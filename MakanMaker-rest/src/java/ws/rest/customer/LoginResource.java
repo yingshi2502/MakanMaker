@@ -52,7 +52,7 @@ public class LoginResource {
     public Response login(@QueryParam("username") String username, @QueryParam("password") String password){
         LoginResponse rsp;
         try{
-            
+            System.err.println("****LoginResource.customerLogin with username: " + username + ", and password: " + password);
             CustomerEntity customer = customerController.customerLogin(username, password, true);
             System.err.println("****Login"+ customer.getMobile());
             customer.getAddresses().clear();
@@ -61,10 +61,11 @@ public class LoginResource {
             customer.setShoppingCart(null);
             customer.setPassword(null);
             rsp = new LoginResponse(true, "Login Success", customer);
+            return Response.status(Response.Status.OK).entity(rsp).build();
         }catch(InvalidLoginCredentialException ex){
             rsp = new LoginResponse(false, ex.getMessage(), null);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rsp).build();
         }
-        return Response.status(Response.Status.OK).entity(rsp).build();
     }
 
     private CustomerControllerLocal lookupCustomerControllerLocal() {

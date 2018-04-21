@@ -36,7 +36,7 @@ import util.enumeration.OrderStatusEnum;
  */
 @Named
 @ViewScoped
-public class MyOrderManagedBean implements Serializable{
+public class MyOrderManagedBean implements Serializable {
 
     @EJB(name = "OrderControllerLocal")
     private OrderControllerLocal orderControllerLocal;
@@ -46,33 +46,54 @@ public class MyOrderManagedBean implements Serializable{
     private ReviewEntity newReview;
     private List<String> statusNames;
     private List<OrderEntity> filteredOrders;
-    
+    private String selectedType;
+
     public MyOrderManagedBean() {
         orders = new ArrayList<>();
         newReview = new ReviewEntity();
-        
+        filteredOrders = new ArrayList<>();
         statusNames = new ArrayList<>();
-        
+
     }
 
     @PostConstruct
     public void postConstruct() {
         CustomerEntity currCustomer = (CustomerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
-        try {
-            setOrders(orderControllerLocal.retrieveOrderByCustomerId(currCustomer.getCustomerId()));
-        } catch (EmptyListException ex) {
-            setNoOrder(true);
-        }catch (NullPointerException ex) {
+        if (currCustomer == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please Login", null));
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/MakanMaker-war/index.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/index.xhtml");
+//                context.redirect(context.getApplicationContextPath() + "/index.xhtml");
             } catch (IOException ex1) {
                 Logger.getLogger(WishListManagedBean.class.getName()).log(Level.SEVERE, null, ex1);
             }
+        } else {
+            try {
+                setOrders(orderControllerLocal.retrieveOrderByCustomerId(currCustomer.getCustomerId()));
+                makeStatusName();
+                for (OrderEntity o : orders) {
+                    if (o.getOrderStatus().equals(OrderStatusEnum.PREPARING)){
+                        filteredOrders.add(o);
+                    }
+                }
+            } catch (EmptyListException ex) {
+                setNoOrder(true);
+                makeStatusName();
+                for (OrderEntity o : orders) {
+                    filteredOrders.add(o);
+                }
+            } catch (NullPointerException ex) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please Login", null));
+                try {
+                    ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+                    context.redirect(context.getApplicationContextPath() + "/index.xhtml");
+                } catch (IOException ex1) {
+                    Logger.getLogger(WishListManagedBean.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+            }
         }
-        makeStatusName();
     }
-    
+
     public boolean filterByStatus(Object value, Object filter, Locale locale) {
 
         String filterText = (filter == null) ? null : filter.toString().trim();
@@ -84,17 +105,34 @@ public class MyOrderManagedBean implements Serializable{
         }
 
         String selected = filter.toString();
-
+        System.err.println("*****order filter" + selected);
         String orderStatus = ((OrderStatusEnum) value).name();
+        System.err.println("*****order value" + orderStatus);
+        System.err.println(selected.compareToIgnoreCase(orderStatus) == 0);
         return selected.compareToIgnoreCase(orderStatus) == 0;
     }
 
-    public String getDeliveryDate(Date date){
-        SimpleDateFormat ft1= new SimpleDateFormat("dd-MMM-yyyy");
+    public void onSelectOrderType() {
+        System.err.println("****selected Type" + selectedType);
+        filteredOrders.clear();
+        for (OrderEntity o : orders) {
+            if (selectedType == null || (getLcOrderStatus(o.getOrderStatus())).equals(selectedType)) {
+                filteredOrders.add(o);
+            }
+        }
+    }
+
+    public String getDeliveryDate(Date date) {
+        SimpleDateFormat ft1 = new SimpleDateFormat("dd-MMM-yyyy");
         return ft1.format(date);
     }
     
-    public String getLcOrderStatus(OrderStatusEnum status){
+    public String getPurchasingDT(Date date){
+        SimpleDateFormat ft1 = new SimpleDateFormat("dd-MMM-yyyy hh:mm");
+        return ft1.format(date);
+    }
+
+    public String getLcOrderStatus(OrderStatusEnum status) {
         switch (status.toString()) {
             case "PREPARING":
                 return "Preparing";
@@ -103,20 +141,20 @@ public class MyOrderManagedBean implements Serializable{
             case "DELIVERED":
                 return "Delivered";
             case "RECEIVED":
-                return "Reveived";
-            case "UNPAID" :
+                return "Received";
+            case "UNPAID":
                 return "Unpaid";
             default:
                 return "Refunded";
 
         }
     }
-    
+
     private void makeStatusName() {
         statusNames.add("Preparing");
         statusNames.add("Deliverying");
         statusNames.add("Delivered");
-        statusNames.add("Reveived");
+        statusNames.add("Received");
         statusNames.add("Refunded");
         statusNames.add("Unpaid");
     }
@@ -134,7 +172,6 @@ public class MyOrderManagedBean implements Serializable{
     public void setOrders(List<OrderEntity> orders) {
         this.orders = orders;
     }
-
 
     /**
      * @return the noOrder
@@ -190,6 +227,20 @@ public class MyOrderManagedBean implements Serializable{
      */
     public void setFilteredOrders(List<OrderEntity> filteredOrders) {
         this.filteredOrders = filteredOrders;
+    }
+
+    /**
+     * @return the selectedType
+     */
+    public String getSelectedType() {
+        return selectedType;
+    }
+
+    /**
+     * @param selectedType the selectedType to set
+     */
+    public void setSelectedType(String selectedType) {
+        this.selectedType = selectedType;
     }
 
 }

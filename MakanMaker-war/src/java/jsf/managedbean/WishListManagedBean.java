@@ -49,7 +49,7 @@ public class WishListManagedBean implements Serializable {
 
         try {
             customerId = currCustomer.getCustomerId();
-            wishListMealKits = wishListControllerLocal.getWishListByCustomerId(getCustomerId());
+            wishListMealKits = wishListControllerLocal.getWishListByCustomerId(getCustomerId(),false);
         } catch (NullPointerException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please Login", null));
             try {
@@ -66,13 +66,13 @@ public class WishListManagedBean implements Serializable {
     public void deleteFromWishList(ActionEvent event) {
         Long toDelete = ((MealKitEntity) event.getComponent().getAttributes().get("toDelete")).getMealKitId();
         wishListControllerLocal.deleteFromWishList(customerId, toDelete);
-        wishListMealKits = wishListControllerLocal.getWishListByCustomerId(getCustomerId());
+        wishListMealKits = wishListControllerLocal.getWishListByCustomerId(getCustomerId(),false);
     }
 
     public void addToShoppingCart(ActionEvent event) {
         Long toAdd = ((MealKitEntity) event.getComponent().getAttributes().get("toAdd")).getMealKitId();
         wishListControllerLocal.addWishListItemToShoppingCart(customerId, toAdd);
-        wishListMealKits = wishListControllerLocal.getWishListByCustomerId(getCustomerId());
+        wishListMealKits = wishListControllerLocal.getWishListByCustomerId(getCustomerId(),false);
     }
 
     /**

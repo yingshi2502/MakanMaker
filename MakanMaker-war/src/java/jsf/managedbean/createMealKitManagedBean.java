@@ -58,6 +58,7 @@ public class createMealKitManagedBean implements Serializable{
     private UploadedFile uploadedImage;
     private String inputStringRecipe;
     private boolean uploadedOne;
+    private List<String> recipe;
     
     /**
      * Creates a new instance of createMealKitManagedBean
@@ -73,6 +74,7 @@ public class createMealKitManagedBean implements Serializable{
         selectItemsTagObject = new ArrayList<>();
         selectItemsTagName = new ArrayList<>();
         inputStringRecipe = "";
+        recipe = new ArrayList<>();
     }
     
     @PostConstruct
@@ -92,7 +94,6 @@ public class createMealKitManagedBean implements Serializable{
             getSelectItemsTagObject().add(new SelectItem(tag, tag.getName()));
             getSelectItemsTagName().add(new SelectItem(tag.getName(), tag.getName()));
         }
-        
         retrieveAllTagNames();
     }
     
@@ -110,7 +111,8 @@ public class createMealKitManagedBean implements Serializable{
         System.err.println("************createMealKitManagedBean.saveNewMealKit(): Start saving new meal kit");
     
         try {
-            newMealKit.setRecipe(Arrays.asList(inputStringRecipe.trim().split(";")));
+            newMealKit.setRecipe(recipe);
+//            newMealKit.setRecipe(Arrays.asList(inputStringRecipe.trim().split(";")));
             newMealKit = mealKitControllerLocal.createNewMealKit(getNewMealKit());
             Long newMealKitEntityId = newMealKit.getMealKitId();
             
@@ -138,6 +140,12 @@ public class createMealKitManagedBean implements Serializable{
         }
     }
     
+    public String extend(){
+        inputStringRecipe = "";
+        return null;
+        
+    }
+    
     public boolean checkIfPriceIsMoreThanZero() {
         if(newMealKit.getPrice() <= 0) {
             return true;
@@ -160,13 +168,16 @@ public class createMealKitManagedBean implements Serializable{
         }
         return getTagNames();
     }
-    
+    public void createNew(){
+        recipe.add(inputStringRecipe);
+        inputStringRecipe = "";
+    }
     public void handleFileUpload(FileUploadEvent event)
     {
         try
         {
             String newFilePath = System.getProperty("user.dir").replaceAll("config", "docroot") + System.getProperty("file.separator") + event.getFile().getFileName();
-            newMealKit.setImagePath("http://localhost:8080/"+event.getFile().getFileName());
+            newMealKit.setImagePath("http://localhost:8080/"+event.getFile().getFileName());  // need to change path
 
             File file = new File(newFilePath);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -368,6 +379,21 @@ public class createMealKitManagedBean implements Serializable{
      */
     public void setInputStringRecipe(String inputStringRecipe) {
         this.inputStringRecipe = inputStringRecipe;
+    }
+
+    /**
+     * @return the recipe
+     */
+    public List<String> getRecipe() {
+        return recipe;
+    }
+
+    /**
+     * @param recipe the recipe to set
+     */
+    public void setRecipe(List<String> recipe) {
+        System.err.println("***inside set recipe");
+        this.recipe = recipe;
     }
     
 }

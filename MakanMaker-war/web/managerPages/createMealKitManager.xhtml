@@ -154,14 +154,16 @@
 
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="recipe" value="Recipe: " />
+                            <p:outputLabel value="Recipe: " />
                         </p:column>
                         <p:column>
-                            <p:inputTextarea id="recipe" style="width: 600px" cols="300" rows="5" value="#{createMealKitManagedBean.inputStringRecipe}" required="true" requiredMessage="Recipe is required" placeholder="Please separate each step with ';'. " >
-
-                            </p:inputTextarea>
-
-                            <p:message for="recipe" />
+                            <p:dataTable emptyMessage="No Steps Added." style="width: 400px" value="#{createMealKitManagedBean.recipe}" var="step" id="showRecipe">
+                                <p:column>
+                                   #{step}
+                                </p:column>
+                                
+                            </p:dataTable>
+                            <p:commandButton icon="ui-icon-pencil"  process="showRecipe" oncomplete="PF('dialogEditRecipe').show()"/>
                         </p:column>
                     </p:row>
 
@@ -191,6 +193,34 @@
 
         </h:form>
 
+        
+        <h:form id="recipeForm">
+            <p:dialog id="dialogEditRecipe" widgetVar="dialogEditRecipe"  width="300px">
+                
+                
+                <h:outputText>Step:</h:outputText>
+                <p:inputText value="#{createMealKitManagedBean.inputStringRecipe}" required="true" style="width: 200px"/>
+                &nbsp;&nbsp;
+                <p:commandButton icon="fa fa-plus" action="#{createMealKitManagedBean.extend}" update="steps @parent" oncomplete="PF('dialogEditRecipe').show()" >
+                    <p:collector value="#{createMealKitManagedBean.inputStringRecipe}" addTo="#{createMealKitManagedBean.recipe}" unique="true"/>
+                </p:commandButton>
+                <br /><br />
+                <p:outputPanel id="steps">
+                    <p:dataTable style="width: 210px" value="#{createMealKitManagedBean.recipe}" var="step" editable="true" id="recipeEditTable" emptyMessage="No Steps Added">
+                        <p:column>
+                            <h:outputText value="#{step}" style="width: 200px"/>
+                        </p:column>
+                    </p:dataTable>
+                    <br />
+                    <p:commandButton value="Save" update=":formCreateMealKit:showRecipe" oncomplete="PF('dialogEditRecipe').hide()"/>
+                </p:outputPanel>
+
+            </p:dialog>
+            
+        </h:form>
+        
     </ui:define>
+    
+    
 </ui:composition>
 

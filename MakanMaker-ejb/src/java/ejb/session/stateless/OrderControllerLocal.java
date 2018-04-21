@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.OrderEntity;
 import entity.TransactionEntity;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import util.enumeration.PaymentTypeEnum;
@@ -38,5 +39,7 @@ public interface OrderControllerLocal {
     public TransactionEntity payForOrder(Long orderId, PaymentTypeEnum paymentType);
 
     public TransactionEntity refundOrder(Long orderId, String description,PaymentTypeEnum paymentType);
+
+    public void createOrderFromRest(Long customerId, Date delivery, Long mealKitId, Long addressId, String specialRequest, int qty);
     
 }

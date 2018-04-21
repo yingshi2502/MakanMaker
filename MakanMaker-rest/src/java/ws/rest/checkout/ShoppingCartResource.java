@@ -8,10 +8,15 @@ package ws.rest.checkout;
 import ejb.session.stateless.CustomerControllerLocal;
 import ejb.session.stateless.OrderControllerLocal;
 import ejb.session.stateless.ShoppingCartControllerLocal;
+import ejb.session.stateless.WishListControllerLocal;
 import entity.MealKitEntity;
 import entity.OrderEntity;
 import entity.ShoppingCartEntity;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Formatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +37,7 @@ import javax.xml.bind.JAXBElement;
 import rest.datamodel.customer.CreateOrdersRequest;
 import rest.datamodel.customer.MsgResponse;
 import rest.datamodel.customer.ShoppingCartResponse;
+import rest.datamodel.mealkit.WishListResponse;
 import util.enumeration.OrderStatusEnum;
 import util.helperClass.CartItemWrapper;
 
@@ -43,12 +49,15 @@ import util.helperClass.CartItemWrapper;
 @Path("shoppingCart")
 public class ShoppingCartResource {
 
+    WishListControllerLocal wishListController = lookupWishListControllerLocal();
+
     OrderControllerLocal orderController = lookupOrderControllerLocal();
 
     ShoppingCartControllerLocal shoppingCartController = lookupShoppingCartControllerLocal();
 
     CustomerControllerLocal customerController = lookupCustomerControllerLocal();
 
+    
     
     
     @Context
@@ -95,6 +104,30 @@ public class ShoppingCartResource {
         
     }
     
+    @Path("retrieveWishListByCustomerId")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveWishListByCustomerId(@QueryParam("customerId") String customerId)
+    {
+        System.err.println("********** retrieveWIshListByCustomerId");
+        Long id = Long.parseLong(customerId);
+        WishListResponse rsp;
+        try
+        {
+            
+            List<MealKitEntity> mealKits = wishListController.getWishListByCustomerId(id, true);
+            rsp = new WishListResponse("Succeed Retrieve", true, mealKits);
+            return Response.status(Response.Status.OK).entity(rsp).build();
+        }
+        catch(Exception ex)
+        {
+            rsp = new WishListResponse(ex.getMessage(), false, null);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rsp).build();
+        }
+    }
+    
+    
     @Path("delete")
     @DELETE
     @Consumes(MediaType.TEXT_PLAIN)
@@ -132,35 +165,31 @@ public class ShoppingCartResource {
     
     @Path("create")
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createOrder(JAXBElement<CreateOrdersRequest> jaxbCreateOrderReq) {
+    public Response createOrder(@QueryParam("customerId") String customerId, @QueryParam("deliveryDate") String deliveryDate, @QueryParam("mealKitId") String mealKitId, @QueryParam("specialRequest") String specialRequest, @QueryParam("qty") String qty, @QueryParam("addressId") String addressId) {
+        System.err.println("Inside Create Order Rest****");
         MsgResponse rsp;
-        
-         if ((jaxbCreateOrderReq != null) && (jaxbCreateOrderReq.getValue() != null)) {
-            try {
-                CreateOrdersRequest req = jaxbCreateOrderReq.getValue();
-                int i=0;
-                for (OrderEntity o: req.getOrders()){
-                    o.setOrderStatus(OrderStatusEnum.PREPARING);
-                    
-                    o = orderController.createNewOrder(o, req.getCustomerId(), req.getMealKitIds().get(i), req.getAddressId(),true);
-                    
-                }
+        try {
+            SimpleDateFormat f = new SimpleDateFormat("ddMMyyyy");
+            Date delivery = f.parse(deliveryDate);
+            System.err.println("Inside Create Order Rest");
 
-                rsp = new MsgResponse("Create Order Success", true);
-                return Response.status(Response.Status.OK).entity(rsp).build();
-            } catch (Exception ex) {
-                rsp = new MsgResponse(ex.getMessage(), false);
+            
+            orderController.createOrderFromRest(Long.parseLong(customerId), delivery, Long.parseLong(mealKitId), Long.parseLong(addressId), specialRequest, Integer.parseInt(qty));
+            rsp = new MsgResponse("Create Order Success", true);
+            return Response.status(Response.Status.OK).entity(rsp).build();
 
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rsp).build();
-            }
-        } else {
-            rsp = new MsgResponse("Invalid Request Message", false);
+        } catch (ParseException ex) {
+            rsp = new MsgResponse("Invalid Date Format", false);
             return Response.status(Response.Status.BAD_REQUEST).entity(rsp).build();
+        } catch (Exception ex) {
+            rsp = new MsgResponse(ex.getMessage(), false);
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rsp).build();
         }
     }
-    
+
     
 
     private CustomerControllerLocal lookupCustomerControllerLocal() {
@@ -187,6 +216,16 @@ public class ShoppingCartResource {
         try {
             javax.naming.Context c = new InitialContext();
             return (OrderControllerLocal) c.lookup("java:global/MakanMaker/MakanMaker-ejb/OrderController!ejb.session.stateless.OrderControllerLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private WishListControllerLocal lookupWishListControllerLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (WishListControllerLocal) c.lookup("java:global/MakanMaker/MakanMaker-ejb/WishListController!ejb.session.stateless.WishListControllerLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

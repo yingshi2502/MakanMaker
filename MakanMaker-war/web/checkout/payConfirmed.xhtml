@@ -10,21 +10,66 @@
         <!--to be fixed:
         pass in the enum type for transaction as tab changes
         -->
+        <style>
+            .continueButton {
+                display: inline-block;
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                cursor: pointer;
+                padding: 10px 20px;
+                border: 1px solid rgba(180,180,180,1);
+                -webkit-border-radius: 3px;
+                border-radius: 3px;
+                font: normal normal bold 16px/normal "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+                color: rgba(2,2,2,0.9);
+                -o-text-overflow: clip;
+                text-overflow: clip;
+                background: #b5babc;
+                -webkit-box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) ;
+                box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) ;
+                text-shadow: 0 0 0 rgba(252,252,252,0.66) ;
+                -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+                -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+                -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+                transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+            }
+            
+            .labelbg {
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                border: none;
+                font: normal 24px/1 Georgia, serif;
+                color: black;
+                font-size: 30px;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                text-shadow: 4px 0 9px rgba(86,170,255,0.9) ;
+                -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+                transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+            }
+        </style>
     </ui:define>
     <ui:define name="content" id="content">
         <h3 style="margin-left: 30px">Your Orders</h3>
-        <p:outputLabel value="Total: #{paymentConfirmManagedBean.totalPrice}" style="font-size: 15px"/>
-        <p:outputLabel value="SubTotal: #{paymentConfirmManagedBean.subTotal}" style="font-size: 15px"/>
-        <p:outputLabel value="Total Shipping: #{paymentConfirmManagedBean.deliveryAdd.shippingFee}" style="font-size: 15px"/>
-        
-        <br/>
-        
+        <p:panelGrid columns="2">
+            <p:outputLabel value="Total: " style="font-size: 15px"/>
+            <p:outputLabel value="$ #{paymentConfirmManagedBean.totalPrice}" styleClass="labelbg" style="font-size: 20px" />
+            <p:outputLabel value="SubTotal: " style="font-size: 15px"/>
+            <p:outputLabel value="$ #{paymentConfirmManagedBean.subTotal}" styleClass="labelbg" style="font-size: 20px" />
+            <p:outputLabel value="Total Shipping: " style="font-size: 15px"/>
+            <p:outputLabel value="$ #{paymentConfirmManagedBean.deliveryAdd.shippingFee}" styleClass="labelbg" style="font-size: 20px" />
+        </p:panelGrid>
+        <br />
         <h:form id="formConfirmation">
-            
+
             <p:growl id = "growl" showDetail="true" showSummary="true" sticky="true"/>
-            
-            <p:dataTable id="dataTableAllOrders" widgetVar="dataTableAllOrders" value="#{paymentConfirmManagedBean.orders}" var="order" tableStyle="table-layout: auto">
-                
+
+            <p:dataTable id="dataTableAllOrders" widgetVar="dataTableAllOrders" value="#{paymentConfirmManagedBean.orders}" var="order" style="text-align: center" tableStyle="table-layout: auto">
+
                 <p:column headerText="Meal Kit">
                     <h:outputText value="#{order.mealKit.name}" />
                 </p:column>
@@ -37,10 +82,10 @@
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Delivery Date">
-                    <h:outputText value="#{order.deliveryDate}" />
+                    <h:outputText value="#{paymentConfirmManagedBean.getDeliveryDate(order.deliveryDate)}" />
                 </p:column>
-                <p:column headerText="Status">
-                    <h:outputText value="#{order.orderStatus}" />
+                <p:column headerText="Extra Request">
+                    <h:outputText value="#{order.extraRequest}" />
                 </p:column>
                 <p:column headerText="Order Number">
                     <p:link outcome="/userProfile/orderPage.xhtml?id=#{order.orderId}"><h:outputText value="#{order.orderNumber}" /></p:link>
@@ -49,10 +94,10 @@
                     <h:outputText value="#{order.transaction.transactionCode}" />
                 </p:column>
             </p:dataTable>
-            
-            <p:button value="Continue Shopping" href="/mealkit/viewAllMealkits.xhtml"/>
+            <br />
+            <p:button value="Continue Shopping" href="/mealkit/viewAllMealkits.xhtml" styleClass="continueButton"/>
         </h:form>
-        
+
     </ui:define>
     <ui:define name="stepsTracker">
         <p:steps activeIndex="3" styleClass="custom" readonly="true">

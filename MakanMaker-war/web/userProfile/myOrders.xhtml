@@ -12,20 +12,22 @@
     <ui:define name="content" id="content">
         <h2 style="margin-left: 30px">My Orders</h2>
         <h:form id="mainForm">
-            <p:dataTable id="orderTable" style="margin-left: 30px; margin-right: 30px" var="order" value="#{myOrderManagedBean.orders}" tableStyle="table-layout: auto" filteredValue="#{myOrderManagedBean.filteredOrders}">
-                <p:column filterBy="#{order.orderStatus}" filterMatchMode="exact" filterFunction="#{myOrderManagedBean.filterByStatus}">
-                    <f:facet name="filter">
-                        <p:selectOneMenu onchange="PF('orderTable').filter()" >
-                            <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
-                            <f:selectItems value="#{myOrderManagedBean.statusNames}" />
-                        </p:selectOneMenu>
+            <p:dataTable id="orderTable" style="margin-left: 30px; margin-right: 30px" var="order" value="#{myOrderManagedBean.filteredOrders}" tableStyle="table-layout: auto" filteredValue="#{myOrderManagedBean.filteredOrders}">
+                <p:column sortBy="#{order.purchasingDate}">
+                    <f:facet name="header">
+                        <p:selectOneButton styleClass="menu" value="#{myOrderManagedBean.selectedType}">
+                            <f:selectItems  value="#{myOrderManagedBean.statusNames}" var="status" itemLabel="#{status}" 
+                                            itemValue="#{status}" >
+                            </f:selectItems>
+                            <p:ajax event="change" listener="#{myOrderManagedBean.onSelectOrderType}" update="@form mainForm"/>
+                        </p:selectOneButton> 
                     </f:facet>
                     <p:panelGrid>
                         <p:row >
                             <p:column style="width:200px">
                                 <h:outputText value="Order" />
                                 <h:link value=" ##{order.orderNumber}" outcome="orderPage.xhtml?id=#{order.orderId}"/><br />
-                                <h:outputText value="Placed on 10 Mar 2018" />
+                                <h:outputText style="font-size: 12px" value="Placed on #{myOrderManagedBean.getPurchasingDT(order.purchasingDate)}" />
                             </p:column>
                             <p:column>
                                 <p:link style="position: absolute;right: 50px" value="Manage" outcome="orderPage.xhtml?id=#{order.orderId}" />

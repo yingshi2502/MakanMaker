@@ -24,14 +24,14 @@ public interface MealKitControllerLocal {
 
     public MealKitEntity updateMealKit(MealKitEntity mealKit) throws MealKitExistException, GeneralException;
 
-    public MealKitEntity retrieveMealKitById(Long mealKitId) throws MealKitNotFoundException;
+    public MealKitEntity retrieveMealKitById(Long mealKitId, boolean detach) throws MealKitNotFoundException;
 
     public void deleteMealKit(MealKitEntity mealKit) throws UndeletableException;
 
     public List<MealKitEntity> retrieveAllMealKits();
 
-    public List<MealKitEntity> searchMealKits(String keywords);
+    public List<MealKitEntity> searchMealKits(String keywords, boolean detach);
 
-    public List<MealKitEntity> retrieveAvailableMealKits();
+    public List<MealKitEntity> retrieveAvailableMealKits(boolean detach);
     
 }
