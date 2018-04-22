@@ -11,48 +11,62 @@
     </ui:define>
     <ui:define name="content" id="content">
         <h2 style="margin-left: 30px">My Orders</h2>
-        <p:dataTable style="margin-left: 30px; margin-right: 30px" var="order" value="#{myOrderManagedBean.orders}" tableStyle="table-layout: auto">
-            <p:column>
-                <p:panelGrid>
-                    <p:row >
-                        <p:column style="width:200px">
-                            <h:outputText value="Order" />
-                            <h:link value=" ##{order.orderNumber}" outcome="orderPage.xhtml?id=#{order.orderId}"/><br />
-                            <h:outputText value="Placed on 10 Mar 2018" />
-                        </p:column>
-                        <p:column>
-                            <p:link style="position: absolute;right: 50px" value="Manage" outcome="orderPage.xhtml?id=#{order.orderId}" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column colspan="5">
-                            <div style="border-bottom: 1px solid #AFAFAF;">
-                            </div>  
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <img scr="#{order.mealKit.imagePath}" height="100px" width="100px" />
-                        </p:column>
-                        <p:column >
-                            <p:link value="#{order.mealKit.name}" outcome="/mealkit/viewMealKitDetails.xhtml?id=#{order.mealKit.mealKitId}"   style="font: 14px;color: #0081c2"/>
-                        </p:column>
+        <h:form id="mainForm">
+            <p:dataTable id="orderTable" style="margin-left: 30px; margin-right: 30px" var="order" value="#{myOrderManagedBean.filteredOrders}" tableStyle="table-layout: auto" filteredValue="#{myOrderManagedBean.filteredOrders}">
+                <p:column sortBy="#{order.purchasingDate}">
+                    <f:facet name="header">
+                        <p:selectOneButton styleClass="menu" value="#{myOrderManagedBean.selectedType}">
+                            <f:selectItems  value="#{myOrderManagedBean.statusNames}" var="status" itemLabel="#{status}" 
+                                            itemValue="#{status}" >
+                            </f:selectItems>
+                            <p:ajax event="change" listener="#{myOrderManagedBean.onSelectOrderType}" update="@form mainForm"/>
+                        </p:selectOneButton> 
+                    </f:facet>
+                    <p:panelGrid>
+                        <p:row >
+                            <p:column style="width:200px">
+                                <h:outputText value="Order" />
+                                <h:link value=" ##{order.orderNumber}" outcome="orderPage.xhtml?id=#{order.orderId}"/><br />
+                                <h:outputText style="font-size: 12px" value="Placed on #{myOrderManagedBean.getPurchasingDT(order.purchasingDate)}" />
+                            </p:column>
+                            <p:column>
+                                <p:link style="position: absolute;right: 50px" value="Manage" outcome="orderPage.xhtml?id=#{order.orderId}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <div style="border-bottom: 1px solid #AFAFAF;">
+                                </div>  
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <img src="#{order.mealKit.imagePath}" height="120" />
 
-                        <p:column>
-                            <h:outputText value="Qty: #{order.quantity}" />
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="#{myOrderManagedBean.getLcOrderStatus(order.orderStatus)}" style="font-size: 12px;padding: 4px 12px; display: inline-block; border-radius: 24px; background-color: #eff0f5; max-width: 150px;" />
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="#{myOrderManagedBean.getDeliveryDate(order.deliveryDate)}" />
-                        </p:column>
+                            </p:column>
+                            <p:column >
+                                <p:link value="#{order.mealKit.name}" outcome="/mealkit/viewMealKitDetails.xhtml?id=#{order.mealKit.mealKitId}"   style="font-size: 14px; color: #0081c2"/>
+                            </p:column>
 
-                    </p:row>
-                </p:panelGrid>
-            </p:column>
+                            <p:column>
+                                <h:outputText value="Qty: #{order.quantity}" />
+                            </p:column>
 
-        </p:dataTable>
+                            <p:column >
+
+                                <h:outputText value="#{myOrderManagedBean.getLcOrderStatus(order.orderStatus)}" style="font-size: 12px;padding: 4px 12px; display: inline-block; border-radius: 24px; background-color: #eff0f5; max-width: 150px;" />
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{myOrderManagedBean.getDeliveryDate(order.deliveryDate)}" />
+                            </p:column>
+
+                        </p:row>
+                    </p:panelGrid>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
     </ui:define>
 </ui:composition>
 

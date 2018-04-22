@@ -6,6 +6,8 @@
 package ejb.session.stateless;
 
 import entity.MealKitEntity;
+import entity.ReviewEntity;
+import entity.TagEntity;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -74,10 +76,16 @@ public class MealKitController implements MealKitControllerLocal {
     }
     
     @Override
-    public MealKitEntity retrieveMealKitById(Long mealKitId) throws MealKitNotFoundException {
+    public MealKitEntity retrieveMealKitById(Long mealKitId, boolean detach) throws MealKitNotFoundException {
         MealKitEntity mealKit = em.find(MealKitEntity.class, mealKitId);
         if (mealKit != null){
             //mealKit.getReviews().size();
+            if (detach){
+                em.detach(mealKit);
+                mealKit.setOrders(null);
+                mealKit.setReviews(null);
+                mealKit.setTags(null);
+            }
             return mealKit;
         }else{
             throw new MealKitNotFoundException("MealKit ID "+ mealKitId+" does not exists!");
@@ -91,10 +99,25 @@ public class MealKitController implements MealKitControllerLocal {
     }
     
     @Override
-    public List<MealKitEntity> searchMealKits(String keywords){
+    public List<MealKitEntity> searchMealKits(String keywords, boolean detach){
         Query query = em.createQuery("SELECT mk FROM MealKitEntity mk WHERE lower(mk.name) LIKE lower(concat('%', :keywords,'%'))");
         query.setParameter("keywords", keywords);
-        return query.getResultList();
+        
+        List<MealKitEntity> mks = query.getResultList();
+        
+        if (detach) {
+            for (MealKitEntity mk : mks) {
+                em.detach(mk);
+                mk.getOrders().clear();
+                mk.getReviews().clear();
+                for (TagEntity t : mk.getTags()) {
+                    em.detach(t);
+                    t.setMealKits(null);
+                }
+            }
+        }
+        
+        return mks;
     }
             
     
@@ -110,12 +133,20 @@ public class MealKitController implements MealKitControllerLocal {
     }
     
     @Override
-    public List<MealKitEntity> retrieveAvailableMealKits() {
+    public List<MealKitEntity> retrieveAvailableMealKits(boolean detach) {
         Query query = em.createQuery("SELECT mk FROM MealKitEntity mk WHERE mk.isAvailable = TRUE");
         List<MealKitEntity> mealKits = query.getResultList();
         for (MealKitEntity mk : mealKits) {
-            mk.getReviews().size();
-            mk.getTags().size();
+            if (detach){
+                em.detach(mk);
+                mk.setReviews(null);
+                mk.setOrders(null);
+                mk.setTags(null);
+            }else{
+                mk.getReviews().size();
+                mk.getTags().size();
+            }
+            
         }
         return mealKits;
     }

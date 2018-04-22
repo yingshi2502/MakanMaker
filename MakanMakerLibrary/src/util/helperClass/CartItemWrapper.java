@@ -11,6 +11,7 @@ public class CartItemWrapper {
     private int quantity;
     private MealKitEntity mk;
     private String extraRequest;
+    
     public CartItemWrapper() {
         this.extraRequest = "";
     }

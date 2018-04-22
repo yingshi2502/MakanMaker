@@ -19,7 +19,7 @@
                 <p:panelGrid>
                     <p:outputLabel value="Order ##{orderDetailManagedBean.currOrder.orderNumber}" style="font-size: 15px; font-weight: bold" /><br />
                     <p:outputLabel value="Placed on #{orderDetailManagedBean.purchasingDate}" style="font-size: 10px;"/>
-                    <p:commandButton value="Confirm Receipt" actionListener="#{orderDetailManagedBean.confirmReceipt}" style="position: absolute; top: 80px;right: 40px" rendered="#{orderDetailManagedBean.currOrderStatusStep ne 3}">
+                    <p:commandButton update="@form orderDetailForm" value="Confirm Receipt" actionListener="#{orderDetailManagedBean.confirmReceipt}" style="position: absolute; top: 80px;right: 40px" rendered="#{orderDetailManagedBean.currOrderStatusStep ne 3}">
                     <p:confirm header="Confirmation" message="Sure to confirm the receipt?" icon="ui-icon-alert" />
                 </p:commandButton>
                 </p:panelGrid> 
@@ -96,14 +96,14 @@
                     <p:outputLabel />
 
                     <p:outputLabel value="Subtotal" style="font-size: 14px"/>
-                    <p:outputLabel value="SGD #{orderDetailManagedBean.subtotal}" style="font-size: 14px;text-align: right;"/>
+                    <p:outputLabel value="SGD #{orderDetailManagedBean.currOrder.totalAmount}" style="font-size: 14px;text-align: right;"/>
 
                     <p:outputLabel value="Shipping Fee" style="font-size: 14px"/>
                     <p:outputLabel value="SGD #{orderDetailManagedBean.currOrder.shippingFee}" style="font-size: 14px;text-align: right;"/>
                     <p:outputLabel /><hr />
 
                     <p:outputLabel value="Total" style="font-size: 15px"/>
-                    <p:outputLabel value="SGD #{orderDetailManagedBean.currOrder.totalAmount}" style="font-size: 15px;text-align: right;"/>
+                    <p:outputLabel value="SGD #{orderDetailManagedBean.currOrder.totalAmount + orderDetailManagedBean.currOrder.shippingFee}" style="font-size: 15px;text-align: right;"/>
                 </p:panelGrid>
 
             </p:column>

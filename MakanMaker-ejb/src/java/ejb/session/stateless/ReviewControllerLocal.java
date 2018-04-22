@@ -19,6 +19,6 @@ public interface ReviewControllerLocal {
 
     ReviewEntity createNewReiview(String customerUsername, Long orderId,Long mealKitId, String reviewContent, Integer ratings);
 
-    List<ReviewEntity> retrieveReviewByMealKitId(Long mealKitId)throws EmptyListException;
+    List<ReviewEntity> retrieveReviewByMealKitId(Long mealKitId, boolean detach)throws EmptyListException;
     
 }

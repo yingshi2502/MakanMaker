@@ -21,14 +21,15 @@
         <h:form id="scForm">
             <p:dataTable var="item" value="#{shoppingCartManagedBean.items}" id="mealkits" style="table-layout: auto;" styleClass="test">
                 <f:facet name="header">
-                    Shopping Cart
-                    <p:link value="Check Out" outcome="/checkout/orderSummary.xhtml" disabled="#{shoppingCartManagedBean.noItem}"/>
+                    <p:button style="position: absolute;left: 20px" icon="fa fa-cart-arrow-down" value="Check Out" outcome="/checkout/orderSummary.xhtml" disabled="#{shoppingCartManagedBean.noItem}" />
+
+                    <p:outputLabel value="Shopping Cart" style="font-size: 20px"/>
                 </f:facet>
                 <p:column>
                     <p:panelGrid>
                         <p:row>
                             <p:column>
-                                <img scr="#{item.mk.imagePath}" height="100px" width="100px" />
+                                <img scr="#{item.mk.imagePath}" height="120" />
                             </p:column>
                             <p:column >
                                 <p:link value="#{item.mk.name}" outcome="/mealkit/viewMealKitDetails.xhtml?id=#{item.mk.mealKitId}"   style="font: 14px;color: #0081c2"/>

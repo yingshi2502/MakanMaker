@@ -34,6 +34,15 @@
                 background-size: auto auto;
             }
         </style>
+        <script type="text/javascript">
+            select: function(start, end) {
+                if(start.isBefore(moment())) {
+                    $('#schedule').fullCalendar('unselect');
+                    return false;
+                }
+            }
+        </script>
+            
     </ui:define>
     <ui:define name="listCart">
         <p:panel style="margin-left: 10px">
@@ -45,15 +54,13 @@
                 </p:panel>
             </p:dataGrid>  
         </p:panel>
-
     </ui:define>
 
     <ui:define name="content" id="content">
         <h:form id="scheduleForm">
             <p:growl id="messages" showDetail="true" />
-            <p:commandButton value="Confirm" actionListener="#{selectScheduleManagedBean.confirmSchedule}" oncomplete="PF('successDialog').show()" update='@form scheduleForm'/>
             <h:panelGrid columnClasses="value" >
-                <p:schedule id="schedule" value="#{selectScheduleManagedBean.eventModel}" widgetVar="myschedule" timeZone="GMT+8" showHeader="true" view="month" resizable="false" style="width:800px;">
+                <p:schedule leftHeaderTemplate="today" rightHeaderTemplate="prev,next" tooltip="true" aspectRatio="1.8" id="schedule" value="#{selectScheduleManagedBean.eventModel}" widgetVar="myschedule" timeZone="GMT+8" showHeader="true" view="month" resizable="false" style="width:800px;" >
                     <p:ajax event="dateSelect" listener="#{selectScheduleManagedBean.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
                     <p:ajax event="eventSelect" listener="#{selectScheduleManagedBean.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
                     <p:ajax event="eventMove" listener="#{selectScheduleManagedBean.onEventMove}" update="messages" />
@@ -74,6 +81,8 @@
                 <p:button value="Proceed To Payment" outcome="payment"/><br />
                 Please complete payment in 15 mins
             </p:dialog>
+            <p:commandButton value="Confirm" actionListener="#{selectScheduleManagedBean.confirmSchedule}" oncomplete="PF('successDialog').show()" update='@form scheduleForm'/>
+
         </h:form>
         <p:steps activeIndex="1" styleClass="custom" readonly="true">
             <p:menuitem value="Select Address" />

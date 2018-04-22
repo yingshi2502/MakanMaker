@@ -78,12 +78,12 @@ public class SelectScheduleManagedBean implements Serializable{
         setAddressToShip((AddressEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("selectedAddressEntity"));
         
         System.err.println("Customer "+currentCustomer.getFullName());
-        shoppingCart = customerController.retrieveShoppingCartByCustomerId(currentCustomer.getCustomerId());
+        shoppingCart = customerController.retrieveShoppingCartByCustomerId(currentCustomer.getCustomerId(),false);
         
         //to be deleted after shopping cart code up.
         //System.err.println("shopping cart "+shoppingCart.sho);
         //shoppingCart = shoppingCartController.addItem(1l, 2, shoppingCart.getShoppingCartId());
-        mealKits = shoppingCartController.retrieveMealKitsByCustomerId(shoppingCart.getShoppingCartId());
+        mealKits = shoppingCartController.retrieveMealKitsByCustomerId(shoppingCart.getShoppingCartId(),false);
         System.err.println("****address "+addressToShip.getPostalCode());
         int i=0;
         List<Integer> qs = shoppingCart.getQuantity();
@@ -135,7 +135,7 @@ public class SelectScheduleManagedBean implements Serializable{
             CartItemWrapper item = (CartItemWrapper)e.getData();
             double totalAmount = item.getQuantity() * item.getMk().getPrice();
             OrderEntity order = new OrderEntity(totalAmount, item.getQuantity(), new Date(), e.getStartDate(), OrderStatusEnum.UNPAID, String.valueOf((char)(i + 64)), item.getExtraRequest(), addressToShip.getShippingFee()/events.size());
-            order = orderController.createNewOrder(order, currentCustomer.getCustomerId(), item.getMk().getMealKitId(), addressToShip.getAddressId());
+            order = orderController.createNewOrder(order, currentCustomer.getCustomerId(), item.getMk().getMealKitId(), addressToShip.getAddressId(),false);
             orders.add(order);
             i++;
         }
@@ -143,6 +143,11 @@ public class SelectScheduleManagedBean implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("newOrders", orders);
     }
     
+    private Date todayDate = new Date();
+    
+    public Date getTodayDate(){
+        return todayDate;
+    }
     
     private Calendar today() {
         Calendar calendar = Calendar.getInstance();

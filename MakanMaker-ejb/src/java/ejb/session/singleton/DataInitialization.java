@@ -99,14 +99,14 @@ public class DataInitialization {
     
     
     private void createOrder(){
-        String code = "akasdgflasbfj";
+        String code = "";
 //        OrderEntity order = new OrderEntity(Double.NaN, deliveryDate, purchasingDate, OrderStatusEnum.PREPARING, code, code, Double.MIN_VALUE)
         Date now = new Date();        
         Date date = new Date(now.getYear(), now.getMonth(), now.getDate()+1, 23, 59, 59);
 
         OrderEntity order = new OrderEntity(Double.valueOf(25), 2, new Date(), date, OrderStatusEnum.PREPARING, code, "Add more flavour", Double.valueOf(5));
         
-       orderControllerLocal.createNewOrder(order, 1l, 1l,1l);  
+       orderControllerLocal.createNewOrder(order, 1l, 1l,1l,false);  
     }
     
     private void createAddress(){

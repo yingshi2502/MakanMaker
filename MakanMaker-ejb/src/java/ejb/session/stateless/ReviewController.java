@@ -61,10 +61,16 @@ public class ReviewController implements ReviewControllerLocal {
      * @throws EmptyListException
      */
     @Override
-    public List<ReviewEntity> retrieveReviewByMealKitId(Long mealKitId) throws EmptyListException{
+    public List<ReviewEntity> retrieveReviewByMealKitId(Long mealKitId, boolean detach) throws EmptyListException{
         Query query = em.createQuery("SELECT r FROM ReviewEntity r WHERE r.mealKit.mealKitId =:id");
         query.setParameter("id", mealKitId);
         List<ReviewEntity> list = query.getResultList();
+        if (detach){
+            for (ReviewEntity r: list){
+                em.detach(r);
+                r.setMealKit(null);
+            }
+        }
         if (list.isEmpty()){
             throw new EmptyListException("No reviews added for the mealKid");
         }

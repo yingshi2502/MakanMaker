@@ -24,8 +24,14 @@
                         </h:panelGrid>
                         <h:outputText
                             value="#{profileManagedBean.currentCustomer.email}" />
-                        <p:link value="Unsubscribe from our Newsletter" />
+                        <p:commandLink value="Unsubscribe from our Newsletter">
+                            <p:confirm header="Confirmation" message="Are you sure you want to unsubscribe?" icon="ui-icon-alert" />
+                        </p:commandLink>
                     </h:panelGrid>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
                 </p:panel>
             </div>
             <div>
@@ -36,38 +42,80 @@
                             <h:outputText style="font-size: 20px" value="| " />
                             <p:link value="EDIT" outcome="myAddressBook"/>  
                         </h:panelGrid>
-                        <p:panelGrid rendered="#{profileManagedBean.noAddress}" columns='2' >
+                        <p:panelGrid rendered="#{!profileManagedBean.noAddress}" columns='2' >
                             <h:panelGrid columns="1" style="text-align: center; ">
                                 <div>
                                     <h:outputText style="font-size:12px; font: lighter;color: #AFAFAF" value="DEFAULT SHIPPING ADDRESS" />
                                     <h:outputText style="font-size:14px;" value="#{profileManagedBean.defaultAddress.fullName}" />
-                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.addressLine1}" />
-                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.addressLine2}" />
-                                    <h:outputText style="font-size:12px" value=" #{profileManagedBean.defaultAddress.country} #{profileManagedBean.defaultAddress.postalCode}" />
+                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.floorUnit}" />
+                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.streetAddress}" />
+                                    <h:outputText style="font-size:12px" value="Singapore [#{profileManagedBean.defaultAddress.postalCode}]" />
                                     <h:outputText style="font-size:12px" value='#{profileManagedBean.defaultAddress.phoneNumber}' />
                                 </div>
                             </h:panelGrid>
                             <h:panelGrid columns="1" style="text-align: center">
                                 <div>
-                                    <h:outputText style="font-size:12px; font: lighter;color: #AFAFAF" value="DEFAULT SHIPPING ADDRESS" />
-                                    <h:outputText style="font-size:14px;" value="Receiver's Name" />
-                                    <h:outputText style="font-size:12px;" value="Address Line 1" />
-                                    <h:outputText style="font-size:12px;" value="Address Line 2" />
-                                    <h:outputText style="font-size:12px" value='Country + postal Code' />
-                                    <h:outputText style="font-size:12px" value='phone 88888888' />
+                                    <h:outputText style="font-size:12px; font: lighter;color: #AFAFAF" value="DEFAULT BILLING ADDRESS" />
+                                    <h:outputText style="font-size:14px;" value="#{profileManagedBean.defaultAddress.fullName}" />
+                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.floorUnit}" />
+                                    <h:outputText style="font-size:12px;" value="#{profileManagedBean.defaultAddress.streetAddress}" />
+                                    <h:outputText style="font-size:12px" value="Singapore [#{profileManagedBean.defaultAddress.postalCode}]" />
+                                    <h:outputText style="font-size:12px" value='#{profileManagedBean.defaultAddress.phoneNumber}' />
                                 </div>
                             </h:panelGrid>
                         </p:panelGrid>
-                        <p:panelGrid rendered="#{!profileManagedBean.noAddress}" >
+                        <p:panelGrid rendered="#{profileManagedBean.noAddress}" >
                             No Address Added Yet
                         </p:panelGrid>
                     </h:panelGrid>
                 </p:panel>
             </div>
         </div>
-        <p:panel id="recentOrder" header="Recent Orders" style="margin-left: 50px; margin-bottom:20px; width: 860px">
-            Hard Code: no order yet
-        </p:panel>
+        <h:form id="mainForm">
+            <p:dataTable id="orderTable" style="margin-left: 30px; margin-right: 30px" var="order" value="#{profileManagedBean.recentOrders}" tableStyle="table-layout: auto" filteredValue="#{myOrderManagedBean.filteredOrders}">
+                <p:column sortBy="#{order.purchasingDate}">
+                    <f:facet name="header">
+                        Preparing Orders 
+                    </f:facet>
+                    <p:panelGrid>
+                        <p:row >
+                            <p:column style="width:200px">
+                                <h:outputText value="Order" />
+                                <h:link value=" ##{order.orderNumber}" outcome="orderPage.xhtml?id=#{order.orderId}"/><br />
+                                <h:outputText style="font-size: 12px" value="Placed on #{profileManagedBean.getPurchasingDT(order.purchasingDate)}" />
+                            </p:column>
+                            <p:column>
+                                <p:link style="position: absolute;right: 50px" value="Manage" outcome="orderPage.xhtml?id=#{order.orderId}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <div style="border-bottom: 1px solid #AFAFAF;">
+                                </div>  
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <img src="#{order.mealKit.imagePath}" height="120" />
+                            </p:column>
+                            <p:column >
+                                <p:link value="#{order.mealKit.name}" outcome="/mealkit/viewMealKitDetails.xhtml?id=#{order.mealKit.mealKitId}"   style="font-size: 14px; color: #0081c2"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="Qty: #{order.quantity}" />
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{profileManagedBean.getDeliveryDate(order.deliveryDate)}" />
+                            </p:column>
+
+                        </p:row>
+                    </p:panelGrid>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
     </ui:define>
 
 </ui:composition>

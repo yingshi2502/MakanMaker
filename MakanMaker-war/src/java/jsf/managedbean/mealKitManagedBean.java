@@ -49,21 +49,22 @@ public class mealKitManagedBean implements Serializable {
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String keywords = request.getParameter("keywords");
-        if (keywords == null) {
-            setMealKits(mealKitControllerLocal.retrieveAvailableMealKits());
-        } else {
-            System.err.println("***Keywords retrieved from HTTP: " + keywords);
-            setMealKits(mealKitControllerLocal.searchMealKits(keywords));
-            System.err.println("***mks retrieved from HTTP: " + mealKits.size());
-        }
-
-        tags = tagControllerLocal.retrieveAllTags();
-        
+        setMealKits(mealKitControllerLocal.retrieveAvailableMealKits(false));
         Random r = new Random();
         int choice = r.nextInt(mealKits.size() - 1);
         chefMealKit = mealKits.get(choice);
         choice = r.nextInt(mealKits.size() - 1);
         todayMealKit = mealKits.get(choice);
+        
+        if (keywords != null) {
+            System.err.println("***Keywords retrieved from HTTP: " + keywords);
+            setMealKits(mealKitControllerLocal.searchMealKits(keywords,false));
+            System.err.println("***mks retrieved from HTTP: " + mealKits.size());
+        }
+
+        tags = tagControllerLocal.retrieveAllTags();
+        
+        
         
         System.err.println("******Tags： " + tags.size());
     }

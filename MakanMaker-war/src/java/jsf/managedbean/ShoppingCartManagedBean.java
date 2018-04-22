@@ -82,9 +82,9 @@ public class ShoppingCartManagedBean implements Serializable{
     
     
     private void refresh(){
-        setShoppingCart(customerController.retrieveShoppingCartByCustomerId(currentCustomer.getCustomerId()));
+        setShoppingCart(customerController.retrieveShoppingCartByCustomerId(currentCustomer.getCustomerId(),false));
         
-        mealKits = shoppingCartController.retrieveMealKitsByCustomerId(getShoppingCart().getShoppingCartId());
+        mealKits = shoppingCartController.retrieveMealKitsByCustomerId(getShoppingCart().getShoppingCartId(),false);
         noItem = mealKits.isEmpty();
         int i=0;
         List<Integer> qs = getShoppingCart().getQuantity();

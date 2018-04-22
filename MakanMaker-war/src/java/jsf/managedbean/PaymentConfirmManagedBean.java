@@ -11,7 +11,9 @@ import entity.CustomerEntity;
 import entity.OrderEntity;
 import entity.TransactionEntity;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,6 +70,11 @@ public class PaymentConfirmManagedBean implements Serializable{
             sum += o.getTotalAmount();
         }
         return sum;
+    }
+    
+    public String getDeliveryDate(Date date) {
+        SimpleDateFormat ft1 = new SimpleDateFormat("dd-MMM-yyyy");
+        return ft1.format(date);
     }
     
     private void sendEmailMsg(){

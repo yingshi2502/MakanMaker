@@ -65,9 +65,9 @@ public class OrderSummaryManagedBean implements Serializable{
                 Logger.getLogger(AddressManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        setShoppingCart(customerController.retrieveShoppingCartByCustomerId(getCurrentCustomer().getCustomerId()));
+        setShoppingCart(customerController.retrieveShoppingCartByCustomerId(getCurrentCustomer().getCustomerId(),false));
         setSubTotal(shoppingCartController.calculatePriceByCartId(shoppingCart.getShoppingCartId()));
-        mealKits = shoppingCartController.retrieveMealKitsByCustomerId(getShoppingCart().getShoppingCartId());
+        mealKits = shoppingCartController.retrieveMealKitsByCustomerId(getShoppingCart().getShoppingCartId(),false);
         
         int i=0;
         List<Integer> qs = getShoppingCart().getQuantity();

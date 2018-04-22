@@ -87,10 +87,10 @@ public class viewMealKitDetailsManagedBean implements Serializable {
         }
                 
         try {
-            setMealKitEntityToView(mealKitControllerLocal.retrieveMealKitById(getMealKitId()));
+            setMealKitEntityToView(mealKitControllerLocal.retrieveMealKitById(getMealKitId(),false));
             System.err.println("*****retrieved" + mealKitEntityToView.getName());
 
-            reviews = reviewController.retrieveReviewByMealKitId(mealKitId);
+            reviews = reviewController.retrieveReviewByMealKitId(mealKitId,false);
             System.err.println("****review"+ reviews.size()+ reviews.get(0).getReview());
             rating = calculateRating();
         } catch (EmptyListException ex) {

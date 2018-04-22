@@ -25,10 +25,13 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(ws.rest.checkout.ShoppingCartResource.class);
         resources.add(ws.rest.customer.AddressResource.class);
         resources.add(ws.rest.customer.CustomerResource.class);
         resources.add(ws.rest.customer.LoginResource.class);
         resources.add(ws.rest.customer.SignupResource.class);
+        resources.add(ws.rest.customer.WishListResource.class);
+        resources.add(ws.rest.mealkit.mealKitResource.class);
         resources.add(ws.rest.review.ReviewResource.class);
     }
 

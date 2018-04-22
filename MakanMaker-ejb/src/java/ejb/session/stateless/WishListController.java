@@ -26,7 +26,7 @@ public class WishListController implements WishListControllerLocal {
 
     
     @Override
-    public List<MealKitEntity> getWishListByCustomerId(Long customerId){
+    public List<MealKitEntity> getWishListByCustomerId(Long customerId, boolean detach){
         CustomerEntity customer = em.find(CustomerEntity.class, customerId);
         List<Long> mealKitsIds = customer.getWishList();
         List<MealKitEntity> wishlist = new ArrayList<>();
@@ -36,9 +36,16 @@ public class WishListController implements WishListControllerLocal {
         for (Long id: mealKitsIds){
             System.err.println("***** id:"+ id);
             MealKitEntity me = em.find(MealKitEntity.class, id);
-            if (me.isIsAvailable()){
+            if (me.isIsAvailable()) {
+                if (detach) {
+                    em.detach(me);
+                    me.setOrders(null);
+                    me.setReviews(null);
+                    me.setTags(null);
+                }
                 wishlist.add(me);
             }
+            
         }
         return wishlist;
     }
