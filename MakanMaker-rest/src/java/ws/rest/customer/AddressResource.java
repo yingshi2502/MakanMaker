@@ -7,6 +7,7 @@ package ws.rest.customer;
 
 import ejb.session.stateless.AddressControllerLocal;
 import entity.AddressEntity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +21,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -29,8 +29,9 @@ import javax.xml.bind.JAXBElement;
 import rest.datamodel.customer.AddressListResponse;
 import rest.datamodel.customer.AddressRequest;
 import rest.datamodel.customer.AddressResponse;
-import rest.datamodel.customer.MsgResponse;
 import util.exception.GeneralException;
+import rest.datamodel.customer.MsgResponse;
+
 
 /**
  * REST Web Service
@@ -62,7 +63,7 @@ public class AddressResource {
         try
         {
             AddressEntity address = addressController.retrieveAddressById(addressId, true);
-            if (address != null) rsp = new AddressResponse("Success Retreive", true, address);
+            if (address != null) rsp = new AddressResponse("Success Retrieve", true, address);
             else rsp = new AddressResponse("No Such Address", false, null);
             return Response.status(Response.Status.OK).entity(rsp).build();
         
@@ -101,7 +102,7 @@ public class AddressResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createAddress(JAXBElement<AddressRequest> jaxbAddressRequest){
-        
+        System.err.println("*********AddressResource.createAddress()" + jaxbAddressRequest.getValue());
         AddressResponse rsp;
         
         if((jaxbAddressRequest != null) && (jaxbAddressRequest.getValue() != null))
@@ -111,7 +112,8 @@ public class AddressResource {
                 AddressRequest addressReq = jaxbAddressRequest.getValue();               
                 
                 AddressEntity newAdd = addressController.createNewAddress(addressReq.getAddress(), addressReq.getCustomerId(),true);
-                
+                System.err.println("*********AddressResource.createAddress(): addressId is: " + newAdd.getAddressId());
+
                 rsp = new AddressResponse("Create Successful", true, newAdd);
                 return Response.status(Response.Status.OK).entity(rsp).build();
             }
@@ -139,19 +141,33 @@ public class AddressResource {
     
     @Path("update")
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateAddress(JAXBElement<AddressRequest> jaxbAddressRequest){
+    public Response updateAddress(@QueryParam("customerId") String customerId, @QueryParam("addressId") String addressId, @QueryParam("streetAddress") String streetAddress, @QueryParam("floorUnit") String floorUnit, @QueryParam("postalCode") String postalCode, @QueryParam("fullName") String fullName, @QueryParam("phoneNumber") String phoneNumber, @QueryParam("isDefaultShipping") boolean isDefaultShipping, @QueryParam("isDefaultBilling") boolean isDefaultBilling){
         
         MsgResponse rsp;
         
-        if((jaxbAddressRequest != null) && (jaxbAddressRequest.getValue() != null))
+        if((customerId != null) && (addressId != null) && (streetAddress != null) && (floorUnit != null) && (postalCode != null) && (fullName != null) && (phoneNumber != null))
         {
             try
             {
-                AddressRequest addressReq = jaxbAddressRequest.getValue();               
+                AddressEntity addressToUpdate = new AddressEntity();
+                List<AddressEntity> addresses = addressController.retrieveAddressByCustomerId(Long.parseLong(customerId),true);
+                for(AddressEntity address: addresses) {
+                    if(address.getAddressId() == Long.parseLong(addressId)) {
+                        address.setFloorUnit(floorUnit);
+                        address.setFullName(fullName);
+                        address.setPhoneNumber(phoneNumber);
+                        address.setPostalCode(postalCode);
+                        address.setStreetAddress(streetAddress);
+                        address.setIsDefaultBilling(isDefaultBilling);
+                        address.setIsDefaultShipping(isDefaultShipping);
+                        addressToUpdate = address;
+                        break;
+                    }
+                }
                 
-                addressController.updateAddress(addressReq.getAddress());
+                addressController.updateAddress(addressToUpdate);
                 
                 rsp = new MsgResponse("Update Successful", true);
                 return Response.status(Response.Status.OK).entity(rsp).build();
